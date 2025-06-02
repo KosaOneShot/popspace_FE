@@ -1,8 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import RegisterForm from './pages/auth/register/RegisterFrom';
-import LoginForm from './pages/auth/login/LoginForm';
-import React from 'react';
 
 
 
