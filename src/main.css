@@ -1,0 +1,21 @@
+/* 최상위: body, html이 스크롤 막지 않게 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* ✅ 가로 스크롤 방지 */
+  box-sizing: border-box;
+}
+
+/* 컨테이너가 항상 부모 기준 중앙에, 잘리지 않게 */
+.register-container {
+  width: 90vw; /* ✅ 화면 크기 기준 비율로 지정 */
+  max-width: 400px;
+  margin: 5vh auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Pretendard', sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+  box-sizing: border-box;
+}
