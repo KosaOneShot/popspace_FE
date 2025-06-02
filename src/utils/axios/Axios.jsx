@@ -5,10 +5,10 @@ class Axios {
 
     static getInstance() {
         if (!Axios.instance) {
-            console.log("📦 axios instance created:", process.env.REACT_APP_SERVER_URL);
+            console.log("📦 axios instance created:", import.meta.env.VITE_API_URL);
 
             Axios.instance = axios.create({
-                baseURL: process.env.REACT_APP_SERVER_URL,
+                baseURL: import.meta.env.VITE_API_URL,
                 headers: {
                     "Content-Type": "application/json",
                 },
