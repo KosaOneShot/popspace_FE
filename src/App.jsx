@@ -2,13 +2,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';     //bootstrap
 import 'bootstrap-icons/font/bootstrap-icons.css'; //bootstrap-icons
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import { Footer, Layout } from './components';
+import { Header, Footer, Layout } from './components';
 
 
 function App() {
   return (
     <div>
-        {/* <PageHeader /> */}
+        <Header/>
         <Layout>
           <Routes>
             {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
