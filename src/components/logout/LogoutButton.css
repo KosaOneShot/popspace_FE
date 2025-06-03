@@ -1,0 +1,15 @@
+.logout-button {
+  background-color: #ef4444; /* 빨강: Tailwind red-500 */
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border: none;
+  border-radius: 0.375rem; /* rounded */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* shadow-md */
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #dc2626; /* Tailwind red-600 */
+}
