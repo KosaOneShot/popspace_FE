@@ -1,33 +1,34 @@
-// src/components/Header.jsx
-import React from "react";
+import React, { useState } from "react";
+import SideMenu from "./SideMenu";
 
 const Header = () => {
-  const HEADER_HEIGHT = 56; // px
+  const [open, setOpen] = useState(false);
+  const HEADER_HEIGHT = 56;
+  const APP_WIDTH = 390;
 
   return (
     <>
       <header
         className="fixed-top start-50 translate-middle-x w-100 bg-white border-bottom d-flex align-items-center px-3"
-        style={{ maxWidth: "390px", height: `${HEADER_HEIGHT}px`, zIndex: 1000 }}
+        style={{ maxWidth: `${APP_WIDTH}px`, height: `${HEADER_HEIGHT}px`, zIndex: 1000 }}
       >
-        {/* 왼쪽 로고 영역 */}
         <a href="/" className="d-flex align-items-center text-decoration-none">
-          <i className="bi bi-rocket-takeoff-fill fs-4 me-2 text-dark"></i>
-          <span className="fw-bold text-dark fs-5 m-0">POP-SPACE</span>
+          <i className="bi bi-rocket-takeoff-fill fs-4 me-2"></i>
+          <span className="fw-bold fs-5">pop-space</span>
         </a>
 
-        {/* 우측 햄버거 버튼 */}
         <button
-          className="btn p-0 ms-auto"
-          style={{ width: "24px", height: "24px" }}
-          aria-label="메뉴"
+          className="btn p-0 ms-auto d-flex align-items-center justify-content-center"
+          onClick={() => setOpen(true)}
+          style={{ width: "1.75rem", height: "1.75rem" }}
         >
-          <i className="bi bi-list fs-3 text-dark"></i>
+          <i className="bi bi-list fs-3"></i>
         </button>
       </header>
 
-      {/* 스크롤 시 콘텐츠가 헤더 아래에서 시작되도록 동일 높이만큼 빈 공간 추가 */}
       <div style={{ height: `${HEADER_HEIGHT}px` }} />
+
+      <SideMenu isOpen={open} onClose={() => setOpen(false)} appWidth={APP_WIDTH} />
     </>
   );
 };
