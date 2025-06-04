@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./NoticeForm.css";
 import axi from "../../utils/axios/Axios";
 
 const NoticeForm = ({ popupId }) => {
@@ -6,6 +8,16 @@ const NoticeForm = ({ popupId }) => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [agree, setAgree] = useState(false);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setImage(file);
+  };
+
+  const handleImageRemove = () => {
+    setImage(null);
+    document.getElementById("image").value = "";
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,91 +54,111 @@ const NoticeForm = ({ popupId }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-8">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        📢 공지 작성
-      </h2>
+    <div className="notice-form-container d-flex flex-column align-items-center px-4 py-5">
+      <h5 className="text-success fw-bold mb-4">공지 작성</h5>
 
       <form
         onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        className="space-y-5"
+        className="w-100"
+        style={{ maxWidth: "400px" }}
       >
         {/* 이미지 업로드 */}
-        <div>
-          <label
-            htmlFor="imageUpload"
-            className="block text-gray-600 font-medium mb-2"
-          >
-            이미지 업로드
+        <div className="mb-4 text-center">
+          <label htmlFor="image" className="form-label d-block fw-semibold">
+            사진
           </label>
+
+          <div
+            className="image-upload-box mx-auto"
+            onClick={() => document.getElementById("image").click()}
+          >
+            {image ? (
+              <>
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="미리보기"
+                  className="preview-image"
+                />
+                <button
+                  type="button"
+                  className="remove-btn"
+                  onClick={handleImageRemove}
+                >
+                  ×
+                </button>
+              </>
+            ) : (
+              <span className="text-muted">+</span>
+            )}
+          </div>
+
           <input
             type="file"
+            id="image"
             accept="image/*"
-            id="imageUpload"
-            className="w-full border border-gray-300 rounded-md px-3 py-2"
-            onChange={(e) => setImage(e.target.files[0])}
+            className="form-control visually-hidden"
+            onChange={handleImageChange}
+            disabled={image !== null}
           />
-          {image && <p className="text-sm mt-2 text-gray-500">{image.name}</p>}
+
+          <div className="text-muted small mt-1">{image ? "1/1" : "0/1"}</div>
         </div>
 
-        {/* 제목 입력 */}
-        <div>
-          <label className="block text-gray-600 font-medium mb-2">
-            공지 제목
-          </label>
+        {/* 제목 */}
+        <div className="mb-3">
+          <label className="form-label">공지 제목</label>
           <input
             type="text"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            className="form-control rounded-input"
             placeholder="제목을 입력해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
 
-        {/* 내용 입력 */}
-        <div>
-          <label className="block text-gray-600 font-medium mb-2">
-            공지 내용
-          </label>
+        {/* 내용 */}
+        <div className="mb-3">
+          <label className="form-label">공지 내용</label>
           <textarea
-            className="w-full border border-gray-300 rounded-md px-3 py-2 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="중요한 공지 사항을 작성해주세요."
+            className="form-control rounded-input"
+            rows="4"
+            placeholder="작성하신 공지는 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다. 중요한 공지 사항은 정확하고 신중하게 작성해주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-          ></textarea>
+          />
         </div>
 
-        {/* 동의 체크 */}
-        <div className="flex items-start gap-2">
+        {/* 체크박스 */}
+        <div className="form-check mb-4">
           <input
+            className="form-check-input"
             type="checkbox"
-            id="confirm"
-            className="mt-1 h-4 w-4 text-green-500 border-gray-300 rounded"
+            id="agreeCheck"
             checked={agree}
             onChange={(e) => setAgree(e.target.checked)}
           />
           <label
-            htmlFor="confirm"
-            className="text-sm text-gray-700 leading-snug"
+            className="form-check-label text-muted small"
+            htmlFor="agreeCheck"
           >
-            글 등록 시 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다.
-            신중하게 작성해주세요.
+            글 등록 시 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다.{" "}
+            <br />
+            중요한 공지 사항은 정확하고 신중하게 작성해주세요.
           </label>
         </div>
 
-        {/* 제출 버튼 */}
+        {/* 완료 버튼 */}
         <button
           type="submit"
+          className="btn w-100"
+          style={{
+            backgroundColor: agree ? "#6c757d" : "#d3d3d3",
+            color: "white",
+            cursor: agree ? "pointer" : "not-allowed",
+          }}
           disabled={!agree}
-          className={`w-full py-2 px-4 rounded-md text-white font-semibold transition 
-            ${
-              agree
-                ? "bg-green-600 hover:bg-green-700"
-                : "bg-gray-400 cursor-not-allowed"
-            }`}
         >
-          공지 등록
+          완료
         </button>
       </form>
     </div>

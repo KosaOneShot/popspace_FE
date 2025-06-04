@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
+import { useDrag } from "react-use-gesture";
+import { useSpring, animated } from "react-spring";
+import DragCont from "./DragCont";
 
 const NoticePopupContainer = ({ nickname }) => {
   const [notices, setNotices] = useState([]);
@@ -20,6 +23,7 @@ const NoticePopupContainer = ({ nickname }) => {
     );
 
     sse.addEventListener("new-notification", (event) => {
+      console.log("[SSE 수신됨]", event.data);
       const data = JSON.parse(event.data);
       setNotices((prev) => [...prev, data]);
     });
@@ -38,14 +42,16 @@ const NoticePopupContainer = ({ nickname }) => {
 
   return (
     <>
+      {" "}
       {Array.isArray(notices)
         ? notices.map((notice, idx) => (
-            <NoticePopup
+            <DragCont
               key={idx}
               title={notice.title}
               content={notice.content}
               imageUrl={notice.imageUrl}
               onClose={() => handleClose(idx)}
+              onHideToday={() => console.log("하루 보지 않기")}
             />
           ))
         : null}
