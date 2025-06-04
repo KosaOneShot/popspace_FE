@@ -1,19 +1,20 @@
-import { Route, Routes } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';     //bootstrap
+import 'bootstrap-icons/font/bootstrap-icons.css'; //bootstrap-icons
 import './App.css';
-
-
-
+import { Route, Routes } from 'react-router-dom';
+import { Header, Footer, Layout } from './components';
 
 
 function App() {
   return (
     <div>
-      {/* <PageHeader /> */}
-      <Routes>
-        {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
-        {/* <Route path='/auth/login' element={<LoginForm />} /> */}
-        {/* <Route path='/main' element = {<Main /> }/> */}
-      </Routes>
+        <Header/>
+        <Layout>
+          <Routes>
+            {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
+          </Routes>
+          <Footer/>
+      </Layout>
     </div>
   );
 }
