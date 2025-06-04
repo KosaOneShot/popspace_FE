@@ -1,0 +1,63 @@
+:root {
+  --main-green: #1D9D8B;        /* 진한 청록 */
+  --light-green: #A7E3DB;       /* 연한 청록 */
+  --disabled-gray: #D3D3D3;
+}
+
+.baseButton {
+  width: auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--main-green);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.baseButton:hover {
+  background-color: var(--light-green);
+}
+
+.baseButton:disabled {
+  background-color: var(--disabled-gray);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.primaryButton {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border: 0.075rem solid var(--main-green);
+  color: var(--main-green);
+}
+
+.primaryButton:hover {
+  opacity: 0.8;
+  background-color: var(--light-green);
+}
+
+@media (max-width: 768px) {
+  td .primaryButton {
+    width: 50%;
+    padding: 6px 12px;
+    font-size: 13px;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  td .primaryButton {
+    width: 70px !important;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
