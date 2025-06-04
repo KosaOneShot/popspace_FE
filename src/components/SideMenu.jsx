@@ -1,10 +1,9 @@
 const menuItems = [
-  { label: "내 정보", href: "/profile" },
+  { label: "홈", href: "/" },
   { label: "팝업 목록", href: "/popups" },
-  { label: "팝업 예약 목록", href: "/reservations" },
-  { label: "공지 등록", href: "/notice" },
-  { label: "통계 보기", href: "/stats" },
-  { label: "웨이팅 시간", href: "/waiting" },
+  { label: "예약 내역", href: "/reservations" },
+  { label: "마이페이지", href: "/mypage" },
+  { label: "통계 (사장님)", href: "/stats" },
 ];
 
 const SideMenu = ({ isOpen, onClose, appWidth }) => {
