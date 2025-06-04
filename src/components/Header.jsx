@@ -13,8 +13,8 @@ const Header = () => {
         style={{ maxWidth: `${APP_WIDTH}px`, height: `${HEADER_HEIGHT}px`, zIndex: 1000 }}
       >
         <a href="/" className="d-flex align-items-center text-decoration-none">
-          <i className="bi bi-rocket-takeoff-fill fs-4 me-2"></i>
-          <span className="fw-bold fs-5">pop-space</span>
+          <i className="bi bi-rocket-takeoff-fill fs-4 me-2" style={{ color: "black" }}></i>
+          <span className="fw-bold fs-5 " style={{ color: "black" }}>POP-SPACE</span>
         </a>
 
         <button
