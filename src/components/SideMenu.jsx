@@ -4,6 +4,7 @@ const menuItems = [
   { label: "예약 내역", href: "/reservations" },
   { label: "마이페이지", href: "/mypage" },
   { label: "통계 (사장님)", href: "/stats" },
+  { label: "QR 스캔 (사장님)", href: "/qr-scan" },
 ];
 
 const SideMenu = ({ isOpen, onClose, appWidth }) => {
