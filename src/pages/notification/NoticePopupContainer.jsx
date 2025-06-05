@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
+import { useAuth } from "../../components/context/AuthContext";
 
-const NoticePopupContainer = ({ nickname }) => {
+const NoticePopupContainer = () => {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
-    if (!nickname) return;
-
     // ✅ 기존 공지들 조회
     axi
-      .get(`/notifications/nickname/${nickname}`)
+      .get(`/notifications`)
       .then((res) => setNotices(res.data))
       .then(console.log("[SSE 수신됨]", notices))
       .catch((err) => console.error("공지 불러오기 실패", err));
 
     // ✅ SSE 실시간 연결
     const sse = new EventSource(
-      `${import.meta.env.VITE_API_URL}/sse/subscribe/${nickname}`
+      `${import.meta.env.VITE_API_URL}/sse/subscribe`
     );
 
     sse.addEventListener("new-notification", (event) => {
@@ -32,7 +31,7 @@ const NoticePopupContainer = ({ nickname }) => {
     };
 
     return () => sse.close();
-  }, [nickname]);
+  }, []);
 
   const handleClose = (notifyIdToClose) => {
     setNotices((prev) =>

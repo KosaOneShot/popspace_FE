@@ -28,9 +28,9 @@ const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
         </button>
       </div>
       <hr className="popup-divider" />
-      {/* {imageUrl && (
+      {imageUrl && (
         <img src={imageUrl} alt="공지 이미지" className="popup-image" />
-      )} */}
+      )}
       <div className="popup-content">
         {content.split("\n").map((line, i) => (
           <p key={i}>{line}</p>

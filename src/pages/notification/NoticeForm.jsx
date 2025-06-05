@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./NoticeForm.css";
 import axi from "../../utils/axios/Axios";
+import { useAuth } from "../../components/context/AuthContext";
 
 const NoticeForm = ({ popupId }) => {
   const [title, setTitle] = useState("");
@@ -33,10 +34,9 @@ const NoticeForm = ({ popupId }) => {
     }
 
     const formData = new FormData();
-    formData.append("popupId", popupId);
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("image", image);
+    formData.append("file", image);
 
     try {
       await axi.post("/notifications", formData, {
