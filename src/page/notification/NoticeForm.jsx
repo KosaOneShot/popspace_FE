@@ -42,7 +42,7 @@ const NoticeForm = ({ popupId }) => {
       await axi.post("/notifications", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("공지 등록 성공!");
+      alert("공지를 전송하였습니다.");
       setTitle("");
       setContent("");
       setImage(null);
@@ -54,8 +54,8 @@ const NoticeForm = ({ popupId }) => {
   };
 
   return (
-    <div className="notice-form-container d-flex flex-column align-items-center px-4 py-5">
-      <h5 className="text-success fw-bold mb-4">공지 작성</h5>
+    <div className="notice-form-container align-items-center px-4 py-4">
+      <h5 className="text-success fw-bold mb-4 text-center">공지 작성</h5>
 
       <form
         onSubmit={handleSubmit}
