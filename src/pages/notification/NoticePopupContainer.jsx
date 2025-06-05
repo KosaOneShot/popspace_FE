@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
-import { useAuth } from "../../components/context/AuthContext";
-
+import Cookies from "js-cookie";
 const NoticePopupContainer = () => {
   const [notices, setNotices] = useState([]);
 
@@ -42,16 +41,19 @@ const NoticePopupContainer = () => {
   return (
     <>
       {Array.isArray(notices)
-        ? notices.map((notice) => (
-            <NoticePopup
-              key={notice.notifyId}
-              title={notice.title}
-              content={notice.content}
-              imageUrl={notice.imageUrl}
-              onClose={() => handleClose(notice.notifyId)}
-              onHideToday={() => console.log("하루 보지 않기")}
-            />
-          ))
+        ? notices
+            .filter((n) => !Cookies.get(`hidePopup_${n.notifyId}`)) // ✅ 쿠키 필터링
+            .map((notice) => (
+              <NoticePopup
+                key={notice.notifyId}
+                notifyId={notice.notifyId}
+                title={notice.title}
+                content={notice.content}
+                imageUrl={notice.imageUrl}
+                onClose={() => handleClose(notice.notifyId)}
+                onHideToday={() => console.log("하루 보지 않기")}
+              />
+            ))
         : null}
     </>
   );

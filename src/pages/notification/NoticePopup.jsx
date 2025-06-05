@@ -1,12 +1,22 @@
-import { useSpring, animated } from "react-spring";
-import { useDrag } from "react-use-gesture";
 import "./NoticePopup.css";
+import Cookies from "js-cookie";
+import { useState } from "react";
 
-const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
+const NoticePopup = ({ notifyId, title, content, imageUrl, onClose }) => {
   // const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
   // const bind = useDrag(({ offset: [ox, oy] }) => {
   //   api.start({ x: ox, y: oy });
   // });
+  const [hideToday, setHideToday] = useState(false);
+  const handleClose = () => {
+    if (hideToday) {
+      // ✅ 오늘 하루 보지 않기 쿠키 저장 (24시간)
+      const expire = new Date();
+      expire.setHours(23, 59, 59, 999);
+      Cookies.set(`hidePopup_${notifyId}`, "true", { expires: expire });
+    }
+    onClose();
+  };
 
   return (
     // <animated.div
@@ -23,7 +33,7 @@ const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
     <div className="notice-popup">
       <div className="popup-header">
         <span className="popup-title">[{title}]</span>
-        <button className="popup-close" onClick={onClose}>
+        <button className="popup-close" onClick={handleClose}>
           ×
         </button>
       </div>
@@ -38,10 +48,16 @@ const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
       </div>
       <div className="popup-footer">
         <label className="popup-checkbox">
-          <input type="checkbox" onChange={onHideToday} /> 오늘 하루동안 보지
-          않기
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id={`hideCheck_${notifyId}`}
+            checked={hideToday}
+            onChange={(e) => setHideToday(e.target.checked)}
+          />
+          오늘 하루동안 보지 않기
         </label>
-        <button className="popup-btn" onClick={onClose}>
+        <button className="popup-btn" onClick={handleClose}>
           닫기
         </button>
       </div>
