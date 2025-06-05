@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
 import Cookies from "js-cookie";
+import { useAuth } from "../../components/context/AuthContext";
 const NoticePopupContainer = () => {
   const [notices, setNotices] = useState([]);
+  const { nickname } = useAuth();
 
   useEffect(() => {
+    if (!nickname) {
+      return;
+    }
     // ✅ 기존 공지들 조회
     axi
       .get(`/notifications`)
@@ -51,7 +56,6 @@ const NoticePopupContainer = () => {
                 content={notice.content}
                 imageUrl={notice.imageUrl}
                 onClose={() => handleClose(notice.notifyId)}
-                onHideToday={() => console.log("하루 보지 않기")}
               />
             ))
         : null}

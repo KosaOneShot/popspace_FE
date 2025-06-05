@@ -9,6 +9,13 @@ const NoticeForm = ({ popupId }) => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [agree, setAgree] = useState(false);
+  const { nickname } = useAuth();
+
+  if (!nickname) {
+    alert("로그인이 필요합니다.");
+    window.location.href = "/auth/login";
+    return null;
+  }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
