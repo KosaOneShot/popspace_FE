@@ -1,8 +1,25 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useSpring, animated } from "react-spring";
+import { useDrag } from "react-use-gesture";
 import "./NoticePopup.css";
 
 const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
+  // const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
+  // const bind = useDrag(({ offset: [ox, oy] }) => {
+  //   api.start({ x: ox, y: oy });
+  // });
+
   return (
+    // <animated.div
+    //   {...bind()}
+    //   style={{
+    //     x,
+    //     y,
+    //     position: "fixed",
+    //     zIndex: 1000,
+    //     touchAction: "none",
+    //   }}
+    //   className="popup-container"
+    // >
     <div className="notice-popup">
       <div className="popup-header">
         <span className="popup-title">[{title}]</span>
@@ -29,6 +46,7 @@ const NoticePopup = ({ title, content, imageUrl, onClose, onHideToday }) => {
         </button>
       </div>
     </div>
+    // </animated.div>
   );
 };
 

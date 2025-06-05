@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
-import { useDrag } from "react-use-gesture";
-import { useSpring, animated } from "react-spring";
-import DragCont from "./DragCont";
 
 const NoticePopupContainer = ({ nickname }) => {
   const [notices, setNotices] = useState([]);
@@ -15,6 +12,7 @@ const NoticePopupContainer = ({ nickname }) => {
     axi
       .get(`/notifications/nickname/${nickname}`)
       .then((res) => setNotices(res.data))
+      .then(console.log("[SSE 수신됨]", notices))
       .catch((err) => console.error("공지 불러오기 실패", err));
 
     // ✅ SSE 실시간 연결
@@ -36,21 +34,22 @@ const NoticePopupContainer = ({ nickname }) => {
     return () => sse.close();
   }, [nickname]);
 
-  const handleClose = (index) => {
-    setNotices((prev) => prev.filter((_, i) => i !== index));
+  const handleClose = (notifyIdToClose) => {
+    setNotices((prev) =>
+      prev.filter((notice) => notice.notifyId !== notifyIdToClose)
+    );
   };
 
   return (
     <>
-      {" "}
       {Array.isArray(notices)
-        ? notices.map((notice, idx) => (
-            <DragCont
-              key={idx}
+        ? notices.map((notice) => (
+            <NoticePopup
+              key={notice.notifyId}
               title={notice.title}
               content={notice.content}
               imageUrl={notice.imageUrl}
-              onClose={() => handleClose(idx)}
+              onClose={() => handleClose(notice.notifyId)}
               onHideToday={() => console.log("하루 보지 않기")}
             />
           ))
