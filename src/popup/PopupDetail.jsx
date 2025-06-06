@@ -111,7 +111,7 @@ const PopupDetail = () => {
   return (
     <div
       className="d-flex flex-column overflow-hidden"
-      style={{ paddingBottom: "150px" /* footer 생각한 하단 여백 */ }}
+      style={{ paddingBottom: "100px" /* footer 생각한 하단 여백 */ }}
     >
       {/* 상단 스크롤 영역: 가로 390px로 고정, 중앙 정렬 */}
       <div className="flex-grow-1 overflow-x-hidden overflow-y-auto">
@@ -166,7 +166,6 @@ const PopupDetail = () => {
           <hr className="border border-2 opacity-50 rounded" />
 
           {/* 리뷰 섹션 */}
-          <h6 className="mb-2">리뷰</h6>
           <ReviewList reviews={reviews} />
         </div>
       </div>

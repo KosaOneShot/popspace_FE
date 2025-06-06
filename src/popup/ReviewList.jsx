@@ -29,10 +29,10 @@ const ReviewList = ({ reviews }) => {
       </div>
       {reviews.map((rev) => (
         <ReviewItem
-          key={rev.review_id}
+          key={rev.reviewId}
           rating={rev.rating}
           content={rev.content}
-          createdAt={rev.created_at}
+          createdAt={rev.createdAt}
         />
       ))}
     </div>
