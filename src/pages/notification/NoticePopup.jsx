@@ -10,7 +10,7 @@ const NoticePopup = ({ notifyId, title, content, imageUrl, onClose }) => {
   const [hideToday, setHideToday] = useState(false);
   const handleClose = () => {
     if (hideToday) {
-      // ✅ 오늘 하루 보지 않기 쿠키 저장 (24시간)
+      // 오늘 하루 보지 않기 쿠키 저장 (24시간)
       const expire = new Date();
       expire.setHours(23, 59, 59, 999);
       Cookies.set(`hidePopup_${notifyId}`, "true", { expires: expire });

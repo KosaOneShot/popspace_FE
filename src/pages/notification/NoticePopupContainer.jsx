@@ -8,10 +8,8 @@ const NoticePopupContainer = () => {
   const { nickname } = useAuth();
 
   useEffect(() => {
-    if (!nickname) {
-      return;
-    }
     // ✅ 기존 공지들 조회
+    if (!nickname) return;
     axi
       .get(`/notifications`)
       .then((res) => setNotices(res.data))
@@ -20,7 +18,10 @@ const NoticePopupContainer = () => {
 
     // ✅ SSE 실시간 연결
     const sse = new EventSource(
-      `${import.meta.env.VITE_API_URL}/sse/subscribe`
+      `${import.meta.env.VITE_API_URL}/sse/subscribe`,
+      {
+        withCredentials: true,
+      }
     );
 
     sse.addEventListener("new-notification", (event) => {
@@ -35,7 +36,7 @@ const NoticePopupContainer = () => {
     };
 
     return () => sse.close();
-  }, []);
+  }, [nickname]);
 
   const handleClose = (notifyIdToClose) => {
     setNotices((prev) =>

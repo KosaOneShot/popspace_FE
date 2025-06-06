@@ -13,7 +13,7 @@ function App() {
     <div>
       <Header />
       <Layout>
-        <NoticePopupContainer />
+        {/* <NoticePopupContainer /> */}
         <Routes>
           {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
           <Route path="/auth/register" element={<RegisterForm />} />
