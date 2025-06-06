@@ -19,9 +19,8 @@ const PopupDetail = () => {
     console.log("여기 왔어요");
     const fetchAll = async () => {
       try {
-        const rlResponse = await axi.get("/popup/detail/reserve-like", {
-          params: { popupId: Number(popupId) },
-        });
+        // const rlResponse = await axi.get(`/popup/detail/reserve-like/${popupId}`);
+        const rlResponse = await axi.get(`/popup/detail/reserve-like`);
         const rlData = rlResponse.data;
         setIsLiked(!!rlData.isPopupLike);
         setReservation(rlData.reservation || null);
@@ -30,9 +29,8 @@ const PopupDetail = () => {
       }
 
       try {
-        const irResponse = await axi.get("/popup/detail/info-review", {
-          params: { popupId: Number(popupId) },
-        });
+        // const irResponse = await axi.get(`/popup/detail/info-review/${popupId}`);
+        const irResponse = await axi.get(`/popup/detail/info-review`);
         const irData = irResponse.data;
         setInfo(irData.popupInfo);
         setReviews(Array.isArray(irData.reviewList) ? irData.reviewList : []);
