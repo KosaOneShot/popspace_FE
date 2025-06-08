@@ -4,6 +4,7 @@ import axi from "../../../utils/axios/Axios";
 
 const WrittenReview = ({ goToPending }) => {
   const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
@@ -15,8 +16,12 @@ const WrittenReview = ({ goToPending }) => {
       })
       .catch((err) => {
         console.error("리뷰 불러오기 실패", err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
+  if (loading) return <div className="text-center py-5">불러오는 중...</div>;
 
   return (
     <div className="container bg-light pb-3 min-vh-100">
