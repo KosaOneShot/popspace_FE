@@ -1,0 +1,13 @@
+.profile-form {
+  margin: 20px;
+}
+
+.profile-label {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.profile-readonly {
+  background-color: #929292;
+  color: #999;
+}
