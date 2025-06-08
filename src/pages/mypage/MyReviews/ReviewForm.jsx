@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import StarRating from "./StarRating";
+import axi from "../../../utils/axios/Axios";
 
 function ReviewForm() {
   const location = useLocation();
@@ -8,6 +9,7 @@ function ReviewForm() {
   const query = new URLSearchParams(location.search);
   const data = location.state?.data;
   const [reviewData, setReviewData] = useState(data || null);
+
   const isEditMode = !!data?.content;
   const [rating, setRating] = useState(data?.rating || 0);
   const [content, setContent] = useState(data?.content || "");
@@ -15,23 +17,30 @@ function ReviewForm() {
   useEffect(() => {
     if (!reviewData) {
       const id = query.get("id");
-      if (id) {
-        fetch(`/api/pending-reviews/${id}`)
-          .then((res) => res.json())
-          .then((data) => setPopupInfo(data));
+      if (id && !isEditMode) {
+        axi.get(`/api/pending-reviews/${id}`).then((res) => {
+          setReviewData(res.data);
+        });
       }
     }
-  }, [reviewData, query]);
+  }, [reviewData, query, isEditMode]);
 
   const handleSubmit = () => {
-    const method = isEditMode ? "PUT" : "POST";
-    const url = isEditMode ? `/api/reviews/${reviewData.id}` : "/api/reviews";
+    const method = isEditMode ? "put" : "post";
+    const url = isEditMode
+      ? `/api/reviews/${reviewData.reviewId}`
+      : "/api/reviews";
 
-    fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: reviewData.id, rating, content }),
-    }).then(() => navigate("/mypage", { state: { tab: "myReviews" } }));
+    const payload = isEditMode
+      ? { rating, content }
+      : { reserveId: reviewData.reserveId, rating, content };
+
+    axi[method](url, payload)
+      .then(() => navigate("/mypage", { state: { tab: "myReviews" } }))
+      .catch((err) => {
+        console.error("후기 저장 실패", err);
+        alert("후기 저장에 실패했습니다.");
+      });
   };
 
   if (!reviewData)

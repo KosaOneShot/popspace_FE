@@ -10,7 +10,7 @@ const MyReviews = () => {
       {subTab === "written" ? (
         <WrittenReview goToPending={() => setSubTab("pending")} />
       ) : (
-        <PendingReview goToWritten={() => setSubTab("written")} />
+        <PendingReview />
       )}
     </div>
   );

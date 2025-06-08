@@ -1,42 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axi from "../../../utils/axios/Axios";
 
-function PendingReview({ goToWritten }) {
+function PendingReview() {
   const navigate = useNavigate();
   const [pending, setPending] = useState([]);
 
   useEffect(() => {
-    // fetch("/api/pending-reviews")
-    //   .then((res) => res.json())
-    //   .then((data) => setPending(data));
-    setPending([
-      {
-        id: 1,
-        title: "빵빵이의 타로집 in 신세계 강남 팝업",
-        visitedDate: "2025년 6월 1일",
-        imageUrl: "https://placehold.co/400x1000.png",
-      },
-      {
-        popupId: 2,
-        title: "무무의 팝업스토어 in 코엑스몰",
-        visitedDate: "2025년 6월 10일",
-        imageUrl: "https://placehold.co/400x400.png?text=popup",
-      },
-      {
-        popupId: 3,
-        title: "오늘의 작가전 in 현대백화점",
-        visitedDate: "2025년 5월 20일",
-        imageUrl: "https://placehold.co/400x400.png?text=popup",
-      },
-    ]);
+    axi
+      .get("/api/reviews/pending")
+      .then((res) => {
+        setPending(res.data);
+      })
+      .catch((err) => {
+        console.error("미작성 후기 조회 실패", err);
+      });
   }, []);
 
   return (
-    <div className="container py-2 bg-light min-vh-100">
+    <div className="container pb-3 bg-light min-vh-100">
       <h4 className="fw-bold text-emerald mb-3 text-center">미작성 후기</h4>
 
       {pending.map((popup) => (
-        <div className="card mb-3 shadow-sm" key={popup.id}>
+        <div className="card mb-3 shadow-sm" key={popup.reserveId}>
           <div className="card-body pb-0 d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
               <img
@@ -60,7 +46,7 @@ function PendingReview({ goToWritten }) {
             <button
               className="btn-emerald w-100"
               onClick={() =>
-                navigate(`/write-review?id=${popup.id}`, {
+                navigate(`/write-review?id=${popup.reserveId}`, {
                   state: { data: popup },
                 })
               }
