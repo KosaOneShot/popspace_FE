@@ -4,6 +4,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import { Header, Footer, Layout } from './components'
 import { PopupDetail, PopupList } from './popup';
+import {ReservationList} from './reservation';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
           <Routes>
             <Route path="/popup/detail/:popupId" element={<PopupDetail />} />
             <Route path='/popup/list' element={<PopupList/>} />
-            {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
+            <Route path='/reservation/list' element={<ReservationList/>} />
           </Routes>
           <Footer/>
       </Layout>
