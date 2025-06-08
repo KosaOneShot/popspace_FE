@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axi from "../utils/axios/Axios";
-
+import {axiUpdatePopupLike} from './popupAxios';
 /** 하단 “예약하기 + 찜하기” 버튼 바 */
 const FooterButtons = ({ popupId, memberId }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -12,17 +12,14 @@ const FooterButtons = ({ popupId, memberId }) => {
   // 찜 버튼 클릭 시 호출되는 함수
   const handleLikeToggle = async () => {
     try {
-      // const response = await axi.post("/popup/detail/like-update", 
-      //   { "popupId" : popupId, "isLiked" : !isLiked }
-      // );
-      const response = await axi.post(`/popup/detail/like-update`);
-      if (response.data && typeof response.data.isLiked === "boolean") {
-        setIsLiked(response.data.isLiked);
-      }
-    } catch (error) {
-      console.error("Failed to update like state:", error);
-    }
+      const resLiked = await axiUpdatePopupLike(1, !isLiked);
+      setIsLiked(resLiked);
+    } catch (err) {
+      console.error(err);
+    }    
   };
+
+  
 
   return (
     <div
