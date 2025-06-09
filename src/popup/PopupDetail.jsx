@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FooterButtons from "./PopupDetailFooter";
 import ReviewList from "./ReviewList";
-import axi from "../utils/axios/Axios";
+import { axiFetchPopupDetail } from "./popupAxios";
 
 const PopupDetail = () => {
   const { popupId } = useParams();
@@ -15,32 +15,15 @@ const PopupDetail = () => {
 
   /* 데이터 불러오기 */
   useEffect(() => {
-    // if (!popupId) return;
-    console.log("여기 왔어요");
-    const fetchAll = async () => {
-      try {
-        // const rlResponse = await axi.get(`/popup/detail/reserve-like/${popupId}`);
-        const rlResponse = await axi.get(`/popup/detail/reserve-like`);
-        const rlData = rlResponse.data;
-        setIsLiked(!!rlData.isPopupLike);
-        setReservation(rlData.reservation || null);
-      } catch (err) {
-        console.error("예약/찜 여부 조회 실패:", err);
-      }
-
-      try {
-        // const irResponse = await axi.get(`/popup/detail/info-review/${popupId}`);
-        const irResponse = await axi.get(`/popup/detail/info-review`);
-        const irData = irResponse.data;
-        setInfo(irData.popupInfo);
-        setReviews(Array.isArray(irData.reviewList) ? irData.reviewList : []);
-      } catch (err) {
-        console.error("팝업 정보/리뷰 조회 실패:", err);
-      }
-      setLoading(false);
-    };
-
-    fetchAll();
+    axiFetchPopupDetail(popupId)
+      .then(({ isPopupLike, reservation, popupInfo, reviewList }) => {
+        setIsLiked(isPopupLike);
+        setReservation(reservation);
+        setInfo(popupInfo);
+        setReviews(reviewList);
+      })
+      .catch(err => console.error('데이터 로드 실패:', err))
+      .finally(() => setLoading(false));
   }, [popupId]);
 
   if (loading) {

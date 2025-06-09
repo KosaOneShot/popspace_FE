@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axi from "../utils/axios/Axios";
 import {axiUpdatePopupLike} from './popupAxios';
 /** 하단 “예약하기 + 찜하기” 버튼 바 */
 const FooterButtons = ({ popupId, memberId }) => {
