@@ -5,14 +5,12 @@ import axi from "../../../utils/axios/Axios";
 const WrittenReview = ({ goToPending }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
     axi
       .get("/api/reviews")
       .then((res) => {
-        setReviews(res.data.written);
-        setPendingCount(res.data.pendingCount);
+        setReviews(res.data);
       })
       .catch((err) => {
         console.error("리뷰 불러오기 실패", err);
