@@ -63,7 +63,7 @@ const ReviewCard = ({ review, onDelete }) => {
               <button
                 className="btn btn-sm p-1 text-muted border-0 bg-transparent"
                 onClick={() =>
-                  navigate(`/edit-review?id=${review.reviewId}`, {
+                  navigate(`/review-form?id=${review.reviewId}`, {
                     state: { data: review },
                   })
                 }

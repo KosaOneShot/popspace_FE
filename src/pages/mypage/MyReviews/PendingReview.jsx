@@ -53,7 +53,7 @@ function PendingReview() {
               className="btn-emerald w-100"
               style={{ fontSize: "14px", padding: "8px 0" }}
               onClick={() =>
-                navigate(`/write-review?id=${popup.reserveId}`, {
+                navigate(`/review-form?id=${popup.reserveId}`, {
                   state: { data: popup },
                 })
               }
