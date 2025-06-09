@@ -1,5 +1,6 @@
 // PopupPage.jsx
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 카테고리별 색상
 const CATEGORY = {
@@ -79,22 +80,30 @@ const dummyData = [
 
 // 팝업 카드 컴포넌트
 function ReservationCard({ item }) {
+  const navigate = useNavigate();          // useNavigate 훅
   const borderColor = CATEGORY[item.category].color;
+
+  const handleCardClick = () => {
+    navigate(`/popup/detail/${item.id}`);  // 클릭 시 이동
+  };
+
   return (
     <div
       className="card mb-1"
       style={{
         border: `2px solid ${borderColor}`,
         height: '90px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        cursor: 'pointer'                   // 클릭 가능 커서
       }}
+      onClick={handleCardClick}             // 카드 전체 클릭 바인딩
     >
       <div className="row g-0 h-100 align-items-center">
         <div className="col-3" style={{ height: '90px', overflow: 'hidden' }}>
           <img
             src={item.imageUrl}
             alt={item.title}
-            style={{ width: '90%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
         <div className="col-9">
@@ -136,20 +145,6 @@ function ReservationCard({ item }) {
             </p>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// ReservationCard 컴포넌트 (PopupCard와 동일한 형식)
-function ReservationCard2({ item }) {
-  const borderColor = CATEGORY[item.category].color;
-  return (
-    <div className="card" style={{ border: `2px solid ${borderColor}` }}>
-      <div className="card-body">
-        <h5 className="card-title">{item.title}</h5>
-        <p className="card-text mb-1">{item.datetime}</p>
-        <p className="card-text text-muted">{item.location}</p>
       </div>
     </div>
   );
@@ -235,6 +230,7 @@ export default function PopupPage() {
                     type="button"
                     className={`btn ${filter === cat.label ? 'btn-light' : 'btn-outline-light'}`}
                     style={{
+                        width: '30%',
                         borderColor:     cat.color,
                         backgroundColor: filter === cat.label ? cat.color : '#fff',
                         color:           filter === cat.label ? '#fff' : cat.color
