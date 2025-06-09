@@ -17,16 +17,16 @@ const QrScan = () => {
     const handleScanSuccess = async (decodedText) => {
         try {
             const urlObj = new URL(decodedText);
-            const reservation_id = urlObj.searchParams.get('reservation_id');
+            const reservationId = urlObj.searchParams.get('reservationId');
             const sig = urlObj.searchParams.get('sig');
 
-            if (!reservation_id || !sig) {
+            if (!reservationId || !sig) {
                 setErrorMessage('QR 코드 형식이 올바르지 않습니다.');
                 return;
             }
 
             const apiUrl = '/api/qr/verify';
-            const res = await axi.post(apiUrl, { reservation_id, sig });
+            const res = await axi.post(apiUrl, { reservationId, sig });
             setReservationInfo(res.data);
             setErrorMessage('');
         } catch (err) {
@@ -154,30 +154,30 @@ const QrScan = () => {
                                 </p>
                                 <p style={{ color: '#888888', marginBottom: '8px' }}>
                                     예약타입&nbsp; <span style={{ color: '#000000' }}>
-                                        {reservationInfo.reservationType === '1' ? '사전 예약' : reservationInfo.reservationType === '2' ? '현장 웨이팅' : '알 수 없음'}
+                                        {reservationInfo.reservationType === 'ADVANCE' ? '사전 예약' : reservationInfo.reservationType === 'WALK_IN' ? '현장 웨이팅' : '알 수 없음'}
                                     </span>
                                 </p>
 
                                 <div className="mt-4">
-                                    {reservationInfo.reservationState === '1' && (
+                                    {reservationInfo.reservationState === 'RESERVED' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 가능한 예약</p>
                                             <button className="btn btn-success w-100 mt-2">입장 처리</button>
                                         </>
                                     )}
-                                    {reservationInfo.reservationState === '2' && (
+                                    {reservationInfo.reservationState === 'CANCELED' && (
                                         <p style={{ color: '#E74C3C' }}>취소된 예약입니다</p>
                                     )}
-                                    {reservationInfo.reservationState === '3' && (
+                                    {reservationInfo.reservationState === 'CHECKED_IN' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 처리된 예약</p>
                                             <button className="btn btn-danger w-100 mt-2">퇴장 처리</button>
                                         </>
                                     )}
-                                    {reservationInfo.reservationState === '4' && (
+                                    {reservationInfo.reservationState === 'CHECKED_OUT' && (
                                         <p style={{ color: '#E74C3C' }}>퇴장 처리된 예약입니다</p>
                                     )}
-                                    {reservationInfo.reservationState === '5' && (
+                                    {reservationInfo.reservationState === 'NOSHOW' && (
                                         <p style={{ color: '#E74C3C' }}>노쇼 처리된 예약입니다</p>
                                     )}
                                 </div>
