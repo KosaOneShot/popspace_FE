@@ -33,7 +33,7 @@ class Axios {
                         originalRequest._retry = true;
                         
                         try {
-                            await Axios.instance.get("/auth/token/refresh");
+                            await Axios.instance.get("/auth/refresh");
 
                             return Axios.instance.request(originalRequest);
                         } catch (refreshError) {

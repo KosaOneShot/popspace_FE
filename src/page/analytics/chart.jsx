@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Doughnut, Line } from "react-chartjs-2";
 import { chartUtils } from "../../utils/chartUtils";
 import classes from "./chart.module.css";
+import axi from "../../utils/axios/Axios";
 
 ChartJS.register(
     ArcElement,
@@ -31,254 +32,311 @@ const Chart = () => {
     const [totalData, setTotalData] = useState(null);
     const [selectedChart, setSelectedChart] = useState("1");
 
-    useEffect(() => {
-        const result = {
-            totalReservationCount: 1240,
-            wishCount: 328,
-            reviewCount: 87,
-            averageRating: 4.6,
-            genderRatio: {
-                male: 60.0,
-                female: 40.0,
-            },
-            ageRatio: {
-                "10s": 5.0,
-                "20s": 35.0,
-                "30s": 40.0,
-                "40s": 15.0,
-                "50s": 3.0,
-                "60s": 2.0,
-            },
-            noShowRatio: {
-                noShow: 12.3,
-                show: 87.7,
-            },
-            weeklyVisitors: [
-                {
-                    week: "1주차",
-                    days: [
-                        { date: "2025-06-01", count: 35 },
-                        { date: "2025-06-02", count: 42 },
-                        { date: "2025-06-03", count: 38 },
-                        { date: "2025-06-04", count: 31 },
-                        { date: "2025-06-05", count: 46 },
-                        { date: "2025-06-06", count: 27 },
-                        { date: "2025-06-07", count: 52 },
-                    ],
-                },
-                {
-                    week: "2주차",
-                    days: [
-                        { date: "2025-06-08", count: 35 },
-                        { date: "2025-06-09", count: 42 },
-                        { date: "2025-06-10", count: 38 },
-                        { date: "2025-06-11", count: 31 },
-                        { date: "2025-06-12", count: 46 },
-                        { date: "2025-06-13", count: 27 },
-                        { date: "2025-06-14", count: 52 },
-                    ],
-                },
-                {
-                    week: "3주차",
-                    days: [
-                        { date: "2025-06-15", count: 35 },
-                        { date: "2025-06-16", count: 42 },
-                        { date: "2025-06-17", count: 38 },
-                        { date: "2025-06-18", count: 31 },
-                        { date: "2025-06-19", count: 46 },
-                        { date: "2025-06-20", count: 27 },
-                        { date: "2025-06-21", count: 52 },
-                    ]
-                },
-                {
-                    week: "4주차",
-                    days: [
-                        { date: "2025-06-22", count: 35 },
-                        { date: "2025-06-23", count: 42 },
-                        { date: "2025-06-24", count: 38 },
-                        { date: "2025-06-25", count: 31 },
-                        { date: "2025-06-26", count: 46 },
-                        { date: "2025-06-27", count: 27 },
-                        { date: "2025-06-28", count: 52 },
-                    ]
-                },
-            ],
-        };
+    const getStatistics = async () => {
+        try {
+            const response = await axi.get("/api/popup/statistics/4");
+            console.log(response.data);
+            setTotalData(response.data);
+        } catch (err) {
+            console.error('실패:', err);
+        }
+    };
 
-        setTotalData(result);
+
+    useEffect(() => {
+        getStatistics();
     }, []);
 
     if (!totalData) return <div>Loading...</div>;
 
     const {
+        popupName,
         totalReservationCount,
-        wishCount,
+        totalEntranceCount,
+        likeCount,
         reviewCount,
         averageRating,
         genderRatio,
-        noShowRatio,
+        ageRatio,
+        advanceNoShowRatio,
+        walkInNoShowRatio,
         weeklyVisitors,
+        hourlyVisitors
     } = totalData;
 
     const genderChartData = {
         labels: ["남성", "여성"],
         datasets: [
             {
-                data: [genderRatio.male, genderRatio.female],
+                data: [genderRatio.maleRatio, genderRatio.femaleRatio],
                 hoverOffset: 6,
                 backgroundColor: ["#36A2EB", "#FF6384"],
             },
         ],
     };
 
-    const noShowChartData = {
-        labels: ["노쇼", "정상 방문"],
+    const advanceNoShowChartData = {
+        labels: ["노쇼", "취소", "정상 방문"],
         datasets: [
             {
-                data: [noShowRatio.noShow, noShowRatio.show],
-                hoverOffset: 6,
-                backgroundColor: ["#FF9F40", "#4BC0C0"],
+                data: [advanceNoShowRatio.noShowRatio, advanceNoShowRatio.cancelRatio, advanceNoShowRatio.showRatio],
+                backgroundColor: ["#FF6384", "#FFCE56", "#4BC0C0"],
             },
         ],
     };
 
+    const walkInNoShowChartData = {
+        labels: ["노쇼", "정상 방문"],
+        datasets: [
+            {
+                data: [walkInNoShowRatio.noShowRatio, walkInNoShowRatio.showRatio],
+                backgroundColor: ["#FF9F40", "#36A2EB"],
+            },
+        ],
+    };
+
+    const ageChartData = {
+        labels: Object.keys(ageRatio),
+        datasets: [
+            {
+                label: "연령대",
+                data: Object.values(ageRatio),
+                backgroundColor: chartUtils.barColors,
+            },
+        ],
+    };
+    
     return (
         <div className={classes.container}>
             <h2>📊 매장 대시보드</h2>
-            <h3>매장명</h3>
+            <h3>{popupName}</h3>
             <div className={classes.tabGroup}>
-                <label>
-                    <input
-                        type="radio"
-                        value="1"
-                        checked={selectedChart === "1"}
-                        onChange={(e) => setSelectedChart(e.target.value)}
-                    />
-                    <span>기본 정보</span>
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="2"
-                        checked={selectedChart === "2"}
-                        onChange={(e) => setSelectedChart(e.target.value)}
-                    />
-                    <span>성별 비율</span>
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="3"
-                        checked={selectedChart === "3"}
-                        onChange={(e) => setSelectedChart(e.target.value)}
-                    />
-                    <span>노쇼 비율</span>
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        value="4"
-                        checked={selectedChart === "4"}
-                        onChange={(e) => setSelectedChart(e.target.value)}
-                    />
-                    <span>일자별 방문자 수</span>
-                </label>
+                <label><input type="radio" value="1" checked={selectedChart === "1"} onChange={e => setSelectedChart(e.target.value)} /> 기본 정보</label>
+                <label><input type="radio" value="2" checked={selectedChart === "2"} onChange={e => setSelectedChart(e.target.value)} /> 성별 비율</label>
+                <label><input type="radio" value="3" checked={selectedChart === "3"} onChange={e => setSelectedChart(e.target.value)} /> 노쇼 비율</label>
+                <label><input type="radio" value="4" checked={selectedChart === "4"} onChange={e => setSelectedChart(e.target.value)} /> 연령대</label>
+                <label><input type="radio" value="5" checked={selectedChart === "5"} onChange={e => setSelectedChart(e.target.value)} /> 주간 방문자</label>
+                <label><input type="radio" value="6" checked={selectedChart === "6"} onChange={e => setSelectedChart(e.target.value)} /> 시간별 방문자</label>
             </div>
+
             {selectedChart === "1" && (
-                <div className={classes.chartContainer}>
-                    <div className={classes.summaryContainer}>
-                        <div className={classes.summaryCard}>
-                            <div className={classes.icon}>📅</div>
-                            <div className={classes.textContainer}>
-                                <h3>총 예약 수</h3>
-                                <p>{totalReservationCount.toLocaleString()}건</p>
-                            </div>
-                        </div>
-                        <div className={classes.summaryCard}>
-                            <div className={classes.icon}>💖</div>
-                            <div className={classes.textContainer}>
-                                <h3>찜 수</h3>
-                                <p>{wishCount.toLocaleString()}건</p>
-                            </div>
-                        </div>
-                        <div className={classes.summaryCard}>
-                            <div className={classes.icon}>📝</div>
-                            <div className={classes.textContainer}>
-                                <h3>리뷰 수</h3>
-                                <p>{reviewCount.toLocaleString()}건</p>
-                            </div>
-                        </div>
-                        <div className={classes.summaryCard}>
-                            <div className={classes.icon}>⭐</div>
-                            <div className={classes.textContainer}>
-                                <h3>평균 별점</h3>
-                                <p>{averageRating}점</p>
-                            </div>
-                        </div>
-                    </div>
+                <div className={classes.summaryContainer}>
+                    <div className={classes.summaryCard}><h4>총 예약 수</h4><p>{totalReservationCount}건</p></div>
+                    <div className={classes.summaryCard}><h4>입장 수</h4><p>{totalEntranceCount}건</p></div>
+                    <div className={classes.summaryCard}><h4>찜 수</h4><p>{likeCount}건</p></div>
+                    <div className={classes.summaryCard}><h4>리뷰 수</h4><p>{reviewCount}건</p></div>
+                    <div className={classes.summaryCard}><h4>평균 별점</h4><p>{averageRating}점</p></div>
                 </div>
             )}
 
             {selectedChart === "2" && (
-                <div className={classes.chartContainer}>
-                    <div className={classes.card}>
-                        <h4 className={classes.cardTitle}>성별 비율</h4>
-                        <div className={classes.chartBox}>
-
-                            <Doughnut data={genderChartData} options={chartUtils.donutChartOptions} />
-                        </div>
-                    </div>
+                <div className={classes.chartBox}>
+                    <h4>성별 비율</h4>
+                    <Doughnut data={genderChartData} options={chartUtils.donutChartOptions} />
                 </div>
             )}
 
             {selectedChart === "3" && (
-                <div className={classes.chartContainer}>
-                    <div className={classes.card}>
-                        <h4 className={classes.cardTitle}>노쇼 비율</h4>
-                        <div className={classes.chartBox}>
-
-                            <Doughnut data={noShowChartData} options={chartUtils.donutChartOptions} />
-                        </div>
+                <>
+                    <div className={classes.chartBox}>
+                        <h4>사전 예약 노쇼 비율</h4>
+                        <Doughnut data={advanceNoShowChartData} options={chartUtils.donutChartOptions} />
                     </div>
-                </div>
+                    <div className={classes.chartBox}>
+                        <h4>현장 방문 노쇼 비율</h4>
+                        <Doughnut data={walkInNoShowChartData} options={chartUtils.donutChartOptions} />
+                    </div>
+                </>
             )}
 
             {selectedChart === "4" && (
+                <div className={classes.chartBox}>
+                    <h4>연령대 비율</h4>
+                    <Doughnut data={ageChartData} options={chartUtils.donutChartOptions} />
+                </div>
+            )}
+
+            {selectedChart === "5" && (
                 <div className={classes.chartContainer}>
-                    {weeklyVisitors.map((weekData, index) => {
-                        const chartData = {
-                            labels: weekData.days.map((d) => d.date),
-                            datasets: [
-                                {
-                                    label: `${weekData.week} 방문자 수`,
-                                    data: weekData.days.map((d) => d.count),
-                                    borderColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
-                                    backgroundColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
-                                    pointBackgroundColor: "#fff",
-                                    pointBorderColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
-                                    borderWidth: 2,
-                                    tension: 0.3,
-                                    pointRadius: 4,
-                                    pointHoverRadius: 6,
-                                    fill: false,
-                                },
-                            ],
+                    {weeklyVisitors.map((week, idx) => {
+                        const data = {
+                            labels: week.dailyVisitors.map(d => d.date),
+                            datasets: [{
+                                label: `${week.weekNumber}주차`,
+                                data: week.dailyVisitors.map(d => d.count),
+                                borderColor: chartUtils.lineColors[idx % chartUtils.lineColors.length],
+                                backgroundColor: chartUtils.lineColors[idx % chartUtils.lineColors.length],
+                                tension: 0
+                            }],
                         };
-
                         return (
-                            <div key={weekData.week} className={classes.thinCard}>
-                                <h4 className={classes.cardTitle}>{weekData.week} 방문자 수</h4>
-                                <div className={classes.chartBox}>
-
-                                    <Line data={chartData} options={chartUtils.lineChartOptions} />
-                                </div>
+                            <div key={idx} className={classes.chartBox}>
+                                <Line data={data} options={chartUtils.lineChartOptions} />
                             </div>
                         );
                     })}
                 </div>
             )}
+
+            {selectedChart === "6" && (
+                <div className={classes.chartBox}>
+                    <h4>시간대별 방문자 수</h4>
+                    <Line
+                        data={{
+                            labels: hourlyVisitors.map(h => `${h.hour}시`),
+                            datasets: [
+                                {
+                                    label: "방문자 수",
+                                    data: hourlyVisitors.map(h => h.count),
+                                    borderColor: "#4BC0C0",
+                                    backgroundColor: "#4BC0C0",
+                                    tension: 0,
+                                },
+                            ],
+                        }}
+                        options={chartUtils.lineChartOptions}
+                    />
+                </div>
+            )}
         </div>
     );
+    // return (
+    //     <div className={classes.container}>
+    //         <h2>📊 매장 대시보드</h2>
+    //         <h3>매장명</h3>
+    //         <div className={classes.tabGroup}>
+    //             <label>
+    //                 <input
+    //                     type="radio"
+    //                     value="1"
+    //                     checked={selectedChart === "1"}
+    //                     onChange={(e) => setSelectedChart(e.target.value)}
+    //                 />
+    //                 <span>기본 정보</span>
+    //             </label>
+    //             <label>
+    //                 <input
+    //                     type="radio"
+    //                     value="2"
+    //                     checked={selectedChart === "2"}
+    //                     onChange={(e) => setSelectedChart(e.target.value)}
+    //                 />
+    //                 <span>성별 비율</span>
+    //             </label>
+    //             <label>
+    //                 <input
+    //                     type="radio"
+    //                     value="3"
+    //                     checked={selectedChart === "3"}
+    //                     onChange={(e) => setSelectedChart(e.target.value)}
+    //                 />
+    //                 <span>노쇼 비율</span>
+    //             </label>
+    //             <label>
+    //                 <input
+    //                     type="radio"
+    //                     value="4"
+    //                     checked={selectedChart === "4"}
+    //                     onChange={(e) => setSelectedChart(e.target.value)}
+    //                 />
+    //                 <span>일자별 방문자 수</span>
+    //             </label>
+    //         </div>
+    //         {selectedChart === "1" && (
+    //             <div className={classes.chartContainer}>
+    //                 <div className={classes.summaryContainer}>
+    //                     <div className={classes.summaryCard}>
+    //                         <div className={classes.icon}>📅</div>
+    //                         <div className={classes.textContainer}>
+    //                             <h3>총 예약 수</h3>
+    //                             <p>{totalReservationCount.toLocaleString()}건</p>
+    //                         </div>
+    //                     </div>
+    //                     <div className={classes.summaryCard}>
+    //                         <div className={classes.icon}>💖</div>
+    //                         <div className={classes.textContainer}>
+    //                             <h3>찜 수</h3>
+    //                             <p>{wishCount.toLocaleString()}건</p>
+    //                         </div>
+    //                     </div>
+    //                     <div className={classes.summaryCard}>
+    //                         <div className={classes.icon}>📝</div>
+    //                         <div className={classes.textContainer}>
+    //                             <h3>리뷰 수</h3>
+    //                             <p>{reviewCount.toLocaleString()}건</p>
+    //                         </div>
+    //                     </div>
+    //                     <div className={classes.summaryCard}>
+    //                         <div className={classes.icon}>⭐</div>
+    //                         <div className={classes.textContainer}>
+    //                             <h3>평균 별점</h3>
+    //                             <p>{averageRating}점</p>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         )}
+
+    //         {selectedChart === "2" && (
+    //             <div className={classes.chartContainer}>
+    //                 <div className={classes.card}>
+    //                     <h4 className={classes.cardTitle}>성별 비율</h4>
+    //                     <div className={classes.chartBox}>
+
+    //                         <Doughnut data={genderChartData} options={chartUtils.donutChartOptions} />
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         )}
+
+    //         {selectedChart === "3" && (
+    //             <div className={classes.chartContainer}>
+    //                 <div className={classes.card}>
+    //                     <h4 className={classes.cardTitle}>노쇼 비율</h4>
+    //                     <div className={classes.chartBox}>
+
+    //                         <Doughnut data={noShowChartData} options={chartUtils.donutChartOptions} />
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         )}
+
+    //         {selectedChart === "4" && (
+    //             <div className={classes.chartContainer}>
+    //                 {weeklyVisitors.map((weekData, index) => {
+    //                     const chartData = {
+    //                         labels: weekData.days.map((d) => d.date),
+    //                         datasets: [
+    //                             {
+    //                                 label: `${weekData.week} 방문자 수`,
+    //                                 data: weekData.days.map((d) => d.count),
+    //                                 borderColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
+    //                                 backgroundColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
+    //                                 pointBackgroundColor: "#fff",
+    //                                 pointBorderColor: chartUtils.lineColors[index % chartUtils.lineColors.length],
+    //                                 borderWidth: 2,
+    //                                 tension: 0.3,
+    //                                 pointRadius: 4,
+    //                                 pointHoverRadius: 6,
+    //                                 fill: false,
+    //                             },
+    //                         ],
+    //                     };
+
+    //                     return (
+    //                         <div key={weekData.week} className={classes.thinCard}>
+    //                             <h4 className={classes.cardTitle}>{weekData.week} 방문자 수</h4>
+    //                             <div className={classes.chartBox}>
+
+    //                                 <Line data={chartData} options={chartUtils.lineChartOptions} />
+    //                             </div>
+    //                         </div>
+    //                     );
+    //                 })}
+    //             </div>
+    //         )}
+    //     </div>
+    // );
 };
 
 export default Chart;
