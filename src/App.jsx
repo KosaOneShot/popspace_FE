@@ -1,10 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.min.css';     //bootstrap
 import 'bootstrap-icons/font/bootstrap-icons.css'; //bootstrap-icons
-import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; //bootstrap
 import { Route, Routes } from 'react-router-dom';
 import { Header, Footer, Layout } from './components'
 import { PopupDetail, PopupList } from './popup';
 import {ReservationList} from './reservation';
+import './App.css';
+import LoginForm from './pages/auth/login/LoginForm';
+import RegisterForm from './pages/auth/register/RegisterFrom';
+
 
 function App() {
   return (
@@ -15,10 +18,12 @@ function App() {
             <Route path="/popup/detail/:popupId" element={<PopupDetail />} />
             <Route path='/popup/list' element={<PopupList/>} />
             <Route path='/reservation/list' element={<ReservationList/>} />
+            <Route path='/auth/register' element={<RegisterForm />} />
+            <Route path='/auth/login' element={<LoginForm />} />
           </Routes>
           <Footer/>
       </Layout>
-    </div>
+    </div >
   );
 }
 
