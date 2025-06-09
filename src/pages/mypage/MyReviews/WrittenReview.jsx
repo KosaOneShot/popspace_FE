@@ -25,13 +25,6 @@ const WrittenReview = ({ goToPending }) => {
 
   return (
     <div className="container bg-light pb-3 min-vh-100">
-      <h4 className="fw-bold text-emerald mb-3 text-center">작성 후기</h4>
-      <div className="pb-3">
-        <button className="btn-emerald w-100" onClick={goToPending}>
-          미작성 후기 쓰러가기 ({pendingCount}건)
-        </button>
-      </div>
-
       {reviews?.map((review) => (
         <ReviewCard
           review={review}

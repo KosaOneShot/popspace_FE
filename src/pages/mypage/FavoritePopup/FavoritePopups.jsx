@@ -11,12 +11,19 @@ const FavoritePopups = () => {
   useEffect(() => {
     axi
       .get("/api/favorites")
-      .then((res) => setFavorites(res.data))
+      .then((res) =>
+        setFavorites(
+          res.data.map((popup) => ({
+            ...popup,
+            liked: true, // 초기 렌더링 시 모두 true로 설정
+          }))
+        )
+      )
       .catch((err) => {
         console.error("관심 팝업 불러오기 실패", err);
       })
       .finally(() => {
-        setLoading(false); // 예: 로딩 상태 종료
+        setLoading(false);
       });
   }, []);
 
@@ -25,7 +32,11 @@ const FavoritePopups = () => {
       .post(`/api/favorites/toggle/${popupId}`)
       .then(() => {
         setFavorites((prev) =>
-          prev.filter((popup) => popup.popupId !== popupId)
+          prev.map((popup) =>
+            popup.popupId === popupId
+              ? { ...popup, liked: !popup.liked }
+              : popup
+          )
         );
       })
       .catch((err) => {
@@ -54,7 +65,11 @@ const FavoritePopups = () => {
                     className="heart-icon"
                     onClick={() => toggleFavorite(popup.popupId)}
                   >
-                    <AiFillHeart color="#FDBA10" size={22} />
+                    {popup.liked ? (
+                      <AiFillHeart color="#FDBA10" size={22} />
+                    ) : (
+                      <AiOutlineHeart color="#ccc" size={22} />
+                    )}
                   </div>
                 </div>
                 <p className="popup-date mb-1">{popup.dateRange}</p>

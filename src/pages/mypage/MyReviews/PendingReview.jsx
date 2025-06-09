@@ -19,32 +19,39 @@ function PendingReview() {
 
   return (
     <div className="container pb-3 bg-light min-vh-100">
-      <h4 className="fw-bold text-emerald mb-3 text-center">미작성 후기</h4>
-
       {pending.map((popup) => (
-        <div className="card mb-3 shadow-sm" key={popup.reserveId}>
-          <div className="card-body pb-0 d-flex justify-content-between align-items-center">
-            <div className="d-flex align-items-center">
-              <img
-                src={popup.imageUrl}
-                alt="popup"
-                className="me-3 rounded"
-                style={{
-                  width: 80,
-                  height: 80,
-                  objectFit: "cover",
-                  flexShrink: 0,
-                }}
-              />
-              <div>
-                <h6>{popup.title}</h6>
-                <p className="text-muted small">방문일: {popup.visitedDate}</p>
+        <div
+          className="card mb-3 shadow-sm w-100"
+          key={popup.reserveId}
+          style={{ borderRadius: "10px", border: "1px solid #e0e0e0" }}
+        >
+          <div className="card-body d-flex align-items-center p-3">
+            <img
+              src={popup.imageUrl}
+              alt="popup"
+              style={{
+                width: 55,
+                height: 55,
+                borderRadius: "8px",
+                objectFit: "cover",
+                marginRight: "1rem",
+                flexShrink: 0,
+              }}
+            />
+            <div className="flex-grow-1">
+              <div className="fw-semibold" style={{ fontSize: "14px" }}>
+                {popup.title}
+              </div>
+              <div className="text-muted small mt-1">
+                방문일: {popup.visitedDate}
               </div>
             </div>
           </div>
-          <div className="p-3">
+
+          <div className="px-3 pb-3">
             <button
               className="btn-emerald w-100"
+              style={{ fontSize: "14px", padding: "8px 0" }}
               onClick={() =>
                 navigate(`/write-review?id=${popup.reserveId}`, {
                   state: { data: popup },

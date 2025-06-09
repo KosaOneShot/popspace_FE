@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import ProfileInfo from "./Profile/ProfileInfo";
 import FavoritePopups from "./FavoritePopup/FavoritePopups";
 import ReviewList from "./MyReviews/MyReviews";
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyPage.css";
 
 const MyPage = () => {
-  const [activeTab, setActiveTab] = useState("profile");
+  const location = useLocation();
+  const tab = location.state?.tab;
+  console.log(tab);
+  const [activeTab, setActiveTab] = useState(tab || "profile");
 
   const renderTab = () => {
     switch (activeTab) {
