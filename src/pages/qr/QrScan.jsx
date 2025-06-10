@@ -17,16 +17,16 @@ const QrScan = () => {
     const handleScanSuccess = async (decodedText) => {
         try {
             const urlObj = new URL(decodedText);
-            const reservationId = urlObj.searchParams.get('reservationId');
+            const reserveId = urlObj.searchParams.get('reserveId');
             const sig = urlObj.searchParams.get('sig');
 
-            if (!reservationId || !sig) {
+            if (!reserveId || !sig) {
                 setErrorMessage('QR 코드 형식이 올바르지 않습니다.');
                 return;
             }
 
             const apiUrl = '/api/qr/verify';
-            const res = await axi.post(apiUrl, { reservationId, sig });
+            const res = await axi.post(apiUrl, { reserveId, sig });
             setReservationInfo(res.data);
             setErrorMessage('');
         } catch (err) {
