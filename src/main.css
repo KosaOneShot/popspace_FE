@@ -19,3 +19,7 @@ html, body {
   animation: fadeIn 0.5s ease-in-out;
   box-sizing: border-box;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
