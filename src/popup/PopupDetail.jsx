@@ -10,17 +10,14 @@ const PopupDetail = () => {
   const [info, setInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
-  const [reservation, setReservation] = useState(null);
   const [loading, setLoading] = useState(true);
 
   /* 데이터 불러오기 */
   useEffect(() => {
     axiFetchPopupDetail(popupId)
-      .then(({ isPopupLike, reservation, popupInfo, reviewList }) => {
+      .then(({ isPopupLike, popupInfo, reviewList }) => {
         console.log("ispopuplike:", isPopupLike);
         setIsLiked(isPopupLike);
-        // log("setIsLiked:", isLiked);
-        setReservation(reservation);
         setInfo(popupInfo);
         setReviews(reviewList);
       })
@@ -161,7 +158,6 @@ const PopupDetail = () => {
       <FooterButtons
         popupId={Number(popupId)}
         like={isLiked}
-        reservation={reservation}
         onLikeChange={handleLikeChange}
       />
     </div>
