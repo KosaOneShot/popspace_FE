@@ -26,8 +26,6 @@ const Header = () => {
         </button>
       </header>
 
-      <div style={{ height: `${HEADER_HEIGHT}px` }} />
-
       <SideMenu isOpen={open} onClose={() => setOpen(false)} appWidth={APP_WIDTH} />
     </>
   );
