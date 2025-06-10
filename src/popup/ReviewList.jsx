@@ -14,8 +14,17 @@ const ReviewItem = ({ rating, content, createdAt }) => (
 
 /** 리뷰 목록을 렌더링하는 컴포넌트 */
 const ReviewList = ({ reviews }) => {
-  if (!reviews.length) return null;
+  // 리뷰가 하나도 없을 때
+  if (reviews.length === 0) {
+    return (
+      <div className="mb-5">
+        <h6 className="fw-bold mb-3">리뷰 0</h6>
+        <p className="text-muted small">리뷰가 없습니다</p>
+      </div>
+    );
+  }
 
+  // 리뷰가 하나 이상 있을 때
   const avg =
     reviews.reduce((sum, r) => sum + Number(r.rating), 0) / reviews.length;
 
