@@ -4,7 +4,7 @@ import axi from '../utils/axios/Axios';
 // 서버에 팝업 찜 상태를 업데이트하는 함수
 export async function axiUpdatePopupLike(popupId, toBeState) {
   console.log(" to be : " + toBeState);
-  const response = await axi.post("/popup/detail/like-update",
+  const response = await axi.post("/popup/like-update",
     { popupId, toBeState }
   );
   console.log("axiUpdatePopupLike() 의 response 입니다~ : " + response.data.isLiked);
@@ -44,17 +44,17 @@ export async function axiFetchPopupList(searchKeyword=null, searchDate=null, sor
 // 서버에서 팝업 상세 정보를 가져와 가공하는 함수 (성공)
 export async function axiFetchPopupDetail(popupId) {
   // 1) 찜여부
-  const rlResponse = await axi.get(`/popup/detail/reserve-like/${popupId}`);
+  const rlResponse = await axi.get(`/popup/like/${popupId}`);
   const rlData = rlResponse.data;
   console.log("axiFetchPopupDetail() 의 {찜여부} response 입니다~ : " + JSON.stringify(rlData));
   
   // 2) 팝업 상세 + 리뷰 목록
-  const irResponse = await axi.get(`/popup/detail/info-review/${popupId}`);
+  const irResponse = await axi.get(`/popup/detail/${popupId}`);
   const irData = irResponse.data;
   console.log("axiFetchPopupDetail() 의 {팝업 상세 + 리뷰 목록} response 입니다~ : " + JSON.stringify(irData));
   
   return {
-    isPopupLike:  rlData.isPopupLike,
+    isPopupLike:  rlData.popupLike,
     popupInfo:    irData.popupInfo,
     reviewList:   Array.isArray(irData.reviewList) ? irData.reviewList : []
   };
