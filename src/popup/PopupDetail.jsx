@@ -17,7 +17,9 @@ const PopupDetail = () => {
   useEffect(() => {
     axiFetchPopupDetail(popupId)
       .then(({ isPopupLike, reservation, popupInfo, reviewList }) => {
+        console.log("ispopuplike:", isPopupLike);
         setIsLiked(isPopupLike);
+        // log("setIsLiked:", isLiked);
         setReservation(reservation);
         setInfo(popupInfo);
         setReviews(reviewList);
@@ -26,6 +28,10 @@ const PopupDetail = () => {
       .finally(() => setLoading(false));
   }, [popupId]);
 
+  const handleLikeChange = (newLikeState) => {
+    setIsLiked(newLikeState);
+  };
+  
   if (loading) {
     return (
       <div className="d-flex flex-column vh-100">
@@ -153,9 +159,10 @@ const PopupDetail = () => {
 
       {/* 하단 고정 버튼들 (예약하기 + 찜하기) */}
       <FooterButtons
-        isLiked={isLiked}
-        reservation={reservation}
         popupId={Number(popupId)}
+        like={isLiked}
+        reservation={reservation}
+        onLikeChange={handleLikeChange}
       />
     </div>
   );

@@ -9,8 +9,10 @@ function CalendarModal({ show, date, onClose, onApply }) {
   const [tmp, setTmp] = useState(date);
   if (!show) return null;
   return (
-    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="modal-dialog modal-sm">
+      <div
+    className="modal d-block"
+    style={{backgroundColor: 'rgba(0,0,0,0.5)'}}
+  ><div className="modal-dialog modal-sm" style={{display : 'flex', alignItems: 'center', height: '70%'}}>
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">날짜 선택</h5>
@@ -98,7 +100,7 @@ export default function PopupList() {
 
   // 초기 목록 로딩
   useEffect(() => {
-    axiFetchPopupList(sortKey)
+    axiFetchPopupList(search, date, sortKey)
       .then(list => setPopupList(list))   // ← 여기를 수정: .then(setPopupList()) X
       .catch(err => console.error('Failed to load popups', err));
   }, [sortKey]);  // sortKey 변경 시마다 다시 호출
@@ -114,12 +116,26 @@ export default function PopupList() {
   };
 
   return (
-    <div className="container pt-0 pb-0" style={{ marginTop: '70px', marginBottom: '90px' }}>
-      {/* 필터 바 */}
-      <div className="row mb-3 g-2 align-items-center">
-        <div className="col-auto">
+    <div className="container" style={{ paddingTop: '70px', marginBottom: '100px', overflowY : 'auto' }}>
+      <div
+        className="mb-3"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 100px',  // 왼쪽은 남은 공간, 오른쪽은 100px 고정
+          columnGap: '8px',
+          width: '390px',
+          margin: '0 auto',
+        }}
+      >
+        {/* 좌측: 입력 필드 두 개 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {/* 1행: 날짜 선택 */}
           <div className="input-group">
-            <span className="input-group-text" role="button" onClick={() => setShowCal(true)}>
+            <span
+              className="input-group-text"
+              role="button"
+              onClick={() => setShowCal(true)}
+            >
               📅
             </span>
             <input
@@ -129,11 +145,10 @@ export default function PopupList() {
               value={date}
               readOnly
               onClick={() => setShowCal(true)}
-              style={{ width: '120px' }}
             />
           </div>
-        </div>
-        <div className="col-auto">
+
+          {/* 2행: 제목 검색 */}
           <div className="input-group">
             <input
               type="text"
@@ -141,18 +156,40 @@ export default function PopupList() {
               placeholder="제목 검색"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              style={{ width: '140px' }}
             />
-            <button className="btn btn-warning" onClick={() => {
-              // TODO : 검색 값 서버로 넘겨야함.
+          </div>
+        </div>
+
+        {/* 우측: 세로로 붙은 버튼 그룹 */}
+        <div
+          className="btn-group-vertical"
+          role="group"
+          style={{ height: '100%' , width : '80px'}}
+        >
+          <button
+            className="btn"
+            onClick={() => {
               axiFetchPopupList(search, date, sortKey).then(list => {
-                console.log('Filtering list:', list);
                 setPopupList(list);
               });
-            }}>
-              검색
-            </button>
-          </div>
+            }}
+            style={{ flex: 1, backgroundColor: '#DB9506', color: 'white' }}
+          >
+            검색
+          </button>
+          <button
+            className="btn"
+            onClick={() => {
+              setSearch('');
+              setDate('');
+              axiFetchPopupList('', '', sortKey).then(list => {
+                setPopupList(list);
+              });
+            }}
+            style={{ flex: 1, backgroundColor: '#1D9D8B', color: 'white' }}
+          >
+            초기화
+          </button>
         </div>
       </div>
 
