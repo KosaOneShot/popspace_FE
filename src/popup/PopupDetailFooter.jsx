@@ -1,24 +1,31 @@
+// src/popup/PopupDetailFooter.jsx
 import React, { useState, useEffect } from "react";
-import {axiUpdatePopupLike} from './popupAxios';
-/** 하단 “예약하기 + 찜하기” 버튼 바 */
-const FooterButtons = ({ popupId, memberId }) => {
-  const [isLiked, setIsLiked] = useState(false);
+import { axiUpdatePopupLike } from "./popupAxios";
 
+/** 하단 “예약하기 + 찜하기” 버튼 바 */
+const FooterButtons = ({ popupId, like, reservation }) => {
+  const [isLiked, setIsLiked] = useState(like);
+
+  // 부모에서 like prop이 바뀌면 동기화
   useEffect(() => {
-    // Optional: 초기 찜 상태 불러올 로직이 필요하면 여기에 작성
-  }, []);
+    setIsLiked(like);
+  }, [like]);
 
   // 찜 버튼 클릭 시 호출되는 함수
   const handleLikeToggle = async () => {
-    try {
-      const resLiked = await axiUpdatePopupLike(1, !isLiked);
-      setIsLiked(resLiked);
-    } catch (err) {
-      console.error(err);
-    }    
-  };
+    // UI를 먼저 토글
+    const next = !isLiked;
+    setIsLiked(next);
 
-  
+    try {
+      // 서버에도 변경 요청
+      await axiUpdatePopupLike(popupId, next);
+    } catch (err) {
+      console.error("찜 상태 업데이트 실패:", err);
+      // 실패하면 UI 롤백
+      setIsLiked(prev => !prev);
+    }
+  };
 
   return (
     <div
@@ -52,7 +59,9 @@ const FooterButtons = ({ popupId, memberId }) => {
       {/* 찜하기 버튼 */}
       <button
         type="button"
-        className="btn btn-outline-danger ms-2 d-flex justify-content-center align-items-center"
+        className={`btn ms-2 d-flex justify-content-center align-items-center ${
+          isLiked ? "btn-danger" : "btn-outline-danger"
+        }`}
         style={{
           borderRadius: "8px",
           width: "40px",
@@ -61,7 +70,10 @@ const FooterButtons = ({ popupId, memberId }) => {
         }}
         onClick={handleLikeToggle}
       >
-        <i className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"}`} style={{ fontSize: "1.2rem" }} />
+        <i
+          className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"}`}
+          style={{ fontSize: "1.2rem" }}
+        />
       </button>
     </div>
   );

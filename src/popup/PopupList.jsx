@@ -39,14 +39,16 @@ function CalendarModal({ show, date, onClose, onApply }) {
 // 개별 팝업 카드
 function PopupCard({ id, name, period, location, imageUrl, isLiked, onToggle, onCardClick }) {
   const handleCardClick = () => onCardClick(id);
-  const handleLike = async e => {
+  const handleLike = e => {
     e.stopPropagation();
-    try {
-      const updated = await axiUpdatePopupLike(id, !isLiked);
-      onToggle(id, updated);
-    } catch (err) {
-      console.error(err);
-    }
+    const nextState = !isLiked;
+    // 1) UI 즉시 업데이트
+    onToggle(id, nextState);
+    // 2) 서버 호출, 실패하면 롤백
+    axiUpdatePopupLike(id, nextState).catch(err => {
+      console.error('찜 업데이트 실패:', err);
+      onToggle(id, isLiked);  // 원래 상태로 복구
+    });
   };
 
   return (
@@ -143,7 +145,7 @@ export default function PopupList() {
             />
             <button className="btn btn-warning" onClick={() => {
               // TODO : 검색 값 서버로 넘겨야함.
-              axiFetchPopupList().then(list => {
+              axiFetchPopupList(search, date, sortKey).then(list => {
                 console.log('Filtering list:', list);
                 setPopupList(list);
               });
@@ -170,7 +172,7 @@ export default function PopupList() {
           style={{ width: '120px', marginBottom: '10px' }}
         >
           <option value="newest">최신순</option>
-          <option value="popular">인기순</option>
+          <option value="mostLiked">인기순</option>
         </select>        
       </div>
 

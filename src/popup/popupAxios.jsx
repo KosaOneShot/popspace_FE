@@ -2,8 +2,11 @@
 import axi from '../utils/axios/Axios';
 
 // 서버에 팝업 찜 상태를 업데이트하는 함수
-export async function axiUpdatePopupLike(popupId, currentLiked) {
-  const response = await axi.post("/popup/detail/like-update");
+export async function axiUpdatePopupLike(popupId, toBeState) {
+  console.log(" to be : " + toBeState);
+  const response = await axi.post("/popup/detail/like-update",
+    { popupId, toBeState }
+  );
   console.log("axiUpdatePopupLike() 의 response 입니다~ : " + response.data.isLiked);
   return response.data && typeof response.data.isLiked === "boolean";  
 }
