@@ -1,0 +1,128 @@
+.register-container {
+  width: 100%;
+  max-width: 420px;            /* 내용 폭 제한 */
+  margin: 40px auto 60px auto; /* 상/하 마진, 좌우는 중앙 정렬 */
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Pretendard', sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    margin: 20px auto 40px auto; /* 모바일에서 여백 줄이기 */
+    padding: 30px 16px;
+  }
+}
+
+.register-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #111;
+  text-align: left;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-group input {
+  flex: 1 1 auto;
+  min-width: 100px; /* 쪼그라듦 방지 */
+}
+
+.register-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+.register-form input:focus {
+  box-shadow: 0 0 0 3px rgba(29, 157, 139, 0.3);
+  outline: none;
+}
+
+.check-button {
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 12px;
+  border: none;
+  background-color: #000000;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  max-width: 90px;
+  flex-shrink: 0;
+}
+
+.check-button:hover {
+  background-color: #5d4037;
+  transform: translateY(-1px);
+}
+
+.register-form button[type="submit"] {
+  padding: 14px;
+  background-color: #1D9D8B;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.register-form button[type="submit"]:hover {
+  background-color: #157a6f;
+  transform: translateY(-1px);
+}
+
+.error-message,
+.success-message {
+  text-align: center;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

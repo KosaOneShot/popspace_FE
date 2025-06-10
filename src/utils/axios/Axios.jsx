@@ -27,7 +27,7 @@ class Axios {
                     if (
                         (error.response?.status === 403 || error.response?.status === 401) &&
                         !originalRequest._retry &&
-                        !originalRequest.url.includes("/auth/token/refresh")
+                        !originalRequest.url.includes("/auth/refresh")
                         // !originalRequest.url.includes("/auth/check") 
                     ) {
                         originalRequest._retry = true;
