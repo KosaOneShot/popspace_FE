@@ -1,10 +1,15 @@
+import { href, Link } from "react-router-dom";
+
 const menuItems = [
   { label: "홈", href: "/" },
   { label: "팝업 목록", href: "/popups" },
   { label: "예약 내역", href: "/reservations" },
   { label: "마이페이지", href: "/mypage" },
-  { label: "통계 (사장님)", href: "/stats" },
+  { label: "통계 (사장님)", href: "/chart/data" },
   { label: "QR 스캔 (사장님)", href: "/qr-scan" },
+  { label: "통계(총괄 관리자)", href: "/admin/popup/list" },
+  { label: "로그인", href: "/auth/login" },
+  { label: "회원가입", href: "/auth/register"}
 ];
 
 const SideMenu = ({ isOpen, onClose, appWidth }) => {
@@ -32,9 +37,12 @@ const SideMenu = ({ isOpen, onClose, appWidth }) => {
       <ul className="list-group list-group-flush">
         {menuItems.map(({ label, href }, idx) => (
           <li key={idx} className="list-group-item">
-            <a href={href} className="text-decoration-none text-dark d-block">
+            <Link to={href} onClick={onClose} className="text-decoration-none text-dark d-block">
               {label}
-            </a>
+            </Link>
+            {/* <a href={href} className="text-decoration-none text-dark d-block">
+              {label}
+            </a> */}
           </li>
         ))}
       </ul>
