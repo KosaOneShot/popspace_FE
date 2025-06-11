@@ -1,6 +1,6 @@
 import 'bootstrap-icons/font/bootstrap-icons.css'; //bootstrap-icons
 import './App.css';
-import Chart from './page/analytics/chart';
+import Chart from './pages/analytics/chart';
 import 'bootstrap/dist/css/bootstrap.min.css'; //bootstrap
 import { Route, Routes } from 'react-router-dom';
 import './App.css';

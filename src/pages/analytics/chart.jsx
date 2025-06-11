@@ -37,7 +37,7 @@ const Chart = () => {
 
     const getPopupList = async () => {
         try {
-            const response = await axi.get("/api/popup/list");
+            const response = await axi.get("/api/popup/popup-admin/list");
             setPopList(response.data);
             if (response.data.length > 0) {
                 setPopupNow(response.data[0].popupId);
