@@ -49,7 +49,7 @@ const Chart = () => {
 
     const getStatistics = async () => {
         try {
-            const response = await axi.get(`/api/popup/statistics/${popupNow}`);
+            const response = await axi.get(`/api/popup-admin/statistics/${popupNow}`);
             console.log(response.data);
             setTotalData(response.data);
         } catch (err) {
