@@ -1,8 +1,8 @@
-.favorite-popups-container {
+.container {
   padding: 10px;
 }
 
-.favorite-popup-card {
+.card {
   border: none;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -10,14 +10,14 @@
   margin-bottom: 16px;
 }
 
-.popup-image {
+.image {
   height: 100%;
   width: 100%;
   object-fit: cover;
   border-radius: 12px 0 0 12px;
 }
 
-.popup-title {
+.title {
   font-weight: bold;
   font-size: 1rem;
   white-space: nowrap;
@@ -26,23 +26,28 @@
   max-width: 100%;
 }
 
-.popup-date {
+.date {
   font-size: 0.85rem;
   color: #929292;
   margin-bottom: 4px;
 }
-.popup-location {
+.location {
   font-size: 0.85rem;
   color: #795548;
   margin-bottom: 4px;
 }
 
-.heart-icon {
+.heartIcon {
   cursor: pointer;
+  transition: transform 0.15s;
   margin-left: 8px;
   color: #ffb703;
 }
 
-.popup-location i {
+.heartIcon:hover {
+  transform: scale(1.1);
+}
+
+.location i {
   color: #e74c3c;
 }
