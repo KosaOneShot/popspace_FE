@@ -1,5 +1,5 @@
 const Footer = () => {
-  // 갈색 : 795548 초록색 : 1D9D8B 검정색 : 000000
+  // 갈색 : 795548 초록색 : 1D9D8B 검정색 : 000000  노란색 : DB9506
   const items = [
     { label: "Home", href: "/", icon: "bi-house-fill", color: "#000000" },
     { label: "Popups", href: "/popup/list", icon: "bi-shop-window", color: "#1D9D8B" },
