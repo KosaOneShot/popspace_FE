@@ -1,42 +1,61 @@
 import React, { useState } from "react";
 import axi from "../../../utils/axios/Axios";
-import "./MyPageAccount.css";
+import styles from "./MyPageAccount.module.css";
 
 const PasswordChangeForm = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
+
+  const handleChange = ({ target: { name, value } }) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
+    setMessage({ type: "", text: "" });
+
+    const { currentPassword, newPassword, confirmPassword } = form;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setMessage({ type: "error", text: "모든 항목을 입력해주세요." });
+      return;
+    }
 
     if (newPassword !== confirmPassword) {
-      setErrorMsg("새 비밀번호가 일치하지 않습니다.");
+      setMessage({ type: "error", text: "새 비밀번호가 일치하지 않습니다." });
       return;
     }
 
     try {
       setLoading(true);
-      await axi.post("api/member/change-password", {
+      await axi.post("/api/member/change-password", {
         oldPassword: currentPassword,
         newPassword: newPassword,
       });
 
-      setSuccessMsg("비밀번호가 성공적으로 변경되었습니다.");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      setMessage({
+        type: "success",
+        text: "비밀번호가 성공적으로 변경되었습니다.",
+      });
+      setForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
       const code = err.response?.status;
       if (code === 400) {
-        setErrorMsg("현재 비밀번호가 일치하지 않습니다.");
+        setMessage({
+          type: "error",
+          text: "현재 비밀번호가 일치하지 않습니다.",
+        });
       } else {
-        setErrorMsg("오류가 발생했습니다. 다시 시도해주세요.");
+        setMessage({
+          type: "error",
+          text: "오류가 발생했습니다. 다시 시도해주세요.",
+        });
       }
     } finally {
       setLoading(false);
@@ -46,38 +65,54 @@ const PasswordChangeForm = () => {
   return (
     <form onSubmit={handleSubmit} className="account-form mt-4">
       <div className="mb-3">
-        <label className="form-label account-label">현재 비밀번호</label>
+        <label className={`form-label ${styles.accountLabel}`}>
+          현재 비밀번호
+        </label>
         <input
           type="password"
+          name="currentPassword"
           className="form-control"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
+          value={form.currentPassword}
+          onChange={handleChange}
         />
       </div>
 
       <div className="mb-3">
-        <label className="form-label account-label">새 비밀번호</label>
+        <label className={`form-label ${styles.accountLabel}`}>
+          새 비밀번호
+        </label>
         <input
           type="password"
+          name="newPassword"
           className="form-control"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          value={form.newPassword}
+          onChange={handleChange}
         />
       </div>
 
       <div className="mb-3">
-        <label className="form-label account-label">새 비밀번호 확인</label>
+        <label className={`form-label ${styles.accountLabel}`}>
+          새 비밀번호 확인
+        </label>
         <input
           type="password"
+          name="confirmPassword"
           className="form-control"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={form.confirmPassword}
+          onChange={handleChange}
         />
       </div>
-      {errorMsg && <div className="text-danger small mb-2">{errorMsg}</div>}
-      {successMsg && (
-        <div className="text-success small mb-2">{successMsg}</div>
+
+      {message.text && (
+        <div
+          className={`small mb-2 ${
+            message.type === "success" ? "text-success" : "text-danger"
+          }`}
+        >
+          {message.text}
+        </div>
       )}
+
       <button className="btn-emerald w-100" type="submit" disabled={loading}>
         {loading ? "변경 중..." : "비밀번호 변경"}
       </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axi from "../../../utils/axios/Axios";
 // import AddressModal from "../../../components/modal/AddressModal";
-import "./MyPageAccount.css";
+import styles from "./MyPageAccount.module.css";
 
 const ProfileInfo = () => {
   const [form, setForm] = useState({
@@ -16,43 +16,43 @@ const ProfileInfo = () => {
   });
 
   const [originalNickname, setOriginalNickname] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [nicknameStatus, setNicknameStatus] = useState(null); // null, valid, invalid
   const [nicknameMessage, setNicknameMessage] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [submitMsg, setSubmitMsg] = useState("");
   const [isDaumPostOpen, setIsDaumPostOpen] = useState(false);
 
   useEffect(() => {
-    axi
-      .get("/api/member/me")
-      .then((res) => {
+    const fetchMember = async () => {
+      try {
+        const res = await axi.get("/api/member/me");
         setForm(res.data);
         setOriginalNickname(res.data.nickname);
-      })
-      .catch((err) => console.error("회원정보 가져오기 실패", err));
+      } catch (err) {
+        console.error("회원정보 가져오기 실패", err);
+      }
+    };
+
+    fetchMember();
   }, []);
 
   const handleChange = ({ target: { name, value } }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
 
     if (name === "nickname") {
-      setIsNicknameChecked(false);
+      setNicknameStatus(null);
       setNicknameMessage("");
     }
   };
 
   const handleAddressComplete = (data) => {
-    setForm((prev) => ({
-      ...prev,
-      roadAddress: data.roadAddress,
-    }));
+    setForm((prev) => ({ ...prev, roadAddress: data.roadAddress }));
     setIsDaumPostOpen(false);
   };
 
   const handleCheckNickname = async () => {
     if (form.nickname === originalNickname) {
-      setIsNicknameChecked(true);
+      setNicknameStatus("valid");
       setNicknameMessage("현재 사용 중인 닉네임입니다.");
       return;
     }
@@ -61,10 +61,10 @@ const ProfileInfo = () => {
       await axi.post("/auth/nickname/check-duplication", {
         nickname: form.nickname,
       });
-      setIsNicknameChecked(true);
+      setNicknameStatus("valid");
       setNicknameMessage("사용 가능한 닉네임입니다.");
     } catch (err) {
-      setIsNicknameChecked(false);
+      setNicknameStatus("invalid");
       setNicknameMessage(
         err.response?.status === 409
           ? "이미 사용 중인 닉네임입니다."
@@ -74,43 +74,40 @@ const ProfileInfo = () => {
   };
 
   const validateForm = () => {
-    for (let key of Object.keys(form)) {
-      if (form[key] === "" || form[key] === null) {
-        return false;
-      }
-    }
-    return true;
+    return Object.values(form).every((value) => value !== "" && value !== null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setSubmitMsg("");
+
     if (!validateForm()) {
-      setErrorMsg("모든 항목을 입력해주세요.");
+      setSubmitMsg("모든 항목을 입력해주세요.");
       return;
     }
 
-    if (form.nickname !== originalNickname && !isNicknameChecked) {
-      setErrorMsg("닉네임 중복 확인을 먼저 해주세요.");
+    if (form.nickname !== originalNickname && nicknameStatus !== "valid") {
+      setSubmitMsg("닉네임 중복 확인을 먼저 해주세요.");
       return;
     }
 
     setLoading(true);
     try {
       await axi.put("/api/member/update", form);
-      setSuccessMsg("회원정보가 수정되었습니다.");
+      setSubmitMsg("회원정보가 성공적으로 수정되었습니다.");
     } catch (err) {
       console.error("회원정보 수정 실패", err);
-      setErrorMsg("수정 실패. 다시 시도해주세요.");
+      setSubmitMsg("수정 실패. 다시 시도해주세요.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="account-form pb-3">
+    <form onSubmit={handleSubmit} className={styles.accountForm}>
       <div className="mb-3">
-        <label className="form-label account-label">이메일</label>
+        <label className={`form-label ${styles.accountLabel}`}>이메일</label>
         <input
           type="email"
           className="form-control text-muted"
@@ -120,7 +117,7 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className="form-label account-label">이름</label>
+        <label className={`form-label ${styles.accountLabel}`}>이름</label>
         <input
           type="text"
           className="form-control text-muted"
@@ -130,7 +127,7 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className="form-label account-label">전화번호</label>
+        <label className={`form-label ${styles.accountLabel}`}>전화번호</label>
         <input
           type="text"
           className="form-control text-muted"
@@ -141,7 +138,7 @@ const ProfileInfo = () => {
 
       <div className="mb-3">
         <div className="mb-2 d-flex justify-content-between align-items-center">
-          <label className="form-label account-label">닉네임</label>
+          <label className={`form-label ${styles.accountLabel}`}>닉네임</label>
           <button
             type="button"
             className="btn-emerald"
@@ -157,20 +154,22 @@ const ProfileInfo = () => {
           value={form.nickname}
           onChange={handleChange}
         />
-        {nicknameMessage && (
-          <div
-            className={`small mt-1 ${
-              isNicknameChecked ? "text-success" : "text-danger"
-            }`}
-          >
-            {nicknameMessage}
-          </div>
-        )}
+        <div
+          className={`small mt-1 ${
+            nicknameStatus === "valid"
+              ? styles.successMessage
+              : styles.errorMessage
+          }`}
+        >
+          {nicknameMessage}
+        </div>
       </div>
 
       <div className="row mb-3">
         <div className="col">
-          <label className="form-label account-label">생년월일</label>
+          <label className={`form-label ${styles.accountLabel}`}>
+            생년월일
+          </label>
           <input
             type="date"
             name="birthDate"
@@ -180,7 +179,7 @@ const ProfileInfo = () => {
           />
         </div>
         <div className="col">
-          <label className="form-label account-label">성별</label>
+          <label className={`form-label ${styles.accountLabel}`}>성별</label>
           <select
             name="sex"
             className="form-select"
@@ -195,7 +194,7 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-2 d-flex justify-content-between align-items-center">
-        <label className="form-label account-label mb-0">주소</label>
+        <label className={`form-label ${styles.accountLabel}`}>주소</label>
         <button
           type="button"
           className="btn-emerald btn-sm"
@@ -206,10 +205,7 @@ const ProfileInfo = () => {
       </div>
 
       {/* {isDaumPostOpen && (
-        <AddressModal
-          onComplete={handleAddressComplete}
-          onClose={() => setIsDaumPostOpen(false)}
-        />
+        <AddressModal onComplete={handleAddressComplete} onClose={() => setIsDaumPostOpen(false)} />
       )} */}
 
       <div className="mb-2">
@@ -233,10 +229,16 @@ const ProfileInfo = () => {
           onChange={handleChange}
         />
       </div>
-      {errorMsg && <div className="text-danger small mb-2">{errorMsg}</div>}
-      {successMsg && (
-        <div className="text-success small mb-2">{successMsg}</div>
-      )}
+
+      <div
+        className={`small mb-2 ${
+          submitMsg.includes("성공")
+            ? styles.successMessage
+            : styles.errorMessage
+        }`}
+      >
+        {submitMsg}
+      </div>
       <button type="submit" className="btn-emerald w-100" disabled={loading}>
         {loading ? "수정 중..." : "수정하기"}
       </button>
