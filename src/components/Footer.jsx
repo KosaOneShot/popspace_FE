@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
-  // 갈색 : 795548 초록색 : 1D9D8B 검정색 : 000000
+  // 갈색 : 795548 초록색 : 1D9D8B 검정색 : 000000  노란색 : DB9506
   const items = [
     { label: "Home", href: "/", icon: "bi-house-fill", color: "#000000" },
     { label: "Popups", href: "/popup/list", icon: "bi-shop-window", color: "#1D9D8B" },
@@ -17,15 +19,15 @@ const Footer = () => {
     >
       <div className="d-flex justify-content-around align-items-center py-2">
         {items.map((item, idx) => (
-          <a
+          <Link
             key={idx}
-            href={item.href}
+            to={item.href}
             className="d-flex flex-column align-items-center text-decoration-none"
             style={{ color: item.color }}
           >
             <i className={`${item.icon} fs-4`} />
             <small style={{ marginTop: "2px" }}>{item.label}</small>
-          </a>
+          </Link>
         ))}
       </div>
     </footer>
