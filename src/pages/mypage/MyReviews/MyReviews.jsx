@@ -2,6 +2,8 @@ import { useState } from "react";
 import PendingReview from "./PendingReview";
 import WrittenReview from "./WrittenReview";
 import TabSwitcher from "../TabSwitcher";
+import styles from "./MyReviews.module.css";
+
 const MyReviews = () => {
   const [subTab, setSubTab] = useState("written");
 
@@ -11,16 +13,12 @@ const MyReviews = () => {
   ];
 
   return (
-    <div className="myreviews-wrapper container">
+    <div className="container">
       {/* 탭 버튼 */}
       <TabSwitcher tabs={tabs} activeTab={subTab} onChange={setSubTab} />
 
       {/* 탭 내용 */}
-      {subTab === "written" ? (
-        <WrittenReview goToPending={() => setSubTab("pending")} />
-      ) : (
-        <PendingReview />
-      )}
+      {subTab === "written" ? <WrittenReview /> : <PendingReview />}
     </div>
   );
 };
