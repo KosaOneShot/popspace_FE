@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./NoticeForm.css";
 import axi from "../../utils/axios/Axios";
 import { useAuth } from "../../components/context/AuthContext";
 import { useEffect } from "react";
+import styles from "./NoticeForm.module.css"; // ✅ 모듈 css import로 변경
 
 const NoticeForm = () => {
   const { nickname } = useAuth();
@@ -49,6 +49,7 @@ const NoticeForm = () => {
       setContent("");
       setImage(null);
       setAgree(false);
+      document.getElementById("image").value = "";
     } catch (err) {
       console.error(err);
       alert("공지 등록 실패");
@@ -56,7 +57,9 @@ const NoticeForm = () => {
   };
 
   return (
-    <div className="notice-form-container align-items-center px-4 py-4">
+    <div
+      className={`${styles.noticeFormContainer} align-items-center px-4 py-4`}
+    >
       <h5 className="text-success fw-bold mb-4 text-center">공지 작성</h5>
 
       <form
@@ -71,7 +74,7 @@ const NoticeForm = () => {
           </label>
 
           <div
-            className="image-upload-box mx-auto"
+            className={`${styles.imageUploadBox} mx-auto`}
             onClick={() => document.getElementById("image").click()}
           >
             {image ? (
@@ -79,11 +82,11 @@ const NoticeForm = () => {
                 <img
                   src={URL.createObjectURL(image)}
                   alt="미리보기"
-                  className="preview-image"
+                  className={styles.previewImage}
                 />
                 <button
                   type="button"
-                  className="remove-btn"
+                  className={styles.removeBtn}
                   onClick={handleImageRemove}
                 >
                   ×
@@ -102,7 +105,6 @@ const NoticeForm = () => {
             onChange={handleImageChange}
             disabled={image !== null}
           />
-
           <div className="text-muted small mt-1">{image ? "1/1" : "0/1"}</div>
         </div>
 
@@ -111,7 +113,7 @@ const NoticeForm = () => {
           <label className="form-label">공지 제목</label>
           <input
             type="text"
-            className="form-control rounded-input"
+            className={`form-control ${styles.roundedInput}`}
             placeholder="제목을 입력해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -122,7 +124,7 @@ const NoticeForm = () => {
         <div className="mb-3">
           <label className="form-label">공지 내용</label>
           <textarea
-            className="form-control rounded-input"
+            className={`form-control ${styles.roundedInput}`}
             rows="4"
             placeholder="작성하신 공지는 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다. 중요한 공지 사항은 정확하고 신중하게 작성해주세요."
             value={content}
@@ -143,7 +145,7 @@ const NoticeForm = () => {
             className="form-check-label text-muted small"
             htmlFor="agreeCheck"
           >
-            글 등록 시 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다.{" "}
+            글 등록 시 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다.
             <br />
             중요한 공지 사항은 정확하고 신중하게 작성해주세요.
           </label>

@@ -1,4 +1,4 @@
-.notice-popup {
+.noticePopup {
   position: fixed;
   z-index: 9999;
   width: 340px;
@@ -9,7 +9,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-.popup-header {
+.popupHeader {
   padding: 12px 16px;
   font-size: 16px;
   font-weight: bold;
@@ -20,7 +20,7 @@
   cursor: move;
 }
 
-.popup-close {
+.popupClose {
   background: transparent;
   border: none;
   font-size: 18px;
@@ -28,24 +28,24 @@
   color: #555;
 }
 
-.popup-divider {
+.popupDivider {
   margin: 0;
   border: none;
   border-top: 1px solid #ddd;
 }
 
-.popup-image {
+.popupImage {
   width: 100%;
 }
 
-.popup-content {
+.popupContent {
   padding: 16px;
   font-size: 14px;
   color: #333;
   line-height: 1.6;
 }
 
-.popup-footer {
+.popupFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,14 +53,14 @@
   background: #f7f7f7;
 }
 
-.popup-checkbox {
+.popupCheckbox {
   font-size: 13px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.popup-btn {
+.popupBtn {
   background: none;
   border: none;
   font-size: 14px;

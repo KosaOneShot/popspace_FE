@@ -1,9 +1,9 @@
-.notice-form-container {
+.noticeFormContainer {
   background-color: #f8f9fa;
   min-height: 100vh;
 }
 
-.image-upload-box {
+.imageUploadBox {
   width: 80px;
   height: 80px;
   border: 1px solid #ccc;
@@ -17,7 +17,7 @@
   cursor: pointer;
 }
 
-.preview-image {
+.previewImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -25,7 +25,7 @@
   display: block;
 }
 
-.remove-btn {
+.removeBtn {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -47,11 +47,11 @@
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
-.rounded-input {
+.roundedInput {
   border-radius: 10px;
   border: 1px solid #ccc;
 }
 
-.rounded-input::placeholder {
+.roundedInput::placeholder {
   color: #c0c0c0;
 }

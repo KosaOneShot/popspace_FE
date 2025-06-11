@@ -6,14 +6,6 @@ import { Footer, Header, Layout } from "./components";
 import LoginForm from "./pages/auth/login/LoginForm";
 import RegisterForm from "./pages/auth/register/RegisterFrom";
 import QrScan from "./pages/qr/QrScan";
-
-import "bootstrap-icons/font/bootstrap-icons.css"; //bootstrap-icons
-import "bootstrap/dist/css/bootstrap.min.css"; //bootstrap
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import { Footer, Header, Layout } from "./components";
-import LoginForm from "./pages/auth/login/LoginForm";
-import RegisterForm from "./pages/auth/register/RegisterFrom";
 import NoticeForm from "./pages/notification/NoticeForm";
 import NoticePopupContainer from "./pages/notification/NoticePopupContainer";
 
