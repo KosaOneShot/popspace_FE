@@ -4,7 +4,7 @@ import axi from '../utils/axios/Axios';
 // 서버에 팝업 찜 상태를 업데이트하는 함수
 export async function axiUpdatePopupLike(popupId, toBeState) {
   console.log("토글할 상태:", toBeState);
-  const response = await axi.post("/popup/like-update", { popupId, toBeState });
+  const response = await axi.post("/api/popup/like-update", { popupId, toBeState });
   console.log("서버 응답 status:", response.status);
   if (response.status === 200) return !toBeState;
   throw new Error(`찜 상태 업데이트 실패: ${response.status}`);
@@ -18,7 +18,7 @@ export async function axiFetchPopupList(searchKeyword, searchDate, sortKey) {
   if (searchDate)    params.searchDate    = searchDate;
   if (sortKey)       params.sortKey       = sortKey;
   
-  const res = await axi.get('/popup/list', { params });
+  const res = await axi.get('/api/popup/list', { params });
   const arr = res.data || [];
   console.log("axiFetchPopupList() 의 response 입니다~ : " + JSON.stringify(arr));
   return arr.map(item => ({
@@ -37,16 +37,16 @@ export async function axiFetchPopupList(searchKeyword, searchDate, sortKey) {
 // 서버에서 팝업 상세 정보를 가져와 가공하는 함수 (성공)
 export async function axiFetchPopupDetail(popupId) {
   // 1) 찜여부
-  const rlResponse = await axi.get(`/popup/like/${popupId}`);
+  const rlResponse = await axi.get(`/api/popup/like/${popupId}`);
   const { liked } = rlResponse.data;
 
   // 2) 팝업 상세
-  const irResponse = await axi.get(`/popup/detail/${popupId}`);
+  const irResponse = await axi.get(`/api/popup/detail/${popupId}`);
   const info = irResponse.data;
   console.log("data : ", info);
   
   // 3) 리뷰 목록
-  const reviewResponse = await axi.get(`/popup/review/${popupId}`);
+  const reviewResponse = await axi.get(`/api/popup/review/${popupId}`);
   const reviewData = reviewResponse.data || [];
   console.log("reviewData : ", reviewData);
 
