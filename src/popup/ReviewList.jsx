@@ -36,9 +36,9 @@ const ReviewList = ({ reviews }) => {
         <span className="fw-bold me-2">{avg.toFixed(1)}</span>
         <span className="text-muted small">(전체 {reviews.length}개)</span>
       </div>
-      {reviews.map((rev) => (
+      {reviews.map((rev, idx) => (
         <ReviewItem
-          key={rev.reviewId}
+          key={rev.reviewId ?? idx}  // reviewId가 없으면 인덱스 사용
           rating={rev.rating}
           content={rev.content}
           createdAt={rev.createdAt}
