@@ -2,67 +2,74 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../components/context/AuthContext';
 import axi from '../../../utils/axios/Axios';
-import './LoginForm.css';
+import styles from './LoginForm.module.css';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   const { setAuth } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { email, password } = formData;
+
     try {
-      const result = await axi.post('/auth/login', formData);
-      const { role, nickname } = result.data;
+      const res = await axi.post('/auth/login', { email, password });
+      const { role, nickname } = res.data;
 
       setAuth({ role, nickname });
-      setSuccess('로그인 성공!');
       setError('');
-      setFormData({ email: '', password: '' });
       navigate('/main');
     } catch (err) {
-      setSuccess('');
-      setError(err.response?.data?.message || '로그인 실패');
+      const message = err.response?.data?.message || '로그인 실패';
+      setError("로그인 실패");
     }
   };
 
   return (
-    <div className="login-container">
-      <h1 className="login-title">Login</h1>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">로그인</button>
-      </form>
+    <div className={styles.LoginFormContainer}>
+      <div className={styles.loginContainer}>
+        <h1 className={styles.loginTitle}>Login</h1>
+        <form className={styles.loginForm} onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className={styles.loginFormInput}
+          />
 
-      <div className="login-footer-links">
-        <span>비밀번호 찾기</span>
-        <span>회원이 아니신가요?</span>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className={styles.loginFormInput}
+          />
+          <button type="submit" className={styles.loginFormButton}>로그인</button>
+        </form>
+        
+        <div className={styles.loginFooterLinks}>
+          <Link to="/auth/change-password" className={styles.footerLink}>
+            비밀번호 찾기
+          </Link>
+          <Link to="/auth/register" className={styles.footerLink}>
+            회원이 아니신가요?
+          </Link>
+        </div>
+
+        {error && <p className={styles.errorMessage}>{error}</p>}
       </div>
-
-      {error && <p className="error-message">{error}</p>}
-      {success && <p className="success-message">{success}</p>}
     </div>
   );
 };
