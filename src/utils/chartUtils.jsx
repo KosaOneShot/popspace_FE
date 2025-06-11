@@ -17,7 +17,7 @@ export const chartUtils = {
 
     return { labels: topLabels, data: topData };
   },
-  
+
   lineColors: [
     "#FF6B57",  // 주황
     "#4BC0C0",  // 민트
@@ -29,25 +29,11 @@ export const chartUtils = {
   ],
   donutChartOptions: {
     responsive: true,
-    maintainAspectRatio: false,
+    // maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "bottom",
         labels: { boxWidth: 12, boxHeight: 12 }
-      }
-    }
-  },
-
-  barChartOptions: {
-    responsive: true,
-    plugins: {
-      legend: { labels: "", position: "bottom" }
-    },
-    scales: {
-      y: {
-        ticks: {
-          callback: (value) => value >= 1000000 ? `${value / 1000000}백만` : value
-        }
       }
     }
   },
@@ -60,6 +46,18 @@ export const chartUtils = {
       }
     },
     scales: {
+      x: {
+        ticks: {
+          callback: function (value, index, ticks) {
+            const label = this.getLabelForValue(value);
+            return label?.slice(5); // "2025-06-02" → "06-02"
+          },
+          maxRotation: 0,
+          minRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 7
+        }
+      },
       y: {
         beginAtZero: true,
         ticks: {
@@ -68,6 +66,4 @@ export const chartUtils = {
       }
     }
   }
-
-
 }
