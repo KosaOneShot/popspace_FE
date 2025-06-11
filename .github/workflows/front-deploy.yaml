@@ -46,7 +46,7 @@ jobs:
         with:
           args: --acl public-read --delete
         env:
-          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME }} 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
