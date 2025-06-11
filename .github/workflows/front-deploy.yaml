@@ -64,3 +64,4 @@ jobs:
             --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
             --paths "/*"
           
+          
