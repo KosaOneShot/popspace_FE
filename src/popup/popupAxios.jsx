@@ -11,18 +11,14 @@ export async function axiUpdatePopupLike(popupId, toBeState) {
 }
 
 // 서버에서 팝업 목록을 가져와 가공하는 함수
-export async function axiFetchPopupList(searchKeyword=null, searchDate=null, sortKey=null) {
-  // TODO : 날짜, 제목, 정렬방식 겁색값을 requestParam 으로 보내기
+export async function axiFetchPopupList(searchKeyword, searchDate, sortKey) {
   console.log("searchKeyword : " + searchKeyword,  "searchDate : " + searchDate,  "sortKey : " + sortKey);
-  const res = await axi.get('/popup/list',
-    {
-      params: {
-        searchKeyword : searchKeyword,
-        searchDate    : searchDate,
-        sortKey       : sortKey,
-      }
-    }
-  );
+  const params = {};
+  if (searchKeyword) params.searchKeyword = searchKeyword;
+  if (searchDate)    params.searchDate    = searchDate;
+  if (sortKey)       params.sortKey       = sortKey;
+  
+  const res = await axi.get('/popup/list', { params });
   const arr = res.data || [];
   console.log("axiFetchPopupList() 의 response 입니다~ : " + JSON.stringify(arr));
   return arr.map(item => ({
@@ -44,38 +40,38 @@ export async function axiFetchPopupDetail(popupId) {
   const rlResponse = await axi.get(`/popup/like/${popupId}`);
   const { liked } = rlResponse.data;
 
-  // 2) 팝업 상세 + 리뷰 목록
+  // 2) 팝업 상세
   const irResponse = await axi.get(`/popup/detail/${popupId}`);
-  const data = irResponse.data;
-  console.log("data : ", data);
+  const info = irResponse.data;
+  console.log("data : ", info);
   
+  // 3) 리뷰 목록
+  const reviewResponse = await axi.get(`/popup/review/${popupId}`);
+  const reviewData = reviewResponse.data || [];
+  console.log("reviewData : ", reviewData);
 
   // 팝업 정보는 첫 번째 객체에서 뽑고
-  const first = data[0] || {};
   const popupInfo = {
-    popupId:        first.popupId,
-    popupName:      first.popupName,
-    location:       first.location,
-    startDate:      first.startDate,
-    endDate:        first.endDate,
-    openTime:       first.openTime,
-    closeTime:      first.closeTime,
-    description:    first.description,
-    category:       first.category,
-    maxReservations:first.maxReservations,
-    imageUrl:       first.imageUrl,
-    memberId:       first.memberId,
+    popupId:          info.popupId,
+    popupName:        info.popupName,
+    imageUrl:         info.imageUrl,
+    startDate:        info.startDate,
+    endDate:          info.endDate,
+    openTime:         info.openTime,
+    closeTime:        info.closeTime,
+    category:         info.category,
+    location:         info.location,
+    maxReservations:  info.maxReservations,
+    description:      info.description
   };
-
-  // 리뷰 리스트는 reviewId가 있는 모든 행에서
-  const reviewList = Array.isArray(data)
-    ? data.map(r => ({
-          reviewId:  r.reviewId,
-          rating:    r.rating,
-          content:   r.content,
-          createdAt: r.createdAt,
-        }))
-    : [];
+  
+  // 리뷰 목록은 reviewData에서 가공
+  const reviewList = reviewData.map(review => ({
+    reviewId:   review.reviewId,
+    rating:     review.rating,
+    content:    review.content,
+    createdAt:  review.createdAt
+  }));
 
   return {
     isPopupLike: liked,
