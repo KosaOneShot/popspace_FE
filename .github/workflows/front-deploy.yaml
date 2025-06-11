@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create .env.production
+        run: |
+          {
+            echo "VITE_API_URL=${{ secrets.VITE_API_URL }}"
+          } > .env.production
+
       - name: Build React app
         run: npm run build
 
@@ -57,5 +63,4 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
             --paths "/*"
-          
           
