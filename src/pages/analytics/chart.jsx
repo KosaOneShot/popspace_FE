@@ -37,7 +37,7 @@ const Chart = () => {
 
     const getPopupList = async () => {
         try {
-            const response = await axi.get("/api/popup/list");
+            const response = await axi.get("/api/popup-admin/popup/list");
             setPopList(response.data);
             if (response.data.length > 0) {
                 setPopupNow(response.data[0].popupId);
@@ -49,7 +49,7 @@ const Chart = () => {
 
     const getStatistics = async () => {
         try {
-            const response = await axi.get(`/api/popup/statistics/${popupNow}`);
+            const response = await axi.get(`/api/popup-admin/popup/statistics/${popupNow}`);
             console.log(response.data);
             setTotalData(response.data);
         } catch (err) {
