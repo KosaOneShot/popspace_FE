@@ -3,25 +3,25 @@ import ProfileInfo from "./Profile/ProfileInfo";
 import FavoritePopups from "./FavoritePopup/FavoritePopups";
 import ReviewList from "./MyReviews/MyReviews";
 import { useLocation } from "react-router-dom";
+import MyPageAccount from "./Profile/MyPageAccount";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyPage.css";
 
 const MyPage = () => {
   const location = useLocation();
   const tab = location.state?.tab;
-  console.log(tab);
   const [activeTab, setActiveTab] = useState(tab || "profile");
 
   const renderTab = () => {
     switch (activeTab) {
       case "profile":
-        return <ProfileInfo />;
+        return <MyPageAccount />;
       case "favorites":
         return <FavoritePopups />;
       case "myReviews":
         return <ReviewList />;
       default:
-        return <ProfileInfo />;
+        return <MyPageAccount />;
     }
   };
 
