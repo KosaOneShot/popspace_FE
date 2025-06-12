@@ -1,0 +1,19 @@
+.card {
+  border: 1px solid #e0e0e0;
+}
+
+.thumbnail {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  margin-right: 1rem;
+}
+
+.contentBox {
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: break-word;
+  margin-bottom: 0.75rem;
+}

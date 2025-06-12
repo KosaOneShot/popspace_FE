@@ -12,6 +12,8 @@ import NoticeForm from "./pages/notification/NoticeForm";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
 import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
+import MyPage from './pages/mypage/MyPage';
+import ReviewForm from './pages/mypage/MyReviews/ReviewForm';
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
           <Route path="/mypage/register-noti" element={<NoticeForm />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
           <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/review-form" element={<ReviewForm />} /> 
         </Routes>
         <Footer />
       </Layout>
