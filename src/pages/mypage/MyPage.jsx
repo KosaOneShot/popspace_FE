@@ -26,8 +26,10 @@ const MyPage = () => {
   };
 
   return (
-    <div className="mypage-wrapper container py-5 px-3">
-      <h2 className="mypage-title text-center mb-5 fw-bold">마이페이지</h2>
+    <div className="mypage-wrapper container py-5 px-3 mt-3">
+      <h2 className="mypage-title text-center text-emerald mb-3 fw-bold">
+        마이페이지
+      </h2>
 
       <ul className="custom-tab-nav d-flex justify-content-around mb-3 border-bottom">
         <li

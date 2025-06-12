@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axi from "../../../utils/axios/Axios";
-// import AddressModal from "../../../components/modal/AddressModal";
+import AddressModal from "../../../components/modal/AddressModal";
 import styles from "./MyPageAccount.module.css";
 
 const ProfileInfo = () => {
@@ -53,7 +53,6 @@ const ProfileInfo = () => {
   const handleCheckNickname = async () => {
     if (form.nickname === originalNickname) {
       setNicknameStatus("valid");
-      setNicknameMessage("현재 사용 중인 닉네임입니다.");
       return;
     }
 
@@ -96,6 +95,8 @@ const ProfileInfo = () => {
     try {
       await axi.put("/api/member/update", form);
       setSubmitMsg("회원정보가 성공적으로 수정되었습니다.");
+      setOriginalNickname(form.nickname);
+      setNicknameMessage("");
     } catch (err) {
       console.error("회원정보 수정 실패", err);
       setSubmitMsg("수정 실패. 다시 시도해주세요.");
@@ -204,9 +205,12 @@ const ProfileInfo = () => {
         </button>
       </div>
 
-      {/* {isDaumPostOpen && (
-        <AddressModal onComplete={handleAddressComplete} onClose={() => setIsDaumPostOpen(false)} />
-      )} */}
+      {isDaumPostOpen && (
+        <AddressModal
+          onComplete={handleAddressComplete}
+          onClose={() => setIsDaumPostOpen(false)}
+        />
+      )}
 
       <div className="mb-2">
         <input

@@ -2,7 +2,6 @@ import { useState } from "react";
 import PendingReview from "./PendingReview";
 import WrittenReview from "./WrittenReview";
 import TabSwitcher from "../TabSwitcher";
-import styles from "./MyReviews.module.css";
 
 const MyReviews = () => {
   const [subTab, setSubTab] = useState("written");
