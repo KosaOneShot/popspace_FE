@@ -2,41 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchReservationDetail } from './ReservationAxios';
-
-//'2025-06-17 13:30:00' 형식 포맷팅
-function formatDate(str) {
-  if (!str) return '-';
-  const [datePart, timePart] = str.split(' ');
-  const [y, m, d] = datePart.split('-');
-  return `${y}년 ${m}월 ${d}일`;
-}
-function formatTime(str) {
-  if (!str) return '-';
-  const [datePart, timePart] = str.split(' ');
-  const [hh, mm] = timePart.split(':');
-  return `${hh}시 ${mm}분`;
-}
-function formatDateTime(str) {
-  if (!str) return '-';
-  const [datePart, timePart] = str.split(' ');
-  const [y, m, d] = datePart.split('-');
-  const [hh, mm] = timePart.split(':');
-  return `${y}년 ${m}월 ${d}일 ${hh}시 ${mm}분`;
-}
-
-function NewlineText({ text, className, style }) {
-  if (!text) return null;
-  return (
-    <div className={className} style={style}>
-      {text.split('\n').map((line, idx, arr) => (
-        <React.Fragment key={idx}>
-          {line}
-          {idx < arr.length - 1 && <br />}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-}
+import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 
 function ReservationInfoRow({ label, value }) {

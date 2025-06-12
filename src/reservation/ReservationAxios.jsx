@@ -1,4 +1,5 @@
 import axi from '../utils/axios/Axios';
+import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 // 예약 목록 조회
 export async function fetchReservationList({ searchKeyword, searchDate, reservationType } = {}) {
@@ -14,7 +15,7 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
     const list =  response.data.map(item => ({
       id: item.reserveId,
       title: item.popupName,
-      datetime: item.reserveTime,
+      datetime: formatDateTime(item.reserveDate + ' ' + item.reserveTime),
       location: item.location,
       imageUrl: item.imageUrl,
       category: item.reservationType
