@@ -1,19 +1,20 @@
-import "bootstrap-icons/font/bootstrap-icons.css"; //bootstrap-icons
-import "bootstrap/dist/css/bootstrap.min.css"; //bootstrap
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import { Footer, Header, Layout } from "./components";
-import AdminPage from "./pages/admin/AdminPage";
-import Chart from "./pages/analytics/chart";
-import ChangePasswordForm from "./pages/auth/chage-password/ChangePasswordForm";
-import LoginForm from "./pages/auth/login/LoginForm";
-import RegisterForm from "./pages/auth/register/RegisterFrom";
+import 'bootstrap-icons/font/bootstrap-icons.css'; //bootstrap-icons
+import 'bootstrap/dist/css/bootstrap.min.css'; //bootstrap
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import { Footer, Header, Layout } from './components';
+import AdminPage from './pages/admin/AdminPage';
+import Chart from './pages/analytics/chart';
+import ChangePasswordForm from './pages/auth/chage-password/ChangePasswordForm';
+import LoginForm from './pages/auth/login/LoginForm';
+import RegisterForm from './pages/auth/register/RegisterFrom';
 import NoticeForm from "./pages/notification/NoticeForm";
-import MyPage from "./pages/mypage/MyPage";
-import ReviewForm from "./pages/mypage/MyReviews/ReviewForm";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
-import AdminPopupStatistics from "./pages/admin/statistics/AdminPopupStatistics";
+import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
+import MyPage from './pages/mypage/MyPage';
+import ReviewForm from './pages/mypage/MyReviews/ReviewForm';
+
 
 function App() {
   return (
@@ -23,13 +24,10 @@ function App() {
         {/* <NoticePopupContainer /> */}
         <Routes>
           {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
-          <Route path="/auth/register" element={<RegisterForm />} />
-          <Route path="/auth/login" element={<LoginForm />} />
-          <Route path="/chart/data" element={<Chart />} />
-          <Route
-            path="/auth/change-password"
-            element={<ChangePasswordForm />}
-          />
+          <Route path='/auth/register' element={<RegisterForm />} />
+          <Route path='/auth/login' element={<LoginForm />} />
+          <Route path='/chart/data' element={<Chart />} />
+          <Route path="/auth/change-password" element={<ChangePasswordForm />} />
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/popup/detail/:popupId" element={<PopupDetail />} />
           <Route path="/popup/list" element={<PopupList />} />
@@ -38,12 +36,9 @@ function App() {
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/mypage/register-noti" element={<NoticeForm />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
-          <Route
-            path="/admin/popup/statistics/:popupId"
-            element={<AdminPopupStatistics />}
-          />
+          <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/review-form" element={<ReviewForm />} />
+          <Route path="/review-form" element={<ReviewForm />} /> 
         </Routes>
         <Footer />
       </Layout>
