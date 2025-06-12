@@ -42,42 +42,6 @@ function CalendarModal({ show, date, onClose, onApply }) {
   );
 }
 
-// 더미 데이터
-const dummyData = [
-  {
-    id: 1,
-    title:    '하늘아카시아 팝업',
-    datetime: '2025년 5월 1일 18:00',
-    location: '롯데백화점 대구점 B2 입구행사장',
-    imageUrl: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202505/29/2932339c-cfdd-4945-a664-7c876e3003e4.jpg',
-    category: '사전예약'
-  },
-  {
-    id: 2,
-    title:    '젠틀몬스터 X 브랏츠 포켓 컬렉션 팝업',
-    datetime: '2025년 4월 10일 19:00',
-    location: '신세계백화점 강남점 지하1층',
-    imageUrl: 'https://imgprism.ehyundai.com/evntCrdInf/imgPath/202506/01/196c0427-73a1-4141-a71a-6fd06f57b4c0.jpg',
-    category: '사전예약'
-  },
-  {
-    id: 3,
-    title:    '소보로에 진심을 담은 베이커리',
-    datetime: '2025년 6월 10일 12:00',
-    location: '롯데백화점 건대스타시티점 B1F 식품행사장',
-    imageUrl: 'https://imgprism.ehyundai.com/evntCrdInf/imgPath/202505/31/3ace029f-92ee-4a3e-a039-0160b5b7c7e3.jpg',
-    category: '현장웨이팅'
-  },
-  {
-    id: 4,
-    title:    '세븐틴 X 비비고 팝업 IN 명동',
-    datetime: '2025년 6월 10일 14:00',
-    location: '현대백화점 명동점 1F',
-    imageUrl: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202505/29/2932339c-cfdd-4945-a664-7c876e3003e4.jpg',
-    category: '현장웨이팅'
-  }
-];
-
 
 // 팝업 카드 컴포넌트
 function ReservationCard({ item }) {
@@ -87,7 +51,7 @@ function ReservationCard({ item }) {
   const handleCardClick = () => {
     navigate(`/popup/detail/${item.id}`);  // 클릭 시 이동
   };
-// 42, 44, 46, 47
+
   return (
     <div
       className="card mb-1"
@@ -167,46 +131,83 @@ export default function ReservationList() {
 
   return (
     <div className="container pt-0 pb-0" style={{ marginTop: '70px', marginBottom: '90px' }}>
-        {/* 달력 + 검색 */}
-        <div className="row mb-3 g-2 align-items-center">
-        <div className="col-auto">
-            <div className="input-group">
-            <span className="input-group-text" role="button"
-                onClick={() => setShowCal(true)}
-            >📅</span>
-            <input
-                type="text"
-                className="form-control"
-                placeholder="날짜 선택"
-                value={searchDate}
-                readOnly
-                onClick={() => setShowCal(true)}
-                style={{ width: '120px' }}
-            />
-            </div>
-        </div>
-        <div className="col-auto">
-            <div className="input-group">
-            <input
-                type="text"
-                className="form-control"
-                placeholder="제목 검색"
-                value={searchKeyword}
-                onChange={e => setSearchKeyword(e.target.value)}
-                style={{ width: '140px' }}
-            />
-            <button
-                className="btn btn-warning"
-                onClick={() => {
-                fetchReservationList({ searchKeyword, searchDate, reservationType }).then(list => {
-                    console.log('Filtering list:', list);
-                    setReservationList(list);
-                });
+        <div
+                className="mb-3"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 100px',  // 왼쪽은 남은 공간, 오른쪽은 100px 고정
+                  columnGap: '8px',
+                  width: '390px',
+                  margin: '0 auto',
                 }}
-            >검색</button>
-            </div>
-        </div>
-        </div>
+              >
+                {/* 좌측: 입력 필드 두 개 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {/* 1행: 날짜 선택 */}
+                  <div className="input-group">
+                    <span
+                      className="input-group-text"
+                      role="button"
+                      onClick={() => setShowCal(true)}
+                    >
+                      📅
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="날짜 선택"
+                      value={searchDate}
+                      readOnly
+                      onClick={() => setShowCal(true)}
+                    />
+                  </div>
+        
+                  {/* 2행: 제목 검색 */}
+                  <div className="input-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="제목 검색"
+                      value={searchKeyword}
+                     onChange={e => setSearchKeyword(e.target.value)}
+                    />
+                  </div>
+                </div>
+        
+                {/* 우측: 세로로 붙은 버튼 그룹 */}
+                <div
+                  className="btn-group-vertical"
+                  role="group"
+                  style={{ height: '100%' , width : '80px'}}
+                >
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      console.log('검색 버튼 클릭:', { searchKeyword, searchDate, reservationType });
+                      fetchReservationList({searchKeyword, searchDate, reservationType}).then(list => {
+                        setReservationList(list);
+                      });
+                    }}
+                    style={{ flex: 1, backgroundColor: '#DB9506', color: 'white' }}
+                  >
+                    검색
+                  </button>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setSearchKeyword('');
+                      setSearchDate('');
+                      setReservationType('ALL'); // 초기화 시 전체로 설정
+                      fetchReservationList({ searchKeyword, searchDate, reservationType }).then(list => {
+                        setReservationList(list);
+                      });
+                    }}
+                    style={{ flex: 1, backgroundColor: '#1D9D8B', color: 'white' }}
+                  >
+                    초기화
+                  </button>
+                </div>
+              </div>
 
         {/* TODO :카테고리 선택 버튼 (한번에 1개만 선택 가능) */}
       <div className="btn-group mb-3" role="group" style={{ width: '100%' }}>
