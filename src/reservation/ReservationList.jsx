@@ -49,7 +49,8 @@ function ReservationCard({ item }) {
   const borderColor = CATEGORY[item.category]?.color || '#CCC'; // fallback color
 
   const handleCardClick = () => {
-    navigate(`/popup/detail/${item.id}`);  // 클릭 시 이동
+    console.log('카드 클릭:',  `/reservation/detail/${item.id}`)
+    navigate(`/reservation/detail/${item.id}`); // 예약 상세 페이지로 이동
   };
 
   return (

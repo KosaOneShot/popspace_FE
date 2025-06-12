@@ -10,7 +10,7 @@ import LoginForm from './pages/auth/login/LoginForm';
 import RegisterForm from './pages/auth/register/RegisterFrom';
 import NoticeForm from "./pages/notification/NoticeForm";
 import NoticePopupContainer from "./pages/notification/NoticePopupContainer";
-import { ReservationList } from "./reservation";
+import { ReservationList, ReservationDetail } from "./reservation";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
 import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
@@ -36,6 +36,7 @@ function App() {
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/mypage/register-noti" element={<NoticeForm />} />
           <Route path="/reservation/list" element={<ReservationList />} />
+          <Route path="/reservation/detail/:reserveId" element={<ReservationDetail />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
           <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
         </Routes>
