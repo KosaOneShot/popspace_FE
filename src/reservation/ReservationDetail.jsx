@@ -38,7 +38,7 @@ export default function ReservationDetail() {
   if (!detail) return <div className="text-center py-5">로딩 중…</div>;
 
   return (
-    <div className="container" style={{ marginTop: '70px', marginBottom: '90px' }}>
+    <div className="container" style={{ marginTop: '70px', marginBottom: detail.reservationState === 'RESERVED' ? '150px' : '100px' }}>
       <button className="btn btn-link mb-3" onClick={() => navigate(-1)}>← 목록으로</button>
 
       {/* 예약 정보 */}
@@ -92,6 +92,28 @@ export default function ReservationDetail() {
               {detail.description || '설명 정보가 없습니다.'}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* 예약취소 버튼 (오직 RESERVED 상태일 때만) */}
+      {detail.reservationState === 'RESERVED' && (
+        <div className="position-fixed"
+            style={{
+                bottom: "75px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "390px",
+                height: "70px",
+                zIndex: 1000,
+                backgroundColor: "#F7F6F3",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                padding: "4px",
+            }}
+        > <button className="btn btn-danger w-100" style={{ margin: '5px 10px'}}>
+            예약취소
+          </button>
         </div>
       )}
     </div>
