@@ -14,6 +14,7 @@ import { ReservationList, ReservationDetail } from "./reservation";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
 import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
+import { Home } from './home';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/reservation/detail/:reserveId" element={<ReservationDetail />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
           <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
+          <Route path="/" element={<Home />} />
         </Routes>
         <Footer />
       </Layout>
