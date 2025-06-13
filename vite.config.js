@@ -4,8 +4,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-    server: {
+  server: {
     host: true, // ← 여기 추가!
     port: 5173
+  },
+  esbuild: {
+    drop: ['console', 'debugger']
   }
 });
