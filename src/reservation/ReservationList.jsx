@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchReservationList } from './ReservationAxios';
+import CalendarModal from '../components/modal/CalenderModal';
 
 // 카테고리별 색상
 const CATEGORY = {
@@ -9,39 +10,6 @@ const CATEGORY = {
   ADVANCE:   { label: '사전예약', color: '#DB9506' },
   WALK_IN:    { label: '현장웨이팅', color: '#1D9D8B' }
 };
-
-// popupList.jsx 와 동일한
-function CalendarModal({ show, date, onClose, onApply }) {
-  const [tmp, setTmp] = useState(date);
-  if (!show) return null;
-  return (
-    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="modal-dialog modal-sm">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">날짜 선택</h5>
-            <button className="btn-close" onClick={onClose} />
-          </div>
-          <div className="modal-body">
-            <input
-              type="date"
-              className="form-control"
-              value={tmp}
-              onChange={e => setTmp(e.target.value)}
-            />
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>취소</button>
-            <button className="btn btn-primary" onClick={() => { onApply(tmp); onClose(); }}>
-              적용
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 
 // 팝업 카드 컴포넌트
 function ReservationCard({ item }) {

@@ -2,41 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiUpdatePopupLike, axiFetchPopupList } from './popupAxios';
-
-
-// 캘린더 모달
-function CalendarModal({ show, date, onClose, onApply }) {
-  const [tmp, setTmp] = useState(date);
-  if (!show) return null;
-  return (
-      <div
-    className="modal d-block"
-    style={{backgroundColor: 'rgba(0,0,0,0.5)'}}
-  ><div className="modal-dialog modal-sm" style={{display : 'flex', alignItems: 'center', height: '70%'}}>
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">날짜 선택</h5>
-            <button className="btn-close" onClick={onClose} />
-          </div>
-          <div className="modal-body">
-            <input
-              type="date"
-              className="form-control"
-              value={tmp}
-              onChange={e => setTmp(e.target.value)}
-            />
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>취소</button>
-            <button className="btn btn-primary" onClick={() => { onApply(tmp); onClose(); }}>
-              적용
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import CalendarModal from '../components/modal/CalenderModal';
 
 // 개별 팝업 카드
 function PopupCard({ id, name, period, location, imageUrl, isLiked, onToggle, onCardClick }) {
