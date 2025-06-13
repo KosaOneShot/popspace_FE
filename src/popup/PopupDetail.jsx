@@ -74,15 +74,7 @@ const PopupDetail = () => {
         {new Date(endDate).toLocaleDateString()}
       </InfoItem>
       <InfoItem label="운영 시간">
-        {new Date(openTime).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}{" "}
-        - {" "}
-        {new Date(closeTime).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
+        {openTime} - {closeTime}
       </InfoItem>
       <InfoItem label="카테고리" isBadge>
         {category}

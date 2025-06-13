@@ -9,9 +9,12 @@ import ChangePasswordForm from './pages/auth/chage-password/ChangePasswordForm';
 import LoginForm from './pages/auth/login/LoginForm';
 import RegisterForm from './pages/auth/register/RegisterFrom';
 import NoticeForm from "./pages/notification/NoticeForm";
+import NoticePopupContainer from "./pages/notification/NoticePopupContainer";
+import { ReservationList, ReservationDetail } from "./reservation";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
 import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
+import { Home } from './home';
 
 
 function App() {
@@ -33,8 +36,11 @@ function App() {
           <Route path="/auth/login" element={<LoginForm />} />
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/mypage/register-noti" element={<NoticeForm />} />
+          <Route path="/reservation/list" element={<ReservationList />} />
+          <Route path="/reservation/detail/:reserveId" element={<ReservationDetail />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
           <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
+          <Route path="/" element={<Home />} />
         </Routes>
         <Footer />
       </Layout>
