@@ -27,6 +27,21 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
     return [];
   }
 }
+// 예약 QR 조회 /api/qr/{reserveId}
+export async function fetchReservationQR(reserveId) {
+  console.log('예약 QR 조회 ID:', reserveId);
+  try {
+    const response = await axi.get(`/api/qr/${reserveId}`, {
+      responseType: 'blob'
+    });
+    console.log('예약 QR 조회 응답:', response.data);
+    const url = URL.createObjectURL(response.data);
+    return url; // <img src={url} 으로 사용
+  } catch (error) {
+    console.error('예약 QR 조회 중 오류 발생:', error);
+    return null;
+  }
+}
 
 
 // 예약 상세 조회

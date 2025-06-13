@@ -1,7 +1,7 @@
 // ReservationDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchReservationDetail } from './ReservationAxios';
+import { fetchReservationDetail, fetchReservationQR } from './ReservationAxios';
 import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 
@@ -28,19 +28,30 @@ export default function ReservationDetail() {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [qrUrl, setQrUrl] = useState(null);
 
   useEffect(() => {
+    fetchReservationQR(reserveId)
+    .then(setQrUrl)
+    .catch(err => {
+      console.error('QR 코드 조회 실패', err);
+      setQrUrl(null);
+    });
     fetchReservationDetail(reserveId)
       .then(setDetail)
       .catch(err => console.error('상세 조회 실패', err));
-  }, [reserveId]);
+  }, [reserveId]);  
 
   if (!detail) return <div className="text-center py-5">로딩 중…</div>;
 
   return (
     <div className="container" style={{ marginTop: '70px', marginBottom: detail.reservationState === 'RESERVED' ? '150px' : '100px' }}>
       <button className="btn btn-link mb-3" onClick={() => navigate(-1)}>← 목록으로</button>
-
+      <img
+        src={qrUrl}
+        alt="예약 QR 코드"
+        style={{ width: '100%', display: 'block' }}
+      />
       {/* 예약 정보 */}
       <div className="card mb-4">
         <div className="card-header">예약 상세 (ID: {detail.reserveId})</div>
