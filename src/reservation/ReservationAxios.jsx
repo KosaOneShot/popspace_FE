@@ -1,21 +1,31 @@
+import { Contact } from 'lucide-react';
 import axi from '../utils/axios/Axios';
 import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 // 예약 목록 조회
-export async function fetchReservationList({ searchKeyword, searchDate, reservationType } = {}) {
-  console.log('예약 목록 조회 파라미터:', { searchKeyword, searchDate, reservationType });
+export async function fetchReservationList({ searchKeyword, searchDate, reservationType, lastReserveDate, lastReserveHour, lastReserveMinute, lastReserveId }) {
+  console.log('예약 목록 조회 파라미터:', { searchKeyword, searchDate, reservationType, lastReserveDate, lastReserveHour, lastReserveMinute, lastReserveId });
   try {
     const response = await axi.get('/api/reservation/list', {
       params: { 
         searchKeyword : searchKeyword, 
         searchDate : searchDate, 
-        reservationType : reservationType }
+        reservationType : reservationType,
+        lastReserveDate: lastReserveDate,
+        lastReserveHour: lastReserveHour,
+        lastReserveMinute: lastReserveMinute,
+        lastReserveId: lastReserveId
+       }
     });
     console.log('예약 목록 조회 응답:', response.data);
     const list =  response.data.map(item => ({
       id: item.reserveId,
       title: item.popupName,
       datetime: formatDateTime(item.reserveDate + ' ' + item.reserveTime),
+      reserveDate: item.reserveDate,
+      // 11:00 에서 시, 분 분리
+      reserveHour : Number(item.reserveTime.split(':')[0]),
+      reserveMinute : Number(item.reserveTime.split(':')[1]),
       location: item.location,
       imageUrl: item.imageUrl,
       category: item.reservationType

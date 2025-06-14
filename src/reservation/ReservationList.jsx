@@ -1,5 +1,5 @@
 // PopupPage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchReservationList } from './ReservationAxios';
 import CalendarModal from '../components/modal/CalenderModal';
@@ -86,20 +86,97 @@ function ReservationCard({ item }) {
 
 // 전체 페이지
 export default function ReservationList() {
+  const containerRef = useRef(null); // 스크롤 컨테이너 참조
   const [searchKeyword,    setSearchKeyword]    = useState('');
   const [searchDate,       setSearchDate]       = useState('');
   const [reservationType, setReservationType] = useState('ALL');
   const [reservationList,  setReservationList]  = useState([]);
   const [showCal, setShowCal] = useState(false);
+  // 페이지네이션
+  const [lastReserveDate, setLastReserveDate] = useState(null);
+  const [lastReserveHour, setLastReserveHour] = useState(null);
+  const [lastReserveMinute, setLastReserveMinute] = useState(null);
+  const [lastReserveId, setLastReserveId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+const fetchFirstPage = () => {
+  setIsLoading(true);
+  fetchReservationList({
+    searchKeyword,
+    searchDate,
+    reservationType,
+    lastReserveDate:    null,
+    lastReserveHour:    null,
+    lastReserveMinute:  null,
+    lastReserveId:      null
+  })
+  .then(list => {
+    setReservationList(list);
+    if (list.length) {
+      const last = list[list.length - 1];
+      setLastReserveDate(last.reserveDate);
+      setLastReserveHour(last.reserveHour);
+      setLastReserveMinute(last.reserveMinute);
+      setLastReserveId(last.id);
+    }
+  })
+  .finally(() => setIsLoading(false));
+};
+
+  const loadMore = () => {
+    if (isLoading) return; // 중복 로딩 방지
+    setIsLoading(true);
+    fetchReservationList({
+      searchKeyword,
+      searchDate,
+      reservationType,
+      lastReserveDate,
+      lastReserveHour,
+      lastReserveMinute,
+      lastReserveId
+    })
+      .then(list => {
+        if (!list || list.length === 0) return;
+        // 중복 제거하며 누적
+        setReservationList(prev => [...prev, ...list.filter(newItem => !prev.some(old => old.id === newItem.id))]);
+        const last = list[list.length - 1];
+        setLastReserveDate(last.reserveDate);
+        setLastReserveHour(last.reserveHour);
+        setLastReserveMinute(last.reserveMinute);
+        setLastReserveId(last.id);
+      })
+      .catch(err => console.error('예약 목록 로드 중 오류 발생:', err))
+      .finally(() => setIsLoading(false)); // 로딩 상태 해제
+  };
 
   useEffect(() => {
-    fetchReservationList({ searchKeyword, searchDate, reservationType })
-      .then(list => setReservationList(list))
-      .catch(err => console.error('예약목록 조회 실패', err));
+    // 초기 목록 로딩
+    setReservationList([]); // 기존 목록 초기화
+    setLastReserveDate(null);
+    setLastReserveHour(null);
+    setLastReserveMinute(null);
+    setLastReserveId(null);
+    
+    fetchFirstPage(); // 초기 로드
   }, [reservationType]);
 
+// 페이지네이션 감지 및 스크롤 이벤트 핸들러
+useEffect(() => {
+  const el = containerRef.current;
+  if (!el) return;
+  const handleScroll = () => {
+    if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50) {
+      loadMore(); // 스크롤이 바닥에 가까워지면 추가 로드
+    }
+  };
+  el.addEventListener('scroll', handleScroll);
+  return () => {
+    el.removeEventListener('scroll', handleScroll); // 컴포넌트 언마운트 시 이벤트 제거
+  };
+}, [loadMore]);
+
   return (
-    <div className="container pt-0 pb-0" style={{ marginTop: '70px', marginBottom: '90px' }}>
+    <div ref={containerRef} className="container pt-0 pb-0" style={{ marginTop: '70px', height: 'calc(100vh - 160px)', marginBottom: '90px', overflowY: 'auto' }}>
         <div
                 className="mb-3"
                 style={{
@@ -178,7 +255,6 @@ export default function ReservationList() {
                 </div>
               </div>
 
-        {/* TODO :카테고리 선택 버튼 (한번에 1개만 선택 가능) */}
       <div className="btn-group mb-3" role="group" style={{ width: '100%' }}>
         {Object.entries(CATEGORY).map(([key, cat]) => (
           <button
