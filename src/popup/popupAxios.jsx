@@ -11,20 +11,24 @@ export async function axiUpdatePopupLike(popupId, toBeState) {
 }
 
 // 서버에서 팝업 목록을 가져와 가공하는 함수
-export async function axiFetchPopupList(searchKeyword, searchDate, sortKey) {
-  console.log("searchKeyword : " + searchKeyword,  "searchDate : " + searchDate,  "sortKey : " + sortKey);
+export async function axiFetchPopupList(searchKeyword, searchDate, sortKey, lastEndDate, lastPopupId) {
+  console.log("searchKeyword : " + searchKeyword,  "searchDate : " + searchDate,  "sortKey : " 
+    + sortKey, "lastEndDate : " + lastEndDate,  "lastPopupId : " + lastPopupId );
   const params = {};
   if (searchKeyword) params.searchKeyword = searchKeyword;
   if (searchDate)    params.searchDate    = searchDate;
   if (sortKey)       params.sortKey       = sortKey;
+  if (lastEndDate)   params.lastEndDate   = lastEndDate;
+  if (lastPopupId)   params.lastPopupId   = lastPopupId;
   
   const res = await axi.get('/api/popup/list', { params });
   const arr = res.data || [];
   console.log("axiFetchPopupList() 의 response 입니다~ : " + JSON.stringify(arr));
   return arr.map(item => ({
-    id:       item.popupId,
+    popupId:       item.popupId,
     name:     item.popupName,
     period:   `${item.startDate.split(' ')[0]} ~ ${item.endDate.split(' ')[0]}`,
+    endDate: item.endDate,
     location: item.location,
     imageUrl: item.imageUrl,
     isLiked:  item.likeState
