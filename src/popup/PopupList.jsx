@@ -1,21 +1,21 @@
 // PopupList.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiUpdatePopupLike, axiFetchPopupList } from './popupAxios';
 import CalendarModal from '../components/modal/CalenderModal';
 
 // 개별 팝업 카드
-function PopupCard({ id, name, period, location, imageUrl, isLiked, onToggle, onCardClick }) {
-  const handleCardClick = () => onCardClick(id);
+function PopupCard({ popupId, name, period, location, imageUrl, isLiked, onToggle, onCardClick }) {
+  const handleCardClick = () => onCardClick(popupId);
   const handleLike = e => {
     e.stopPropagation();
     const nextState = !isLiked;
     // 1) UI 즉시 업데이트
-    onToggle(id, nextState);
+    onToggle(popupId, nextState);
     // 2) 서버 호출, 실패하면 롤백
-    axiUpdatePopupLike(id, nextState).catch(err => {
+    axiUpdatePopupLike(popupId, nextState).catch(err => {
       console.error('찜 업데이트 실패:', err);
-      onToggle(id, isLiked);  // 원래 상태로 복구
+      onToggle(popupId, isLiked);  // 원래 상태로 복구
     });
   };
 
@@ -57,32 +57,87 @@ function PopupCard({ id, name, period, location, imageUrl, isLiked, onToggle, on
 
 // 팝업 목록 전체
 export default function PopupList() {
+  const containerRef = useRef(null); // 스크롤 컨테이너 참조
   const navigate = useNavigate();
   const [showCal, setShowCal] = useState(false);
   const [date, setDate]       = useState('');
   const [search, setSearch]   = useState('');
   const [sortKey, setSortKey] = useState('newest');
   const [popupList, setPopupList]     = useState([]);
+  // 페이지네이션 (무한스크롤)
+  const [lastEndDate,   setLastEndDate]   = useState(null);
+  const [lastLikeCnt,  setLastLikeCnt]   = useState(null);
+  const [lastPopupId,   setLastPopupId]   = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // 중복 로딩 방지 상태값
+
+// 무한 페이지네이션
+const loadMore = () => {
+  if (isLoading) return; // 중복 로딩 방지
+  setIsLoading(true);
+  
+  axiFetchPopupList(search, date, sortKey, lastEndDate, lastPopupId)
+    .then(list => {
+      if (!list || list.length === 0) return;
+
+      // 1) 중복 제거하며 누적
+      setPopupList(prev =>
+        prev.concat(
+          list.filter(newItem =>
+            !prev.some(old => old.popupId === newItem.popupId)
+          )
+        )
+      );
+      // 2) 커서 갱신: 응답 리스트의 마지막 아이템으로
+      console.log(list);
+      const lastData = list[list.length - 1];
+      setLastEndDate(lastData.endDate);
+      setLastPopupId(lastData.popupId);
+    })
+    .catch(err => console.error(err))
+    .finally(() => setIsLoading(false)); // 로딩 상태 해제
+};
 
   // 초기 목록 로딩
   useEffect(() => {
-    axiFetchPopupList(search, date, sortKey)
-      .then(list => setPopupList(list))   // ← 여기를 수정: .then(setPopupList()) X
-      .catch(err => console.error('Failed to load popups', err));
+    // 상태 초기화
+    setPopupList([]);
+    setSearch('');
+    setDate('');
+    setLastEndDate(null);
+    setLastLikeCnt(null);
+    setLastPopupId(null);
+
+    loadMore();
   }, [sortKey]);  // sortKey 변경 시마다 다시 호출
 
-  // 
-  const toggleFav = (id, newLiked) => {
-    setPopupList(popupList.map(i => i.id === id ? { ...i, isLiked: newLiked } : i));
+  // 스크롤 이벤트 리스너 등록
+  useEffect(() => {
+  const el = containerRef.current;
+  if (!el) return;
+  const onScroll = () => {
+    if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50) { // 스크롤이 끝까지 도달했는지 확인
+      loadMore();
+    }
+  };
+  el.addEventListener('scroll', onScroll);
+  return () => el.removeEventListener('scroll', onScroll);
+}, [loadMore]);
+
+
+  const toggleFav = (popupId, newLiked) => {
+    setPopupList(popupList.map(i => i.popupId === popupId ? { ...i, isLiked: newLiked } : i));
   };
 
-  const handleCardClick = id => {
-    // navigate(`/detail/${id}`);
-    navigate(`/popup/detail/${id}`);
+  const handleCardClick = popupId => {
+    // navigate(`/detail/${popupId}`);
+    navigate(`/popup/detail/${popupId}`);
   };
+  
+  
+  return (  
+    <div ref={containerRef}
+      className="container" style={{ paddingTop: '70px', marginBottom: '100px', height: 'calc(100vh - 140px)', overflowY : 'auto' }}>
 
-  return (
-    <div className="container" style={{ paddingTop: '70px', marginBottom: '100px', overflowY : 'auto' }}>
       <div
         className="mb-3"
         style={{
@@ -189,7 +244,7 @@ export default function PopupList() {
       ) : (
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3">
           {popupList.map(item => (
-            <div key={item.id} className="col">
+            <div key={item.popupId} className="col">
               <PopupCard
                 {...item}
                 onToggle={toggleFav}
