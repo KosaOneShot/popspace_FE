@@ -52,41 +52,38 @@ function PopupCard({ popup }) {
   );
 }
 
-
-
 function ReservationCard({ res }) {
-  const navigate = useNavigate();
-  
-  if (!res) return null; // 데이터가 없을 경우 null 반환
-  const reserveDateTime = formatDate(res.reserveDate) + ' ' + formatTime(res.reserveTime);
+  const nav = useNavigate();
+  const empty = !res?.popupId;
 
   return (
-    <div
-      className="card shadow-sm mb-4 mx-auto"
-      style={{
-        width: '53%',
-        overflow: 'hidden',
-        textAlign: 'center'
-      }}>
-      <img
-        src={res.imageUrl}
-        alt={res.popupName}
-        className="img-fluid"
-        style={{ height: '20%', height : '150px', width: '100%', objectFit: 'cover' }}
-      />
-      <div
-        className="card-body d-flex flex-column justify-content-between"
-        style={{ padding: '0.75rem' }}
-      >
-        <div>
-          <h6 className="card-title mb-1 text-dark">{res.popupName}</h6>
-          <p className="card-text mb-0" style={{fontSize : '12px', color: '#795548'}}>{reserveDateTime}</p>
-          <p className="card-text text-muted small mb-0">
-            {res.location}
-          </p>
+    <div className="card shadow-sm mb-4 mx-auto text-center" style={{ width: '53%' }}>
+      {empty ? (
+        <div style={{ height: 150, background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span className="text-muted">예정된 팝업이 없습니다</span>
         </div>
-        <button className="btn btn-outline-secondary btn-sm w-100 mt-1"
-          onClick={() => (navigate(`/popup/detail/${res.popupId}`))}
+      ) : (
+        <img
+          src={res.imageUrl}
+          alt={res.popupName}
+          className="img-fluid"
+          style={{ height: 150, objectFit: 'cover' }}
+        />
+      )}
+      <div className="card-body p-3">
+        {!empty && (
+          <>
+            <h6 className="mb-1">{res.popupName}</h6>
+            <p className="small text-secondary mb-2">
+              {formatDate(res.reserveDate)} {formatTime(res.reserveTime)}
+            </p>
+            <p className="small text-muted mb-3">{res.location}</p>
+          </>
+        )}
+        <button
+          className="btn btn-outline-secondary btn-sm w-100"
+          onClick={() => empty || nav(`/popup/detail/${res.popupId}`)}
+          disabled={empty}
         >
           예약 상세 보기
         </button>
@@ -94,6 +91,9 @@ function ReservationCard({ res }) {
     </div>
   );
 }
+
+
+
 
 // 홈 화면
 export default function Home() {
@@ -121,9 +121,10 @@ useEffect(() => {
 
       {/* 섹션2: 하단 내 예약 카드 */}
       <section>
-        <h2 className="h5 border-bottom pb-2 mb-3 text-secondary" style={{ marginTop: '50' }}>
+        <h2 className="h5 border-bottom pb-2 mb-5 text-secondary" style={{ marginTop: '50' }}>
             곧 만날 예약
         </h2>
+        {console.log("upcomingReservation: ", upcomingReservation)}
         <ReservationCard res={upcomingReservation} />
       </section>
     </div>
