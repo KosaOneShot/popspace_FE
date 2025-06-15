@@ -74,6 +74,7 @@ const QrScan = () => {
 
     // DOM이 렌더링된 이후에만 카메라 시작
     useEffect(() => {
+
         const interval = setInterval(() => {
             if (
                 qrReaderContainerRef.current &&
@@ -89,15 +90,26 @@ const QrScan = () => {
     }, []);
 
     // unmount 시 정리
+    // clear 전 stop 보장: setTimeout 추가
     useEffect(() => {
         return () => {
-            if (html5QrCodeRef.current) {
-                html5QrCodeRef.current.stop().catch(() => {});
-                html5QrCodeRef.current.clear().catch(() => {});
-                html5QrCodeRef.current = null;
-            }
+            const scanner = html5QrCodeRef.current;
+            if (!scanner) return;
+
+            (async () => {
+                try {
+                    await scanner.stop();
+                    await new Promise((r) => setTimeout(r, 200));
+                    await scanner.clear();
+                } catch (e) {
+                    console.warn('Unmount 중 stop/clear 오류:', e?.message);
+                } finally {
+                    html5QrCodeRef.current = null;
+                }
+            })();
         };
     }, []);
+
 
     return (
         <div className="container mt-4 text-center" style={{ maxWidth: 360 }}>
@@ -197,19 +209,19 @@ const QrScan = () => {
 
                                     const scanner = html5QrCodeRef.current;
                                     try {
-                                        if (scanner?.getState) {
-                                            try {
-                                                await scanner.stop();
-                                            } catch (stopErr) {
-                                                console.warn('stop 중 오류:', stopErr.message);
-                                            }
-                                            try {
-                                                await scanner.clear();
-                                            } catch (clearErr) {
-                                                console.warn('clear 중 오류:', clearErr.message);
-                                            }
-                                            html5QrCodeRef.current = null;
+                                        if (scanner) {
+                                            (async () => {
+                                                try {
+                                                    await scanner.stop(); // 먼저 스캔 중단
+                                                    await scanner.clear(); // 그 다음에 클리어 (그러나 보장은 x)
+                                                } catch (err) {
+                                                    console.warn('Unmount 중 stop/clear 오류:', err.message);
+                                                } finally {
+                                                    html5QrCodeRef.current = null;
+                                                }
+                                            })();
                                         }
+
                                     } catch (outerErr) {
                                         console.error('스캐너 상태 확인 오류:', outerErr.message);
                                     }
