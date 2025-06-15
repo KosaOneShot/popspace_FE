@@ -74,6 +74,7 @@ const PasswordChangeForm = () => {
           className="form-control"
           value={form.currentPassword}
           onChange={handleChange}
+          maxLength={32}
         />
       </div>
 
@@ -87,6 +88,7 @@ const PasswordChangeForm = () => {
           className="form-control"
           value={form.newPassword}
           onChange={handleChange}
+          maxLength={32}
         />
       </div>
 
@@ -100,6 +102,7 @@ const PasswordChangeForm = () => {
           className="form-control"
           value={form.confirmPassword}
           onChange={handleChange}
+          maxLength={32}
         />
       </div>
 

@@ -9,6 +9,7 @@ function ReviewForm() {
   const query = new URLSearchParams(location.search);
   const data = location.state?.data;
   const idFromUrl = query.get("id");
+  const MAX_CONTENT_LENGTH = 160;
 
   const isEditMode = !!data?.content;
 
@@ -50,6 +51,7 @@ function ReviewForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "content" && value.length > MAX_CONTENT_LENGTH) return;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -129,6 +131,7 @@ function ReviewForm() {
           name="content"
           value={form.content}
           onChange={handleChange}
+          maxLength={MAX_CONTENT_LENGTH}
           placeholder="작성하신 후기는 다른 고객들에게 큰 도움이 될 수 있습니다."
         />
       </div>
