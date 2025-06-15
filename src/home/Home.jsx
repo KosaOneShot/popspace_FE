@@ -13,6 +13,7 @@ function PopupCard({ popup }) {
   const [likeCount, setLikeCount] = useState(popup.likeCount);
 
   const handleLikeToggle = () => {
+    e.stopPropagation(); // 카드 클릭 이벤트 전파 막기
     const toBeState = !liked;
     axiUpdatePopupLike(popup.popupId, toBeState).then(() => {
       setLiked(toBeState);
@@ -20,7 +21,8 @@ function PopupCard({ popup }) {
     });
   };
   return (
-    <div className="mb-4">
+    <div className="mb-4"
+      style={{ cursor: 'pointer' }} onClick={() => navigate(`/popup/detail/${popup.popupId}`)}>
       <div className="ratio ratio-1x1">
         <img
           src={popup.imageUrl}
