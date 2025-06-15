@@ -1,0 +1,123 @@
+/* 선택한 날짜 색상, 둥근 사각형 모양 */
+.custom-selected {
+    background-color: #1D9D8B !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+/* 비활성 날짜 (아주 연한 회색) */
+.custom-disabled {
+    color: #d3d3d3 !important;
+    pointer-events: none;
+}
+
+/* 일요일만 빨간색, 선택되거나 disabled 아니어야 함 */
+.custom-day:nth-child(1):not(.custom-disabled):not(.custom-selected) {
+    color: red;
+}
+
+/* 기본 DayPicker 네비게이션 화살표 색상 변경 */
+.rdp-button_previous svg,
+.rdp-button_next svg {
+    color: #1D9D8B !important;
+    fill: #1D9D8B !important;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* 화살표 위치 좌우 양옆으로 변경 */
+.rdp-nav {
+    width: 100%;
+    display: flex;
+    /* 좌우 끝 버튼 배치 */
+    justify-content: space-between;
+    /* 좌우 여백 */
+    padding: 0 1rem;
+    z-index: 1;
+}
+
+/* 캡션 전체를 상대 위치 기준으로 설정 */
+.rdp-month_caption {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+
+/* 시간대 버튼 css */
+.time-button-grid {
+    display: grid;
+    /* 한 줄에 3개 */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-items: center;
+    padding: 0 30px; /* 좌우 여백을 32px로 설정 */
+}
+
+.time-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #000;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 100px;
+    transition: all 0.2s ease-in-out;
+}
+
+.time-btn:hover:enabled {
+    border-color: #1D9D8B;
+}
+
+.time-btn:disabled,
+.time-btn.disabled {
+    color: #d3d3d3;
+    cursor: not-allowed;
+}
+
+.time-btn.selected {
+    background-color: #1D9D8B;
+    color: white;
+    border-color: #1D9D8B;
+}
+
+
+
+/* 예약하기 버튼 css */
+.reserve-btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid #d3d3d3;
+    background-color: #f0f0f0;
+    color: #888;
+    cursor: not-allowed;
+    transition: background-color 0.3s, color 0.3s;
+    width: 200px;
+}
+
+.reserve-btn.active {
+    background-color: #1D9D8B;
+    border-color: #1D9D8B;
+    color: white;
+    cursor: pointer;
+}
+
+.reserve-btn:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* 시간 버튼과 간격 유지 */
+.reserve-btn-container {
+    margin-top: 40px;
+    text-align: center;
+}
