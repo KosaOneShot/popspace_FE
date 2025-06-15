@@ -14,6 +14,8 @@ import { ReservationList, ReservationDetail } from "./reservation";
 import QrScan from "./pages/qr/QrScan";
 import { PopupDetail, PopupList } from "./popup";
 import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics';
+import MyPage from './pages/mypage/MyPage';
+import ReviewForm from './pages/mypage/MyReviews/ReviewForm';
 import { Home } from './home';
 
 
@@ -40,6 +42,8 @@ function App() {
           <Route path="/reservation/detail/:reserveId" element={<ReservationDetail />} />
           <Route path="/admin/popup/list" element={<AdminPage />} />
           <Route path="/admin/popup/statistics/:popupId" element={<AdminPopupStatistics />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/review-form" element={<ReviewForm />} /> 
           <Route path="/" element={<Home />} />
         </Routes>
         <Footer />
