@@ -17,6 +17,7 @@ import AdminPopupStatistics from './pages/admin/statistics/AdminPopupStatistics'
 import MyPage from './pages/mypage/MyPage';
 import ReviewForm from './pages/mypage/MyReviews/ReviewForm';
 import { Home } from './home';
+import ReservationForm from './pages/reservation/ReservationForm';
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/review-form" element={<ReviewForm />} /> 
           <Route path="/" element={<Home />} />
+          <Route path='/popups/:popupId/reservation' element={<ReservationForm />} />
         </Routes>
         <Footer />
       </Layout>
