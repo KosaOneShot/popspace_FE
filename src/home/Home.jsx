@@ -6,51 +6,77 @@ import { axiFetchMostLikedPopup, axiFetchUpcomingReservation } from './HomeAxios
 import { axiUpdatePopupLike, axiFetchPopupLike } from '../popup/popupAxios';
 
 function PopupCard({ popup }) {
-  if (!popup) return null;
-
   const navigate = useNavigate();
-  const [liked, setLiked]     = useState(popup.isLiked);
-  const [likeCount, setLikeCount] = useState(popup.likeCount);
+  const empty = !popup?.popupId;
 
-// 상단 1등 팝업의 좋아요 토글 핸들러
-const handleLikeToggle = e => {
-  e.stopPropagation();
-  setLikeCount(c => c + (liked ? -1 : +1));
-  const toBeState = !liked;
-  setLiked(toBeState);
+  // 좋아요/카운트 로컬 상태
+  const [liked, setLiked] = useState(popup?.isLiked ?? false);
+  const [likeCount, setLikeCount] = useState(popup?.likeCount ?? 0);
 
-  axiUpdatePopupLike(popup.popupId, toBeState)
-    .catch(err => {
-      // 실패 시 롤백
+  // 값이 처음 들어올 때 초기화
+  useEffect(() => {
+    setLiked(popup?.isLiked ?? false);
+    setLikeCount(popup?.likeCount ?? 0);
+  }, [popup]);
+
+  const handleLikeToggle = e => {
+    if (empty) return;
+    e.stopPropagation();
+    // UI 즉시 반영
+    setLikeCount(c => c + (liked ? -1 : +1));
+    const toBe = !liked;
+    setLiked(toBe);
+    axiUpdatePopupLike(popup.popupId, toBe).catch(err => {
+      // 롤백
       console.error(err);
       setLiked(liked);
       setLikeCount(c => c + (liked ? +1 : -1));
     });
-};
+  };
 
   return (
     <div className="mb-4">
-      <div className="ratio ratio-1x1" onClick={() => navigate(`/popup/detail/${popup.popupId}`)}>
-        <img
-          src={popup.imageUrl}
-          alt={popup.popupName}
-          className="img-fluid rounded-top"
-          style={{ objectFit: 'cover', cursor: 'pointer' }}
-        />
+      <div
+        className="ratio ratio-1x1"
+        style={{ background: empty ? '#f8f9fa' : undefined, cursor: empty ? 'default' : 'pointer' }}
+        onClick={() => !empty && navigate(`/popup/detail/${popup.popupId}`)}
+      >
+        {empty
+          ? <div className="d-flex justify-content-center align-items-center h-100">
+              <span className="text-muted">인기 팝업이 없습니다</span>
+            </div>
+          : <img
+              src={popup.imageUrl}
+              alt={popup.popupName}
+              className="img-fluid rounded-top"
+              style={{ objectFit: 'cover' }}
+            />}
       </div>
+
       <div className="px-3 py-2">
-        <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#1D9D8B' }}>
-          🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br/>
-          『 {popup.popupName} 』 🎉
-        </p>
+        {empty
+          ? null
+          : <>
+              <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#1D9D8B' }}>
+                🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br/>
+                『 {popup.popupName} 』 🎉
+              </p>
+            </>}
+
         <div className="d-flex justify-content-between align-items-center mt-2">
-          <div onClick={handleLikeToggle} style={{ cursor: 'pointer' }}>
+          <div
+            onClick={handleLikeToggle}
+            style={{ cursor: empty ? 'not-allowed' : 'pointer' }}
+            className="d-flex align-items-center"
+          >
             <i className={`bi me-1 ${liked ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'}`} />
             <span className="text-muted small">{likeCount}</span>
           </div>
+
           <button
             className="btn btn-light btn-sm text-secondary rounded-pill"
-            onClick={() => navigate('/popup/list')}
+            onClick={() => !empty && navigate('/popup/list')}
+            disabled={empty}
           >
             다른 팝업도 알아보기 »
           </button>
