@@ -153,6 +153,7 @@ const ProfileInfo = () => {
           name="nickname"
           className="form-control"
           value={form.nickname}
+          maxLength={20}
           onChange={handleChange}
         />
         <div
@@ -230,6 +231,7 @@ const ProfileInfo = () => {
           className="form-control"
           placeholder="상세 주소"
           value={form.detailAddress}
+          maxLength={40}
           onChange={handleChange}
         />
       </div>
