@@ -3,9 +3,9 @@ import axi from '../utils/axios/Axios';
 
 // 서버에 팝업 찜 상태를 업데이트하는 함수
 export async function axiUpdatePopupLike(popupId, toBeState) {
-  console.log("토글할 상태:", toBeState);
+  console.log("popupId : " + popupId, "toBeState : " + toBeState);
   const response = await axi.post("/api/popup/like-update", { popupId, toBeState });
-  console.log("서버 응답 status:", response.status);
+  console.log("서버 응답 status:", response.status, !toBeState);
   if (response.status === 200) return !toBeState;
   throw new Error(`찜 상태 업데이트 실패: ${response.status}`);
 }
@@ -35,14 +35,20 @@ export async function axiFetchPopupList(searchKeyword, searchDate, sortKey, last
   }));
 }
 
+// 찜여부
+export async function axiFetchPopupLike(popupId){
+  const rlResponse = await axi.get(`/api/popup/like/${popupId}`);
+  const { liked } = rlResponse.data;
+  console.log("찜 여부 : ", liked);
+  return liked;
+}
 
 
 
 // 서버에서 팝업 상세 정보를 가져와 가공하는 함수 (성공)
 export async function axiFetchPopupDetail(popupId) {
   // 1) 찜여부
-  const rlResponse = await axi.get(`/api/popup/like/${popupId}`);
-  const { liked } = rlResponse.data;
+  const liked = await axiFetchPopupLike(popupId);
 
   // 2) 팝업 상세
   const irResponse = await axi.get(`/api/popup/detail/${popupId}`);

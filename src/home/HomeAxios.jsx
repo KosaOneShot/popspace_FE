@@ -19,7 +19,7 @@ export async function axiFetchUpcomingReservation() {
     const data = res.data;
     console.log("axiFetchMyReservations() 의 response 입니다~ : " + JSON.stringify(data));
     console.log(data.popupId);
-    
+
     return {
         reserveId: data.reserveId,
         reserveDate: data.reserveDate,
