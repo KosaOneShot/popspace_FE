@@ -79,10 +79,12 @@ function ReservationCard({ res }) {
             </p>
             <p className="small text-muted mb-3">{res.location}</p>
           </>
-        )}
+        )}       
         <button
           className="btn btn-outline-secondary btn-sm w-100"
-          onClick={() => empty || nav(`/popup/detail/${res.popupId}`)}
+          onClick={() => {if (!empty) {
+            nav(`/reservation/detail/${res.reserveId}`);
+          }}}
           disabled={empty}
         >
           예약 상세 보기
