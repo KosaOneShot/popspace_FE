@@ -11,6 +11,24 @@ const NoticeForm = () => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [agree, setAgree] = useState(false);
+  const [popList, setPopList] = useState([]);
+  const [selectedPopupId, setSelectedPopupId] = useState("");
+
+  const getPopupList = async () => {
+    try {
+      const response = await axi.get("/api/popup-admin/popup/list");
+      setPopList(response.data);
+      if (response.data.length > 0) {
+        setSelectedPopupId(response.data[0].popupId);
+      }
+    } catch (err) {
+      console.error("팝업 리스트 가져오기 실패:", err);
+    }
+  };
+
+  useEffect(() => {
+    getPopupList();
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -30,7 +48,7 @@ const NoticeForm = () => {
       return;
     }
 
-    if (!title || !content || !image) {
+    if (!selectedPopupId || !title || !content || !image) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
@@ -39,6 +57,7 @@ const NoticeForm = () => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("file", image);
+    formData.append("popupId", selectedPopupId);
 
     try {
       await axi.post("/notifications", formData, {
@@ -57,10 +76,8 @@ const NoticeForm = () => {
   };
 
   return (
-    <div
-      className={`${styles.noticeFormContainer} align-items-center px-4 py-4`}
-    >
-      <h5 className="text-success fw-bold mb-4 text-center">공지 작성</h5>
+    <div className={`${styles.noticeFormContainer} align-items-center px-4`}>
+      <h4 className="text-emerald fw-bold mb-4 text-center">공지 작성</h4>
 
       <form
         onSubmit={handleSubmit}
@@ -106,6 +123,22 @@ const NoticeForm = () => {
             disabled={image !== null}
           />
           <div className="text-muted small mt-1">{image ? "1/1" : "0/1"}</div>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">공지할 팝업 선택</label>
+          <select
+            className={`form-control ${styles.roundedInput}`}
+            value={selectedPopupId}
+            onChange={(e) => setSelectedPopupId(e.target.value)}
+            required
+          >
+            <option value="">팝업을 선택해주세요</option>
+            {popList.map((popup) => (
+              <option key={popup.popupId} value={popup.popupId}>
+                {popup.popupName}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* 제목 */}
