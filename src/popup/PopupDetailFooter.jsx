@@ -1,13 +1,15 @@
 // src/popup/PopupDetailFooter.jsx
 import React, { useState, useEffect } from "react";
 import { axiUpdatePopupLike } from "./popupAxios";
+import { useNavigate } from "react-router-dom";
 // src/popup/PopupDetailFooter.jsx
 
 /** 하단 “예약하기 + 찜하기” 버튼 바 */
 const FooterButtons = ({ popupId, like }) => {
   const [isLiked, setIsLiked] = useState(like);
+  const navigate = useNavigate();
 
-  // 부모에서 like prop이 바뀌면 동기화
+    // 부모에서 like prop이 바뀌면 동기화
   useEffect(() => {
     setIsLiked(like);
   }, [like]);
@@ -23,6 +25,12 @@ const FooterButtons = ({ popupId, like }) => {
       setIsLiked(prev => !prev);
     }
   };
+
+  // 사전 예약 버튼 클릭
+const handleAdvanceClick = () => {
+    navigate(`/popups/${popupId}/reservation`);
+};
+
 
   return (
     <div
@@ -45,6 +53,7 @@ const FooterButtons = ({ popupId, like }) => {
     <button
       type="button"
       className="btn me-2"
+      onClick={handleAdvanceClick}
       style={{
         width: "43%",
         borderRadius: "8px",
