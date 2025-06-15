@@ -31,7 +31,7 @@ export async function axiFetchPopupList(searchKeyword, searchDate, sortKey, last
     endDate: item.endDate,
     location: item.location,
     imageUrl: item.imageUrl,
-    isLiked:  item.likeState
+    isLiked:  item.likeState === 'ACTIVE'
   }));
 }
 
