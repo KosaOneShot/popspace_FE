@@ -8,7 +8,7 @@ export default defineConfig({
     host: true, // ← 여기 추가!
     port: 5173
   },
-  esbuild: {
-    drop: ['console', 'debugger']
-  }
+  // esbuild: {
+  //   drop: ['console', 'debugger']
+  // }
 });
