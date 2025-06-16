@@ -7,7 +7,7 @@ import CalendarModal from '../components/modal/CalenderModal';
 // 카테고리별 색상
 const CATEGORY = {
   ALL:        { label: '전체', color: '#795548' },
-  ADVANCE:   { label: '사전예약', color: '#DB9506' },
+  ADVANCE:   { label: '사전예약', color: '#f8ac0b' },
   WALK_IN:    { label: '현장웨이팅', color: '#1D9D8B' }
 };
 
@@ -75,7 +75,7 @@ function ReservationCard({ item }) {
                 textOverflow: 'ellipsis'
               }}
             >
-              {item.location}
+             <i className="bi bi-geo-alt" style={{color: '#e74c3c'}}></i> {item.location}
             </p>
           </div>
         </div>
@@ -234,9 +234,9 @@ useEffect(() => {
                         setReservationList(list);
                       });
                     }}
-                    style={{ flex: 1, backgroundColor: '#DB9506', color: 'white' }}
+                    style={{ flex: 1, backgroundColor: '#f8ac0b', color: 'white' }}
                   >
-                    검색
+                   검색 
                   </button>
                   <button
                     className="btn"
