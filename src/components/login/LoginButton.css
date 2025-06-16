@@ -1,5 +1,5 @@
 .login-button {
-  background-color: #f7d167; /* Tailwind purple-500 */
+  background-color: rgb(248, 172, 11); /* Tailwind purple-500 */
   color: white;
   font-weight: 600;
   padding: 0.5rem 1rem; /* py-2 px-4 */
@@ -14,5 +14,5 @@
 }
 
 .login-button:hover {
-  background-color: #f3ba1d; /* Tailwind purple-600 */
+  background-color: rgb(218, 151, 5); /* Tailwind purple-600 */
 }

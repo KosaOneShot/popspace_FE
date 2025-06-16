@@ -108,7 +108,7 @@ const ProfileInfo = () => {
   return (
     <form onSubmit={handleSubmit} className={styles.accountForm}>
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`}>이메일</label>
+        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>이메일</label>
         <input
           type="email"
           className="form-control text-muted"
@@ -118,7 +118,7 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`}>이름</label>
+        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>이름</label>
         <input
           type="text"
           className="form-control text-muted"
@@ -128,7 +128,7 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`}>전화번호</label>
+        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>전화번호</label>
         <input
           type="text"
           className="form-control text-muted"
@@ -138,24 +138,27 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <div className="mb-2 d-flex justify-content-between align-items-center">
-          <label className={`form-label ${styles.accountLabel}`}>닉네임</label>
+        <label className={`form-label ${styles.accountLabel}`} style={{ color: '#3E2C22' }}>
+          닉네임
+        </label>
+        <div className="input-group">
+          <input
+            type="text"
+            name="nickname"
+            className="form-control"
+            value={form.nickname}
+            maxLength={20}
+            onChange={handleChange}
+          />
           <button
             type="button"
-            className="btn-emerald"
+            className="btn"
             onClick={handleCheckNickname}
+            style={{backgroundColor: '#FFB823', color: 'white', fontSize: '14px'}}
           >
             중복 확인
           </button>
         </div>
-        <input
-          type="text"
-          name="nickname"
-          className="form-control"
-          value={form.nickname}
-          maxLength={20}
-          onChange={handleChange}
-        />
         <div
           className={`small mt-1 ${
             nicknameStatus === "valid"
@@ -169,7 +172,7 @@ const ProfileInfo = () => {
 
       <div className="row mb-3">
         <div className="col">
-          <label className={`form-label ${styles.accountLabel}`}>
+          <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>
             생년월일
           </label>
           <input
@@ -181,7 +184,7 @@ const ProfileInfo = () => {
           />
         </div>
         <div className="col">
-          <label className={`form-label ${styles.accountLabel}`}>성별</label>
+          <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>성별</label>
           <select
             name="sex"
             className="form-select"
@@ -195,35 +198,35 @@ const ProfileInfo = () => {
         </div>
       </div>
 
-      <div className="mb-2 d-flex justify-content-between align-items-center">
-        <label className={`form-label ${styles.accountLabel}`}>주소</label>
-        <button
-          type="button"
-          className="btn-emerald btn-sm"
-          onClick={() => setIsDaumPostOpen(true)}
-        >
-          주소 검색
-        </button>
+      <div className="mb-2">
+        <label className={`form-label ${styles.accountLabel}`} style={{ color: '#3E2C22' }}>
+          주소
+        </label>
+        <div className="input-group">
+          <input
+            type="text"
+            name="roadAddress"
+            className="form-control"
+            placeholder="도로명 주소"
+            value={form.roadAddress}
+            readOnly
+          />
+          <button
+            type="button"
+            className="btn btn-emerald btn-sm"
+            onClick={() => setIsDaumPostOpen(true)}
+            style={{backgroundColor: '#FFB823'}}
+          >
+            주소 검색
+          </button>
+        </div>
       </div>
-
       {isDaumPostOpen && (
         <AddressModal
           onComplete={handleAddressComplete}
           onClose={() => setIsDaumPostOpen(false)}
         />
       )}
-
-      <div className="mb-2">
-        <input
-          type="text"
-          name="roadAddress"
-          className="form-control"
-          placeholder="도로명 주소"
-          value={form.roadAddress}
-          readOnly
-        />
-      </div>
-
       <div className="mb-3">
         <input
           type="text"

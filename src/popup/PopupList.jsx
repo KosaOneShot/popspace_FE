@@ -44,11 +44,11 @@ function PopupCard({ popupId, name, period, location, imageUrl, isLiked, onToggl
             <span className={isLiked ? 'text-danger' : 'text-secondary'}>&hearts;</span>
           </span>
         </div>
-        <p className="card-text mb-1" style={{ fontSize: '0.6rem', lineHeight: 1, color: '#795548' }}>
+        <p className="card-text mb-1 text-muted" style={{ fontSize: '0.6rem', lineHeight: 1 }}>
           {period}
         </p>
-        <p className="card-text mb-1 text-muted" style={{ fontSize: '0.8rem', lineHeight: 1 }}>
-          {location}
+        <p className="card-text mb-1" style={{ fontSize: '0.8rem', lineHeight: 1, color: '#795548' }}>
+          <i className="bi bi-geo-alt" style={{color: '#e74c3c'}}></i> {location}
         </p>
       </div>
     </div>
@@ -194,7 +194,7 @@ const loadMore = () => {
                 setPopupList(list);
               });
             }}
-            style={{ flex: 1, backgroundColor: '#DB9506', color: 'white' }}
+            style={{ flex: 1, backgroundColor: '#f8ac0b', color: 'white' }}
           >
             검색
           </button>

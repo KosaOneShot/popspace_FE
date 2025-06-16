@@ -59,7 +59,7 @@ const handleAdvanceClick = () => {
         width: "43%",
         borderRadius: "8px",
         height: "80%",
-        backgroundColor: isLogined ? "#DB9506" : "#ccc",
+        backgroundColor: isLogined ? "#f8ac0b" : "#ccc",
         color: isLogined ? "#fff" : "#666"
       }}
     >

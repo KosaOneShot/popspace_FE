@@ -8,10 +8,11 @@ import RegisterButton from "./register/RegisterButton";
   // 초록색: #1D9D8B 
   // 갈색 : #A0522D
   /**
-   * #3E2C22 #1B5E56 #7C6004 #FAF3E0 #F5E3D0 #DDF6F3
+   * #3E2C22 #1B5E56 #7C6004rgb(249, 244, 232) #F5E3D0
+#e9f5f3
    */
 
-const hoverColor = "#FAF3E0";
+const hoverColor = "#e9f5f3";
 const iconColor = "#7C6004";
 
 
