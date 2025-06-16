@@ -10,6 +10,7 @@ const LogoutButton = () => {
     try {
       await axi.post('/api/auth/logout');
       alert('로그아웃 되었습니다.');
+      window.location.reload(); // 사이드메뉴 새로고침
       navigate('/main');
     } catch (error) {
       console.error('로그아웃 실패:', error);

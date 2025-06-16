@@ -21,6 +21,7 @@ const LoginForm = () => {
       const res = await axi.post('/api/auth/login', { email, password });
       setError('');
       navigate('/');
+      setTimeout(() => window.location.reload(), 100); // 로그인시 사이드메뉴 새로고침
     } catch (err) {
       const message = err.response?.data?.message || '로그인 실패';
       setError("로그인 실패");
