@@ -66,7 +66,9 @@ const ReservationForm = () => {
         setSelectedTime(null);
 
         // yyyy-mm-dd
-        const dateStr = selectedDate.toISOString().split('T')[0];
+        const pad = (n) => n.toString().padStart(2, '0');
+        const dateStr = `${selectedDate.getFullYear()}-${pad(selectedDate.getMonth() + 1)}-${pad(selectedDate.getDate())}`;
+
         axi.get(`/api/popups/${popupId}/available-times`, { params: { date: dateStr } })
 
             .then(res => {
