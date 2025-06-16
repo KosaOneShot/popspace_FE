@@ -38,6 +38,30 @@ const QrScan = () => {
         }
     };
 
+    const handleCheckIn = async () => {
+        try {
+            await axi.post('/api/admin/reservation/checkin', {
+                reserveId: reservationInfo.reserveId
+            });
+            alert('입장 처리가 완료되었습니다.');
+        } catch (error) {
+            console.error('입장 처리 실패:', error);
+            alert('입장 처리에 실패했습니다.');
+        }
+    };
+
+    const handleCheckOut = async () => {
+        try {
+            await axi.post('/api/admin/reservation/checkout', {
+                reserveId: reservationInfo.reserveId
+            });
+            alert('퇴장 처리가 완료되었습니다.');
+        } catch (error) {
+            console.error('퇴장 처리 실패:', error);
+            alert('퇴장 처리에 실패했습니다.');
+        }
+    };
+
     // 카메라 초기화
     const startCamera = async () => {
         if (html5QrCodeRef.current) {
@@ -171,11 +195,19 @@ const QrScan = () => {
                                 </p>
 
                                 <div className="mt-4">
-                                    {reservationInfo.reservationState === 'RESERVED' && (
+                                    {reservationInfo.reservationState === 'EMAIL_SEND' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 가능한 예약</p>
-                                            <button className="btn btn-success w-100 mt-2">입장 처리</button>
+                                            <button
+                                                className="btn btn-success w-100 mt-2"
+                                                onClick={handleCheckIn}
+                                            >
+                                                입장 처리
+                                            </button>
                                         </>
+                                    )}
+                                    {reservationInfo.reservationState === 'RESERVED' && (
+                                            <p style={{ color: '#1D9D8B' }}>아직 입장 시간이 아닙니다.</p>
                                     )}
                                     {reservationInfo.reservationState === 'CANCELED' && (
                                         <p style={{ color: '#E74C3C' }}>취소된 예약입니다</p>
@@ -183,7 +215,12 @@ const QrScan = () => {
                                     {reservationInfo.reservationState === 'CHECKED_IN' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 처리된 예약</p>
-                                            <button className="btn btn-danger w-100 mt-2">퇴장 처리</button>
+                                            <button
+                                                className="btn btn-danger w-100 mt-2"
+                                                onClick={handleCheckOut}
+                                            >
+                                                퇴장 처리
+                                            </button>
                                         </>
                                     )}
                                     {reservationInfo.reservationState === 'CHECKED_OUT' && (
