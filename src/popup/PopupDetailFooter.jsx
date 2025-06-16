@@ -4,7 +4,7 @@ import { axiUpdatePopupLike } from "./popupAxios";
 // src/popup/PopupDetailFooter.jsx
 
 /** 하단 “예약하기 + 찜하기” 버튼 바 */
-const FooterButtons = ({ popupId, like }) => {
+const FooterButtons = ({ popupId, like, isLogined }) => {
   const [isLiked, setIsLiked] = useState(like);
 
   // 부모에서 like prop이 바뀌면 동기화
@@ -44,13 +44,14 @@ const FooterButtons = ({ popupId, like }) => {
     {/* 사전예약 버튼 */}
     <button
       type="button"
+      disabled={!isLogined}
       className="btn me-2"
       style={{
         width: "43%",
         borderRadius: "8px",
         height: "80%",
-        backgroundColor: "#DB9506",
-        color: "#fff"
+        backgroundColor: isLogined ? "#DB9506" : "#ccc",
+        color: isLogined ? "#fff" : "#666"
       }}
     >
       사전 예약
@@ -59,37 +60,47 @@ const FooterButtons = ({ popupId, like }) => {
     {/* 웨이팅 버튼 */}
     <button
       type="button"
+      disabled={!isLogined}
       className="btn"
       style={{
         width: "43%",
         borderRadius: "8px",
         height: "80%",
-        backgroundColor: "#1D9D8B",
-        color: "#fff"
+        backgroundColor: isLogined ? "#1D9D8B" : "#ccc",
+        color: isLogined ? "#fff" : "#666"
       }}
     >
       현장 웨이팅
     </button>
 
-      {/* 찜하기 버튼 */}
-      <button
-        type="button"
-        className={`btn ms-2 d-flex justify-content-center align-items-center ${
-          isLiked ? "btn-danger" : "btn-outline-danger"
-        }`}
-        style={{          
-          borderRadius: "8px",
-          width: "40px",
-          height: "80%",
-          padding: 0,
+    {/* 찜하기 버튼 */}
+    <button
+      type="button"
+      disabled={!isLogined}
+      className={`btn ms-2 d-flex justify-content-center align-items-center ${
+        isLogined
+          ? isLiked
+            ? "btn-danger"
+            : "btn-outline-danger"
+          : "btn-secondary"
+      }`}
+      style={{
+        borderRadius: "8px",
+        width: "40px",
+        height: "80%",
+        padding: 0,
+        pointerEvents: isLogined ? "auto" : "none"
+      }}
+      onClick={handleLikeToggle}
+    >
+      <i
+        className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"}`}
+        style={{
+          fontSize: "1.2rem",
+          color: isLogined ? undefined : "#666"
         }}
-        onClick={handleLikeToggle}
-      >
-        <i
-          className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"}`}
-          style={{ fontSize: "1.2rem" }}
-        />
-      </button>
+      />
+    </button>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// Home.jsx
 import { formatDate, formatTime } from '../utils/TimeFormat';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -9,28 +8,30 @@ function PopupCard({ popup }) {
   const navigate = useNavigate();
   const empty = !popup?.popupId;
 
-  // 좋아요/카운트 로컬 상태
+  const isLogined = popup?.isLogined ?? false;
+
   const [liked, setLiked] = useState(popup?.isLiked ?? false);
   const [likeCount, setLikeCount] = useState(popup?.likeCount ?? 0);
 
-  // 값이 처음 들어올 때 초기화
   useEffect(() => {
     setLiked(popup?.isLiked ?? false);
     setLikeCount(popup?.likeCount ?? 0);
   }, [popup]);
 
-  const handleLikeToggle = e => {
+  const handleLikeToggle = (e) => {
     if (empty) return;
     e.stopPropagation();
-    // UI 즉시 반영
-    setLikeCount(c => c + (liked ? -1 : +1));
-    const toBe = !liked;
+
+    const original = liked;
+    const toBe = !original;
+
     setLiked(toBe);
+    setLikeCount(c => c + (toBe ? +1 : -1));
+
     axiUpdatePopupLike(popup.popupId, toBe).catch(err => {
-      // 롤백
       console.error(err);
-      setLiked(liked);
-      setLikeCount(c => c + (liked ? +1 : -1));
+      setLiked(original);
+      setLikeCount(c => c + (toBe ? -1 : +1));
     });
   };
 
@@ -41,32 +42,35 @@ function PopupCard({ popup }) {
         style={{ background: empty ? '#f8f9fa' : undefined, cursor: empty ? 'default' : 'pointer' }}
         onClick={() => !empty && navigate(`/popup/detail/${popup.popupId}`)}
       >
-        {empty
-          ? <div className="d-flex justify-content-center align-items-center h-100">
-              <span className="text-muted">인기 팝업이 없습니다</span>
-            </div>
-          : <img
-              src={popup.imageUrl}
-              alt={popup.popupName}
-              className="img-fluid rounded-top"
-              style={{ objectFit: 'cover' }}
-            />}
+        {empty ? (
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <span className="text-muted">인기 팝업이 없습니다</span>
+          </div>
+        ) : (
+          <img
+            src={popup.imageUrl}
+            alt={popup.popupName}
+            className="img-fluid rounded-top"
+            style={{ objectFit: 'cover' }}
+          />
+        )}
       </div>
 
       <div className="px-3 py-2">
-        {empty
-          ? null
-          : <>
-              <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#1D9D8B' }}>
-                🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br/>
-                『 {popup.popupName} 』 🎉
-              </p>
-            </>}
+        {!empty && (
+          <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#1D9D8B' }}>
+            🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br />
+            『 {popup.popupName} 』 🎉
+          </p>
+        )}
 
         <div className="d-flex justify-content-between align-items-center mt-2">
           <div
-            onClick={handleLikeToggle}
-            style={{ cursor: empty ? 'not-allowed' : 'pointer' }}
+            onClick={isLogined ? handleLikeToggle : undefined}
+            style={{
+              cursor: isLogined ? (empty ? 'not-allowed' : 'pointer') : 'not-allowed',
+              opacity: isLogined ? 1 : 0.5
+            }}
             className="d-flex align-items-center"
           >
             <i className={`bi me-1 ${liked ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'}`} />
@@ -93,10 +97,15 @@ function ReservationCard({ res }) {
   return (
     <div className="card shadow-sm mb-4 mx-auto text-center" style={{ width: '53%' }}>
       {empty ? (
-        <div style={{
-          height: 150, background: '#f8f9fa',
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
+        <div
+          style={{
+            height: 150,
+            background: '#f8f9fa',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
           <span className="text-muted">예정된 팝업이 없습니다</span>
         </div>
       ) : (
@@ -134,16 +143,24 @@ export default function Home() {
   const [upcomingReservation, setUpcomingReservation] = useState(null);
 
   useEffect(() => {
-    // 1) 인기 팝업 + 좋아요 상태
-    axiFetchMostLikedPopup()
-      .then(popup =>
-        axiFetchPopupLike(popup.popupId)
-          .then(isLiked => ({ ...popup, isLiked, likeCount: popup.likeCount }))
-      )
-      .then(setMostLikedPopup)
-      .catch(console.error);
+    let popupData;
 
-    // 2) 곧 만날 예약
+    axiFetchMostLikedPopup()
+      .then(popup => {
+        popupData = popup;
+        // ✅ return으로 Promise를 넘겨줘야 다음 then에서 받을 수 있음
+        return axiFetchPopupLike(popup.popupId);
+      })
+      .then(({ isLiked, isLogined }) => {
+        console.log('팝업 찜 여부:', isLiked, '로그인 여부:', isLogined);
+        setMostLikedPopup({ ...popupData, isLiked, isLogined });
+      })
+      .catch(() => {
+        if (popupData) {
+          setMostLikedPopup({ ...popupData, isLiked: false, isLogined: false });
+        }
+      });
+
     axiFetchUpcomingReservation()
       .then(setUpcomingReservation)
       .catch(console.error);
@@ -152,12 +169,10 @@ export default function Home() {
   return (
     <div className="container py-4" style={{ maxWidth: 390, margin: '0 auto 60px' }}>
       <section>
-        <PopupCard popup={mostLikedPopup} />
+        <PopupCard popup={mostLikedPopup} /> {/* ✅ isLogined 제거 */}
       </section>
       <section>
-        <h2 className="h5 border-bottom pb-2 mb-5 text-secondary">
-          곧 만날 예약
-        </h2>
+        <h2 className="h5 border-bottom pb-2 mb-5 text-secondary">곧 만날 예약</h2>
         <ReservationCard res={upcomingReservation} />
       </section>
     </div>

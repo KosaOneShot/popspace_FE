@@ -11,15 +11,17 @@ const PopupDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isLogined, setIsLogined] = useState(true); // 로그인 여부
 
   /* 데이터 불러오기 */
   useEffect(() => {
     axiFetchPopupDetail(popupId)
-      .then(({ isPopupLike, popupInfo, reviewList }) => {
+      .then(({ isPopupLike, popupInfo, reviewList, isLogined }) => {
         console.log("ispopuplike:", isPopupLike);
         setIsLiked(isPopupLike);
         setInfo(popupInfo);
         setReviews(reviewList);
+        setIsLogined(isLogined); // 로그인 상태로 가정
       })
       .catch(err => console.error('데이터 로드 실패:', err))
       .finally(() => setLoading(false));
@@ -151,6 +153,7 @@ const PopupDetail = () => {
         popupId={Number(popupId)}
         like={isLiked}
         onLikeChange={handleLikeChange}
+        isLogined={isLogined}
       />
     </div>
   );
