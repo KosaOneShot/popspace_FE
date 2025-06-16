@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (hasChecked.current) return;
         hasChecked.current = true;
-        //     if (location.pathname === '/auth/login') {
+        //     if (location.pathname === '/api/auth/login') {
         //   setLoading(false);
         //   return;
         // }

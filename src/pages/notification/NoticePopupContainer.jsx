@@ -11,14 +11,14 @@ const NoticePopupContainer = () => {
     // ✅ 기존 공지들 조회
     if (!nickname) return;
     axi
-      .get(`/notifications`)
+      .get(`/api/notifications`)
       .then((res) => setNotices(res.data))
       .then(console.log("[SSE 수신됨]", notices))
       .catch((err) => console.error("공지 불러오기 실패", err));
 
     // ✅ SSE 실시간 연결
     const sse = new EventSource(
-      `${import.meta.env.VITE_API_URL}/sse/subscribe`,
+      `${import.meta.env.VITE_API_URL}/api/sse/subscribe`,
       {
         withCredentials: true,
       }

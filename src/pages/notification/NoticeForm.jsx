@@ -41,7 +41,7 @@ const NoticeForm = () => {
     formData.append("file", image);
 
     try {
-      await axi.post("/notifications", formData, {
+      await axi.post("/api/notifications", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       alert("공지를 전송하였습니다.");
