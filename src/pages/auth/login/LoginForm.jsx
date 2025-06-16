@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../components/context/AuthContext';
 import axi from '../../../utils/axios/Axios';
 import styles from './LoginForm.module.css';
 import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
-  const { setAuth } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -21,11 +19,8 @@ const LoginForm = () => {
 
     try {
       const res = await axi.post('/api/auth/login', { email, password });
-      const { role, nickname } = res.data;
-
-      setAuth({ role, nickname });
       setError('');
-      navigate('/main');
+      navigate('/');
     } catch (err) {
       const message = err.response?.data?.message || '로그인 실패';
       setError("로그인 실패");

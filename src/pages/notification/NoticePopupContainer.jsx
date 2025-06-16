@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import NoticePopup from "./NoticePopup";
 import axi from "../../utils/axios/Axios";
 import Cookies from "js-cookie";
-import { useAuth } from "../../components/context/AuthContext";
+import useUserInfo from "../../hook/useUserInfo";
 const NoticePopupContainer = () => {
   const [notices, setNotices] = useState([]);
-  const { nickname } = useAuth();
+  const { nickname, role, error, loading } = useUserInfo();
 
   useEffect(() => {
     // ✅ 기존 공지들 조회
@@ -48,17 +48,17 @@ const NoticePopupContainer = () => {
     <>
       {Array.isArray(notices)
         ? notices
-            .filter((n) => !Cookies.get(`hidePopup_${n.notifyId}`)) // ✅ 쿠키 필터링
-            .map((notice) => (
-              <NoticePopup
-                key={notice.notifyId}
-                notifyId={notice.notifyId}
-                title={notice.title}
-                content={notice.content}
-                imageUrl={notice.imageUrl}
-                onClose={() => handleClose(notice.notifyId)}
-              />
-            ))
+          .filter((n) => !Cookies.get(`hidePopup_${n.notifyId}`)) // ✅ 쿠키 필터링
+          .map((notice) => (
+            <NoticePopup
+              key={notice.notifyId}
+              notifyId={notice.notifyId}
+              title={notice.title}
+              content={notice.content}
+              imageUrl={notice.imageUrl}
+              onClose={() => handleClose(notice.notifyId)}
+            />
+          ))
         : null}
     </>
   );
