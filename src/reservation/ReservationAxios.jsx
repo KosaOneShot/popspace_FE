@@ -61,14 +61,23 @@ export async function fetchReservationDetail(reserveId) {
     const response = await axi.get(`/api/reservation/detail/${reserveId}`);
     console.log('예약 상세 조회 응답:', response.data);
     const detail = response.data;
+    const reservationStateKor = {
+      RESERVED: '예약완료',
+      CANCELED: '예약취소',
+      CHECKED_IN: '입장',
+      CHECKED_OUT: '퇴장',
+      NOSHOW: '노쇼'
+    }[detail.reservationState] || detail.reservationState;
+    const reservationTypeKor = detail.reservationType === 'ADVANCE' ? '사전 예약' : '현장 웨이팅';
+
     return {
       reserveId: detail.reserveId,
       reserveDate: detail.reserveDate,
       reserveTime: detail.reserveTime,
       createdAt: detail.createdAt,
       canceledAt: detail.canceledAt,
-      reservationState: detail.reservationState,
-      reservationType: detail.reservationType,
+      reservationState: reservationStateKor,
+      reservationType: reservationTypeKor,
       popupId: detail.popupId,
       memberName: detail.memberName,
       popupName: detail.popupName,
