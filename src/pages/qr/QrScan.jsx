@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axi from '../../utils/axios/Axios';
-import { useAuth } from '../../components/context/AuthContext';
+import useUserInfo from '../../hook/useUserInfo';
 
 const QrScan = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -10,7 +10,8 @@ const QrScan = () => {
     const html5QrCodeRef = useRef(null);
     const qrReaderContainerRef = useRef(null);
     const hasStartedRef = useRef(false);
-    const { role, nickname } = useAuth();
+    //todo 받아오기
+    const { nickname,role, error, loading } = useUserInfo();
     const [reservationInfo, setReservationInfo] = useState(null);
 
     // 스캔 성공시 서버 호출
@@ -65,10 +66,10 @@ const QrScan = () => {
             },
             (decodedText) => {
                 setScanning(false);
-                scanner.stop().catch(() => {});
+                scanner.stop().catch(() => { });
                 handleScanSuccess(decodedText);
             },
-            () => {}
+            () => { }
         );
     };
 

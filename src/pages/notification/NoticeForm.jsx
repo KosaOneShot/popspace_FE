@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axi from "../../utils/axios/Axios";
-import { useAuth } from "../../components/context/AuthContext";
 import { useEffect } from "react";
 import styles from "./NoticeForm.module.css"; // ✅ 모듈 css import로 변경
+import useUserInfo from "../../hook/useUserInfo";
 
 const NoticeForm = () => {
-  const { nickname } = useAuth();
+  const { nickname, role, error, loading } = useUserInfo();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
