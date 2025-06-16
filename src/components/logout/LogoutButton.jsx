@@ -10,7 +10,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     try {
-      await axi.post('/auth/logout');
+      await axi.post('/api/auth/logout');
       setAuth({
         role: null,
         userNickname: null, 

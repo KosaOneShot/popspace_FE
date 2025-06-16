@@ -27,7 +27,6 @@ function App() {
       <Layout>
         {/* <NoticePopupContainer /> */}
         <Routes>
-          {/* <Route path='/auth/register' element={<RegisterForm />} /> */}
           <Route path='/auth/register' element={<RegisterForm />} />
           <Route path='/auth/login' element={<LoginForm />} />
           <Route path='/chart/data' element={<Chart />} />
@@ -35,7 +34,6 @@ function App() {
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/popup/detail/:popupId" element={<PopupDetail />} />
           <Route path="/popup/list" element={<PopupList />} />
-          <Route path="/auth/register" element={<RegisterForm />} />
           <Route path="/auth/login" element={<LoginForm />} />
           <Route path="/qr-scan" element={<QrScan />} />
           <Route path="/mypage/register-noti" element={<NoticeForm />} />

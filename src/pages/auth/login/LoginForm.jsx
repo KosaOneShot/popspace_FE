@@ -20,7 +20,7 @@ const LoginForm = () => {
     const { email, password } = formData;
 
     try {
-      const res = await axi.post('/auth/login', { email, password });
+      const res = await axi.post('/api/auth/login', { email, password });
       const { role, nickname } = res.data;
 
       setAuth({ role, nickname });

@@ -57,7 +57,7 @@ const ProfileInfo = () => {
     }
 
     try {
-      await axi.post("/auth/nickname/check-duplication", {
+      await axi.post("/api/auth/nickname/check-duplication", {
         nickname: form.nickname,
       });
       setNicknameStatus("valid");
