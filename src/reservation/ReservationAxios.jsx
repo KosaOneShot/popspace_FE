@@ -96,3 +96,38 @@ export async function fetchReservationDetail(reserveId) {
     return null;
   }
 }
+
+// 현장 웨이팅 대기 관련 정보 조회
+export async function fetchWalkInPreview(popupId) {
+  console.log('현장 웨이팅 대기 정보 조회:', popupId);
+  try {
+    const response = await axi.get(`/api/${popupId}/reservation/total/sequence`);
+    const data = response.data;
+
+    return {
+      // 현재 대기 순번
+      sequence: data.sequence,
+      // 평균 대기 시간
+      averageWaitTime: data.averageWaitTime,
+      // 예상 입장 시간
+      entranceTime: data.entranceTime,
+    };
+  } catch (error) {
+    console.error('현장 웨이팅 정보 조회 중 오류 발생:', error);
+    return null;
+  }
+}
+
+// 현장 웨이팅 예약 시도
+export async function postWalkInReservation(popupId) {
+  const payload = {
+    popupId: Number(popupId)
+  };
+
+  try {
+    const res = await axi.post("/api/reservation/walk-in", payload);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+}
