@@ -2,8 +2,8 @@ import { href, Link } from "react-router-dom";
 
 const menuItems = [
   { label: "홈", href: "/" },
-  { label: "팝업 목록", href: "/popups" },
-  { label: "예약 내역", href: "/reservations" },
+  { label: "팝업 목록", href: "/popup/list" },
+  { label: "예약 내역", href: "/reservation/list" },
   { label: "마이페이지", href: "/mypage" },
   { label: "통계 (사장님)", href: "/chart/data" },
   { label: "QR 스캔 (사장님)", href: "/qr-scan" },

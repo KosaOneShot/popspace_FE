@@ -13,7 +13,7 @@ const ChangePasswordForm = () => {
 
     const handleRequestCode = async () => {
         try {
-            await axi.post('/auth/reset-password/verify-email', { email });
+            await axi.post('/api/auth/reset-password/verify-email', { email });
             setStep(2);
             setMessage('입력하신 이메일로 인증 코드를 전송했습니다.');
         } catch (err) {
@@ -23,7 +23,7 @@ const ChangePasswordForm = () => {
 
     const handleResetPassword = async () => {
         try {
-            await axi.post('/auth/reset-password/verify-code', {
+            await axi.post('/api/auth/reset-password/verify-code', {
                 email,
                 code
             });

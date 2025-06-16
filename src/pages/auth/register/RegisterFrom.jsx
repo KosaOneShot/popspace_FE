@@ -60,7 +60,7 @@ const RegisterForm = () => {
     try {
       console.log(formData.email);
 
-      const res = await axi.post('/auth/email/check-duplication', {
+      const res = await axi.post('/api/auth/email/check-duplication', {
         email: formData.email
       });
 
@@ -83,7 +83,7 @@ const RegisterForm = () => {
     try {
       console.log(formData.nickname);
 
-      const res = await axi.post('/auth/nickname/check-duplication', {
+      const res = await axi.post('/api/auth/nickname/check-duplication', {
         nickname: formData.nickname
       });
 
@@ -134,7 +134,7 @@ const RegisterForm = () => {
       const payload = buildPayload();
       console.log(payload);
 
-      await axi.post('/auth/register', payload);
+      await axi.post('/api/auth/register', payload);
       setError('');
       setFormData(initialFormData);
       navigate('/auth/login');

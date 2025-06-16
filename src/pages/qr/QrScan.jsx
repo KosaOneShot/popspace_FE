@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axi from '../../utils/axios/Axios';
-import { useAuth } from '../../components/context/AuthContext';
+import useUserInfo from '../../hook/useUserInfo';
 
 const QrScan = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -10,7 +10,8 @@ const QrScan = () => {
     const html5QrCodeRef = useRef(null);
     const qrReaderContainerRef = useRef(null);
     const hasStartedRef = useRef(false);
-    const { role, nickname } = useAuth();
+    //todo 받아오기
+    const { nickname,role, error, loading } = useUserInfo();
     const [reservationInfo, setReservationInfo] = useState(null);
 
     // 스캔 성공시 서버 호출
@@ -35,6 +36,30 @@ const QrScan = () => {
             } else {
                 setErrorMessage('서버 응답 없음 또는 네트워크 오류');
             }
+        }
+    };
+
+    const handleCheckIn = async () => {
+        try {
+            await axi.post('/api/admin/reservation/checkin', {
+                reserveId: reservationInfo.reserveId
+            });
+            alert('입장 처리가 완료되었습니다.');
+        } catch (error) {
+            console.error('입장 처리 실패:', error);
+            alert('입장 처리에 실패했습니다.');
+        }
+    };
+
+    const handleCheckOut = async () => {
+        try {
+            await axi.post('/api/admin/reservation/checkout', {
+                reserveId: reservationInfo.reserveId
+            });
+            alert('퇴장 처리가 완료되었습니다.');
+        } catch (error) {
+            console.error('퇴장 처리 실패:', error);
+            alert('퇴장 처리에 실패했습니다.');
         }
     };
 
@@ -65,15 +90,16 @@ const QrScan = () => {
             },
             (decodedText) => {
                 setScanning(false);
-                scanner.stop().catch(() => {});
+                scanner.stop().catch(() => { });
                 handleScanSuccess(decodedText);
             },
-            () => {}
+            () => { }
         );
     };
 
     // DOM이 렌더링된 이후에만 카메라 시작
     useEffect(() => {
+
         const interval = setInterval(() => {
             if (
                 qrReaderContainerRef.current &&
@@ -89,15 +115,26 @@ const QrScan = () => {
     }, []);
 
     // unmount 시 정리
+    // clear 전 stop 보장: setTimeout 추가
     useEffect(() => {
         return () => {
-            if (html5QrCodeRef.current) {
-                html5QrCodeRef.current.stop().catch(() => {});
-                html5QrCodeRef.current.clear().catch(() => {});
-                html5QrCodeRef.current = null;
-            }
+            const scanner = html5QrCodeRef.current;
+            if (!scanner) return;
+
+            (async () => {
+                try {
+                    await scanner.stop();
+                    await new Promise((r) => setTimeout(r, 200));
+                    await scanner.clear();
+                } catch (e) {
+                    console.warn('Unmount 중 stop/clear 오류:', e?.message);
+                } finally {
+                    html5QrCodeRef.current = null;
+                }
+            })();
         };
     }, []);
+
 
     return (
         <div className="container mt-4 text-center" style={{ maxWidth: 360 }}>
@@ -159,11 +196,19 @@ const QrScan = () => {
                                 </p>
 
                                 <div className="mt-4">
-                                    {reservationInfo.reservationState === 'RESERVED' && (
+                                    {reservationInfo.reservationState === 'EMAIL_SEND' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 가능한 예약</p>
-                                            <button className="btn btn-success w-100 mt-2">입장 처리</button>
+                                            <button
+                                                className="btn btn-success w-100 mt-2"
+                                                onClick={handleCheckIn}
+                                            >
+                                                입장 처리
+                                            </button>
                                         </>
+                                    )}
+                                    {reservationInfo.reservationState === 'RESERVED' && (
+                                            <p style={{ color: '#1D9D8B' }}>아직 입장 시간이 아닙니다.</p>
                                     )}
                                     {reservationInfo.reservationState === 'CANCELED' && (
                                         <p style={{ color: '#E74C3C' }}>취소된 예약입니다</p>
@@ -171,7 +216,12 @@ const QrScan = () => {
                                     {reservationInfo.reservationState === 'CHECKED_IN' && (
                                         <>
                                             <p style={{ color: '#1D9D8B' }}>입장 처리된 예약</p>
-                                            <button className="btn btn-danger w-100 mt-2">퇴장 처리</button>
+                                            <button
+                                                className="btn btn-danger w-100 mt-2"
+                                                onClick={handleCheckOut}
+                                            >
+                                                퇴장 처리
+                                            </button>
                                         </>
                                     )}
                                     {reservationInfo.reservationState === 'CHECKED_OUT' && (
@@ -197,19 +247,19 @@ const QrScan = () => {
 
                                     const scanner = html5QrCodeRef.current;
                                     try {
-                                        if (scanner?.getState) {
-                                            try {
-                                                await scanner.stop();
-                                            } catch (stopErr) {
-                                                console.warn('stop 중 오류:', stopErr.message);
-                                            }
-                                            try {
-                                                await scanner.clear();
-                                            } catch (clearErr) {
-                                                console.warn('clear 중 오류:', clearErr.message);
-                                            }
-                                            html5QrCodeRef.current = null;
+                                        if (scanner) {
+                                            (async () => {
+                                                try {
+                                                    await scanner.stop(); // 먼저 스캔 중단
+                                                    await scanner.clear(); // 그 다음에 클리어 (그러나 보장은 x)
+                                                } catch (err) {
+                                                    console.warn('Unmount 중 stop/clear 오류:', err.message);
+                                                } finally {
+                                                    html5QrCodeRef.current = null;
+                                                }
+                                            })();
                                         }
+
                                     } catch (outerErr) {
                                         console.error('스캐너 상태 확인 오류:', outerErr.message);
                                     }

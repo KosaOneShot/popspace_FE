@@ -20,20 +20,20 @@ class Axios {
                 async (error) => {
                     const originalRequest = error.config;
 
-                    if (Axios.currentPath === "/auth/login") {
+                    if (Axios.currentPath === "/api/auth/login") {
                         return Promise.reject(error);
                     }
 
                     if (
                         (error.response?.status === 401) &&
                         !originalRequest._retry &&
-                        !originalRequest.url.includes("/auth/refresh")
+                        !originalRequest.url.includes("/api/auth/refresh")
                         // !originalRequest.url.includes("/auth/check") 
                     ) {
                         originalRequest._retry = true;
                         
                         try {
-                            await Axios.instance.get("/auth/refresh");
+                            await Axios.instance.get("/api/auth/refresh");
 
                             return Axios.instance.request(originalRequest);
                         } catch (refreshError) {

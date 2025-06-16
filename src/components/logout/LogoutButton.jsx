@@ -1,20 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import axi from '../../utils/axios/Axios';
-import { useAuth } from '../context/AuthContext';
 import './LogoutButton.css';
 
 
 const LogoutButton = () => {
-  const { setAuth } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axi.post('/auth/logout');
-      setAuth({
-        role: null,
-        userNickname: null, 
-      });
+      await axi.post('/api/auth/logout');
       alert('로그아웃 되었습니다.');
       navigate('/main');
     } catch (error) {
