@@ -14,6 +14,9 @@ const QrScan = () => {
     //todo 받아오기
     const { nickname,role, error, loading } = useUserInfo();
     const [reservationInfo, setReservationInfo] = useState(null);
+    const roleLabel = {
+        ROLE_POPUP_ADMIN: '관리자'
+    };
 
     // 스캔 성공시 서버 호출
     const handleScanSuccess = async (decodedText) => {
@@ -168,12 +171,12 @@ const QrScan = () => {
                  maxWidth: 360,
                  marginTop: 70
              }}>
-            <div>{role}: {nickname}</div>
+            <div>{roleLabel[role] || role}: {nickname}</div>
 
             {/* QR 스캔 UI */}
             <h3 className="mb-3"
                 style={{
-                    color: '#1D9D8B',
+                    color: '#8250DF',
                 }}>
                 QR {scanning ? '(스캔 중)' : '(스캔 완료)'}
             </h3>
@@ -191,7 +194,7 @@ const QrScan = () => {
 
                 {(reservationInfo || errorMessage) && (
                     <div style={{
-                        border: '1px solid #DB9506',
+                        border: '1px solid #8250DF',
                         borderRadius: '16px',
                         padding: '16px',
                         backgroundColor: '#ffffff',
@@ -208,7 +211,7 @@ const QrScan = () => {
 
                         {reservationInfo && (
                             <>
-                                <h5 style={{ color: '#1D9D8B', marginBottom: '16px' }}>예약 정보</h5>
+                                <h5 style={{ color: '#8250DF', marginBottom: '16px' }}>예약 정보</h5>
                                 <p style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '24px', color: '#888888' }}>
                                     {reservationInfo.popupName}
                                 </p>
@@ -231,7 +234,7 @@ const QrScan = () => {
                                 <div className="mt-4">
                                     {reservationInfo.reservationState === 'EMAIL_SEND' && (
                                         <>
-                                            <p style={{ color: '#1D9D8B' }}>입장 가능한 예약</p>
+                                            <p style={{ color: '#8250DF' }}>입장 가능한 예약</p>
                                             <button
                                                 className="btn btn-success w-100 mt-2"
                                                 onClick={handleCheckIn}
@@ -241,14 +244,14 @@ const QrScan = () => {
                                         </>
                                     )}
                                     {reservationInfo.reservationState === 'RESERVED' && (
-                                            <p style={{ color: '#1D9D8B' }}>아직 입장 시간이 아닙니다.</p>
+                                            <p style={{ color: '#8250DF' }}>아직 입장 시간이 아닙니다.</p>
                                     )}
                                     {reservationInfo.reservationState === 'CANCELED' && (
                                         <p style={{ color: '#E74C3C' }}>취소된 예약입니다</p>
                                     )}
                                     {reservationInfo.reservationState === 'CHECKED_IN' && (
                                         <>
-                                            <p style={{ color: '#1D9D8B' }}>입장 처리된 예약</p>
+                                            <p style={{ color: '#8250DF' }}>입장 처리된 예약</p>
                                             <button
                                                 className="btn btn-danger w-100 mt-2"
                                                 onClick={handleCheckOut}
