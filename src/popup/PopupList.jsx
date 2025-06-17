@@ -150,6 +150,15 @@ export default function PopupList() {
     navigate(`/popup/detail/${popupId}`);
   };
   
+  useEffect(() => {
+    // 날짜가 변경되면 팝업 목록을 새로 불러옴
+    if (date) {
+      axiFetchPopupList(search, date, sortKey).then(setPopupList);
+    } else {
+      // 날짜가 비어있으면 초기화
+      axiFetchPopupList('', '', sortKey).then(setPopupList);
+    }
+  }, [date])
   
   return (  
     <div ref={containerRef}
