@@ -4,14 +4,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import axi from '../../utils/axios/Axios';
+import { useNavigate } from 'react-router-dom';
 // 커스텀 css
 import './ReservationCalendar.css';
 
 const ReservationForm = () => {
+    const navigate = useNavigate();
+    
     const [availableDates, setAvailableDates] = useState([]);
     const [fullyBookedDates, setFullyBookedDates] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
-
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
 
@@ -34,7 +36,10 @@ const ReservationForm = () => {
         try {
             const res = await axi.post('/api/reservation/advance', payload);
             console.log('예약 성공:', res.data);
+            const reserveId = res.data.reserveId;
             alert("예약 성공!")
+            // 예약 상세 페이지로 이동
+            navigate(`/reservation/detail/${reserveId}`);
         } catch (err) {
             const message = err?.response?.data?.message || '예약 중 오류가 발생했습니다.';
             alert(message);
@@ -105,7 +110,15 @@ const ReservationForm = () => {
         ['일', '월', '화', '수', '목', '금', '토'][day.getDay()];
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4"
+             style={{
+                 height: '100%',
+                 minHeight: '600px',
+                 minHeight: '100%',
+                 overflowY: 'auto',
+                 paddingBottom: '80px' // 예약하기 버튼 공간 확보
+             }}
+        >
             <p className="text-center">날짜와 시간을 선택해주세요</p>
             {/* 달력 */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>

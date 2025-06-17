@@ -121,16 +121,16 @@
 }
 
 .checkButton:hover {
-  background-color: #5d4037;
+  background-color:  rgb(56, 56, 56);
   transform: translateY(-0.0625rem);
 }
 
 .registerForm button[type="submit"]:hover {
-  background-color: #157a6f;
+  background-color:  rgb(56, 56, 56);
   transform: translateY(-0.0625rem);
 }
 
 .registerForm input:focus {
-  box-shadow: 0 0 0 0.25rem rgba(29, 157, 139, 0.3);
+  /* box-shadow: 0 0 0 0.25rem rgba(29, 157, 139, 0.3); */
   outline: none;
 }

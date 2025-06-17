@@ -36,7 +36,7 @@
 
 /* 홈으로 버튼 */
 .lm-button {
-  background-color: #1D9D8B; /* 메인 옐로우 */
+  background-color: #000; /* 메인 옐로우 */
   color: #e9ede8; 
   border: none;
   border-radius: 0.375rem;

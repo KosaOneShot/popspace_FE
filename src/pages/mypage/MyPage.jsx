@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import ProfileInfo from "./Profile/ProfileInfo";
 import FavoritePopups from "./FavoritePopup/FavoritePopups";
 import ReviewList from "./MyReviews/MyReviews";
-import { useLocation } from "react-router-dom";
 import MyPageAccount from "./Profile/MyPageAccount";
+import useUserInfo from "../../hook/useUserInfo";
+import { useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyPage.css";
 
 const MyPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { nickname, role, loading, error } = useUserInfo();
   const tab = location.state?.tab;
   const [activeTab, setActiveTab] = useState(tab || "profile");
+
+
+
+  if (!loading && (error || !nickname)) {
+    navigate("/auth/login");
+    return null;
+  }
 
   const renderTab = () => {
     switch (activeTab) {
@@ -27,10 +37,6 @@ const MyPage = () => {
 
   return (
     <div className="mypage-wrapper container py-5 px-3 mt-3">
-      {/* <h2 className="mypage-title text-center text-emerald mb-3 fw-bold">
-        마이페이지
-      </h2> */}
-
       <ul className="custom-tab-nav d-flex justify-content-around mb-3 border-bottom">
         <li
           className={`tab-item ${activeTab === "profile" ? "active" : ""}`}
@@ -46,9 +52,7 @@ const MyPage = () => {
         </li>
         <li
           className={`tab-item ${activeTab === "myReviews" ? "active" : ""}`}
-          onClick={() => {
-            setActiveTab("myReviews");
-          }}
+          onClick={() => setActiveTab("myReviews")}
         >
           내 후기
         </li>

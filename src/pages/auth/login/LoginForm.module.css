@@ -86,12 +86,12 @@
 }
 
 .loginFormInput:focus {
-  box-shadow: 0 0 0 3px rgba(29, 157, 139, 0.3);
+  /* box-shadow: 0 0 0 3px rgba(29, 157, 139, 0.3); */
   outline: none;
 }
 
 .loginFormButton:hover {
-  background-color: #157a6f;
+  background-color: rgb(56, 56, 56);
   transform: translateY(-1px);
 }
 

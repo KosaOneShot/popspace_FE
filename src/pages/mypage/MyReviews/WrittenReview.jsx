@@ -28,7 +28,7 @@ const WrittenReview = () => {
   if (loading) return <div className="text-center py-5">불러오는 중...</div>;
 
   return (
-    <div className="container bg-light pb-3 min-vh-100">
+    <div className="container pb-3 min-vh-100">
       {reviews.map((review) => (
         <ReviewCard
           key={review.reviewId}
