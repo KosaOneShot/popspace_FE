@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileInfo from "./Profile/ProfileInfo";
 import FavoritePopups from "./FavoritePopup/FavoritePopups";
 import ReviewList from "./MyReviews/MyReviews";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MyPageAccount from "./Profile/MyPageAccount";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyPage.css";
+import useUserInfo from "../../hook/useUserInfo";
 
 const MyPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const tab = location.state?.tab;
   const [activeTab, setActiveTab] = useState(tab || "profile");
+  const { role, nickname, loading } = useUserInfo();
+
+  useEffect(() => {
+    if (!loading && !role) {
+      navigate("/auth/login");
+    }
+  }, [loading, role, navigate]);
 
   const renderTab = () => {
     switch (activeTab) {
