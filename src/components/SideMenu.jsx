@@ -15,13 +15,13 @@ const hoverColor = "#e9f5f3";
 const iconColor = "#7C6004";
 
 
-const SideMenu = ({ isOpen, onClose, appWidth,userInfo }) => {
+const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {
   const { nickname, role, error, loading } = userInfo;
   const SIDEBAR_WIDTH = appWidth / 2;
 
   const getMenuItemsByRole = (role) => {
     console.log(role);
-    
+
     const baseItems = [
       { label: "홈", href: "/", icon: "bi-house-door" },
       { label: "팝업 목록", href: "/popup/list", icon: "bi-shop" },
@@ -46,6 +46,11 @@ const SideMenu = ({ isOpen, onClose, appWidth,userInfo }) => {
     } else {
       return baseItems;
     }
+  };
+
+  const handleNavigation = (href) => {
+    onClose(); // 메뉴 먼저 닫고
+    setTimeout(() => navigate(href), 100); // 잠깐 delay 줘도 부드러움
   };
 
   const menuItems = getMenuItemsByRole(role);
@@ -76,11 +81,29 @@ const SideMenu = ({ isOpen, onClose, appWidth,userInfo }) => {
         </div>
 
         <ul className="list-group list-group-flush">
+
+          <li>
+            <div className="px-3 pt-3 " >
+              {role ? (
+                <LogoutButton />
+              ) : (
+                <div>
+                  <div >
+                    <LoginButton />
+                  </div>
+                  <div className="">
+                    <RegisterButton />
+                  </div>
+                </div>
+              )}
+            </div>
+          </li>
+
           {menuItems.map(({ label, href, icon }, idx) => (
             <li key={idx} className="list-group-item px-3 py-2 border-0 bg-transparent">
               <Link
                 to={href}
-                onClick={onClose}
+                onClick={()=>handleNavigation(href)}
                 className="d-flex align-items-center text-decoration-none text-dark rounded px-2 py-2 hover-bg"
                 style={{ transition: "background-color 0.2s" }}
               >
@@ -90,17 +113,6 @@ const SideMenu = ({ isOpen, onClose, appWidth,userInfo }) => {
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="px-3 pb-4 d-flex justify-content-center" >
-        {role ? (
-          <LogoutButton />
-        ) : (
-          <div className="d-flex justify-content-center w-100">
-            <LoginButton />
-            <RegisterButton />
-          </div>
-        )}
       </div>
 
       <style>
