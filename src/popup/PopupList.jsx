@@ -70,45 +70,62 @@ export default function PopupList() {
   const [lastPopupId,   setLastPopupId]   = useState(null);
   const [isLoading, setIsLoading] = useState(false); // 중복 로딩 방지 상태값
 
-// 무한 페이지네이션
-const loadMore = () => {
-  if (isLoading) return; // 중복 로딩 방지
-  setIsLoading(true);
-  
-  axiFetchPopupList(search, date, sortKey, lastEndDate, lastPopupId)
-    .then(list => {
-      if (!list || list.length === 0) return;
+  /** 1) 첫 마운트-중복 호출 방지용 ref */
+  const firstFetchDone = useRef(false);
 
-      // 1) 중복 제거하며 누적
-      setPopupList(prev =>
-        prev.concat(
-          list.filter(newItem =>
-            !prev.some(old => old.popupId === newItem.popupId)
-          )
-        )
+  /** 2) 첫 페이지 전용 함수(커서 파라미터 없이 요청) */
+  const fetchFirstPage = async () => {
+    setIsLoading(true);
+    try {
+      const list = await axiFetchPopupList(search, date, sortKey); // cursor 파라미터 X
+      setPopupList(list);
+      if (list.length) {
+        const last = list[list.length - 1];
+        setLastEndDate(last.endDate);
+        setLastPopupId(last.popupId);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /** 3) 무한 스크롤 페이지네이션(커서 포함) */
+  const loadMore = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      const list = await axiFetchPopupList(
+        search,
+        date,
+        sortKey,
+        lastEndDate,   // null ⇒ 자동 제외
+        lastPopupId
       );
-      // 2) 커서 갱신: 응답 리스트의 마지막 아이템으로
-      console.log(list);
-      const lastData = list[list.length - 1];
-      setLastEndDate(lastData.endDate);
-      setLastPopupId(lastData.popupId);
-    })
-    .catch(err => console.error(err))
-    .finally(() => setIsLoading(false)); // 로딩 상태 해제
-};
+      if (!list.length) return;
+      setPopupList(prev =>
+        prev.concat(list.filter(n => !prev.some(o => o.popupId === n.popupId)))
+      );
+      const last = list[list.length - 1];
+      setLastEndDate(last.endDate);
+      setLastPopupId(last.popupId);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // 초기 목록 로딩
+  /** 4) 초기 로딩 ─ StrictMode 중복 실행 무시 */
   useEffect(() => {
+    if (firstFetchDone.current) return;
+    firstFetchDone.current = true;
+
     // 상태 초기화
     setPopupList([]);
-    setSearch('');
-    setDate('');
     setLastEndDate(null);
-    setLastLikeCnt(null);
     setLastPopupId(null);
 
-    loadMore();
-  }, [sortKey]);  // sortKey 변경 시마다 다시 호출
+    fetchFirstPage();
+  }, [sortKey]); // sortKey 바뀌면 새로 로드
+
 
   // 스크롤 이벤트 리스너 등록
   useEffect(() => {
@@ -222,10 +239,7 @@ const loadMore = () => {
           onChange={e => {
             const key = e.target.value;
             setSortKey(key);
-            axiFetchPopupList(key).then(list => {
-              console.log('Filtering list:', list);
-              setPopupList(list);
-            });
+            axiFetchPopupList(search, date, key).then(setPopupList);
           }}
           style={{ width: '120px', marginBottom: '10px' }}
         >
