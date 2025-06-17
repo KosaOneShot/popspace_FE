@@ -34,8 +34,9 @@ function PopupCard({ popupId, name, period, location, imageUrl, isLiked, onToggl
             style={{
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              width: '120px'
+              // textOverflow: 'ellipsis',
+              width: '120px',
+              fontSize : '1rem',
             }}
           >
             {name}
