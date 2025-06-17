@@ -4,7 +4,7 @@ const Footer = () => {
   const location = useLocation();
   // defaultColor 는 비활성일 때, activeColor 는 현재 경로에 매칭될 때 사용할 색
   const defaultColor = "#000000";
-  const activeColor  = "#1D9D8B";
+  const activeColor  = "#8250DF";
 
   const items = [
     { label: "Home",        href: "/",                   icon: "bi-house-fill"       },
