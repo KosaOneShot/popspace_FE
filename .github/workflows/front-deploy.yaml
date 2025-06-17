@@ -1,0 +1,71 @@
+name: front-deploy To CloudFront
+
+on:
+  push:
+    branches: ["deploy"]
+
+  pull_request:
+    types: [closed]
+    branches: ["deploy"]
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Github Repository 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23 # 사용 중인 Node 버전
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create .env.production
+        run: |
+          {
+            echo "VITE_API_URL=${{ secrets.VITE_API_URL }}"
+          } > .env.production
+
+      - name: Build React app
+        run: npm run build
+
+        
+      - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_KEY}}
+
+        
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@v0.5.1
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME }} 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: dist
+
+      - name: CloudFront 캐시 무효화
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
+            --paths "/*"
+          
+
+
+          
+
+        

@@ -107,7 +107,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
                           <button
                               className="btn w-50"
                               onClick={handleWalkInReserve}
-                              style={{ backgroundColor: '#1D9D8B', color: '#fff', border: 'none' }}
+                              style={{ backgroundColor: '#8250DF', color: '#fff', border: 'none' }}
                           >예약하기
                           </button>
                       </div>
@@ -142,7 +142,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
         width: "43%",
         borderRadius: "8px",
         height: "80%",
-        backgroundColor: isLogined ? "#f8ac0b" : "#ccc",
+        backgroundColor: isLogined ? "#8250DF" : "#ccc",
         color: isLogined ? "#fff" : "#666"
       }}
     >
@@ -159,7 +159,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
         width: "43%",
         borderRadius: "8px",
         height: "80%",
-        backgroundColor: isLogined ? "#1D9D8B" : "#ccc",
+        backgroundColor: isLogined ? "#000" : "#ccc",
         color: isLogined ? "#fff" : "#666"
       }}
     >
