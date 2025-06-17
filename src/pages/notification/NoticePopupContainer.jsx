@@ -48,17 +48,17 @@ const NoticePopupContainer = () => {
     <>
       {Array.isArray(notices)
         ? notices
-          .filter((n) => !Cookies.get(`hidePopup_${n.notifyId}`)) // ✅ 쿠키 필터링
-          .map((notice) => (
-            <NoticePopup
-              key={notice.notifyId}
-              notifyId={notice.notifyId}
-              title={notice.title}
-              content={notice.content}
-              imageUrl={notice.imageUrl}
-              onClose={() => handleClose(notice.notifyId)}
-            />
-          ))
+            .filter((n) => !Cookies.get(`hidePopup_${n.notifyId}`)) // ✅ 쿠키 필터링
+            .map((notice, idx) => (
+              <NoticePopup
+                key={idx}
+                notifyId={notice.notifyId}
+                title={notice.title}
+                content={notice.content}
+                imageUrl={notice.imageUrl}
+                onClose={() => handleClose(notice.notifyId)}
+              />
+            ))
         : null}
     </>
   );
