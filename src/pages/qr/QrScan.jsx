@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axi from '../../utils/axios/Axios';
 import useUserInfo from '../../hook/useUserInfo';
+import './QrScanPage.css';
 
 const QrScan = () => {
     const [errorMessage, setErrorMessage] = useState('');
@@ -63,6 +64,13 @@ const QrScan = () => {
         }
     };
 
+    // 전면 카메라 여부 (전면 카메라 좌우반전 위해)
+    const isFrontCamera = (label) => {
+        const keywords = ['front', 'user', 'face'];
+        const lower = label?.toLowerCase() || '';
+        return keywords.some(word => lower.includes(word));
+    };
+
     // 카메라 초기화
     const startCamera = async () => {
         if (html5QrCodeRef.current) {
@@ -80,9 +88,27 @@ const QrScan = () => {
             return;
         }
 
+        // 후면 카메라 우선 선택
+        const backCamera = cameras.find(device =>
+            device.label.toLowerCase().includes('back') ||
+            device.label.toLowerCase().includes('rear') ||
+            device.label.toLowerCase().includes('environment')
+        );
+        const selectedDevice = backCamera || cameras[0];
+        const selectedDeviceId = selectedDevice.id;
+
+        // 전면 카메라면 좌우반전
+        if (qrReaderContainerRef.current) {
+            if (isFrontCamera(selectedDevice.label)) {
+                qrReaderContainerRef.current.classList.add('mirror');
+            } else {
+                qrReaderContainerRef.current.classList.remove('mirror');
+            }
+        }
+
         setScanning(true);
         await scanner.start(
-            cameras[0].id,
+            selectedDeviceId,
             {
                 fps: 10,
                 qrbox: { width: 250, height: 250 },
@@ -137,11 +163,18 @@ const QrScan = () => {
 
 
     return (
-        <div className="container mt-4 text-center" style={{ maxWidth: 360 }}>
+        <div className="container text-center"
+             style={{
+                 maxWidth: 360,
+                 marginTop: 70
+             }}>
             <div>{role}: {nickname}</div>
 
             {/* QR 스캔 UI */}
-            <h3 className="mb-3" style={{ color: '#1D9D8B' }}>
+            <h3 className="mb-3"
+                style={{
+                    color: '#1D9D8B',
+                }}>
                 QR {scanning ? '(스캔 중)' : '(스캔 완료)'}
             </h3>
 
