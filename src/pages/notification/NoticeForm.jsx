@@ -121,6 +121,12 @@ const NoticeForm = () => {
             className="form-control visually-hidden"
             onChange={handleImageChange}
             disabled={image !== null}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              border: '1px solid transparent'
+            }}
           />
           <div className="text-muted small mt-1">{image ? "1/1" : "0/1"}</div>
         </div>
@@ -131,6 +137,12 @@ const NoticeForm = () => {
             value={selectedPopupId}
             onChange={(e) => setSelectedPopupId(e.target.value)}
             required
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              border: '1px solid transparent'
+            }}
           >
             <option value="">팝업을 선택해주세요</option>
             {popList.map((popup) => (
@@ -150,6 +162,12 @@ const NoticeForm = () => {
             placeholder="제목을 입력해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              border: '1px solid transparent'
+            }}
           />
         </div>
 
@@ -162,6 +180,13 @@ const NoticeForm = () => {
             placeholder="작성하신 공지는 해당 팝업을 예약한 고객에게 팝업 형태로 안내됩니다. 중요한 공지 사항은 정확하고 신중하게 작성해주세요."
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              border: '1px solid transparent',
+              resize: 'none'
+            }}
           />
         </div>
 

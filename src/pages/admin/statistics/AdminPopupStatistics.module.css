@@ -71,7 +71,7 @@
 }
 
 .tabGroup input[type="radio"]:checked+span {
-  background-color: #1D9D8B;
+  background-color: #8250DF;
   color: white;
 }
 

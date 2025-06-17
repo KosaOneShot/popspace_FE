@@ -105,6 +105,13 @@ function ReviewForm() {
           className="form-control text-muted"
           value={form.title}
           readOnly
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc',
+            backgroundColor: '#ccc'
+          }}
         />
       </div>
 
@@ -115,6 +122,13 @@ function ReviewForm() {
           className="form-control text-muted"
           value={form.visitedDate}
           readOnly
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc',
+            backgroundColor: '#ccc'
+          }}
         />
       </div>
 
@@ -133,6 +147,12 @@ function ReviewForm() {
           onChange={handleChange}
           maxLength={MAX_CONTENT_LENGTH}
           placeholder="작성하신 후기는 다른 고객들에게 큰 도움이 될 수 있습니다."
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc'
+          }}
         />
       </div>
 

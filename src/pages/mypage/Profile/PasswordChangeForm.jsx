@@ -75,6 +75,12 @@ const PasswordChangeForm = () => {
           value={form.currentPassword}
           onChange={handleChange}
           maxLength={32}
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc'
+          }}
         />
       </div>
 
@@ -89,6 +95,12 @@ const PasswordChangeForm = () => {
           value={form.newPassword}
           onChange={handleChange}
           maxLength={32}
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc'
+          }}
         />
       </div>
 
@@ -103,14 +115,19 @@ const PasswordChangeForm = () => {
           value={form.confirmPassword}
           onChange={handleChange}
           maxLength={32}
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc'
+          }}
         />
       </div>
 
       {message.text && (
         <div
-          className={`small mb-2 ${
-            message.type === "success" ? "text-success" : "text-danger"
-          }`}
+          className={`small mb-2 ${message.type === "success" ? "text-success" : "text-danger"
+            }`}
         >
           {message.text}
         </div>

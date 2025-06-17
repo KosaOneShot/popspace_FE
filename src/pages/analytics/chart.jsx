@@ -16,6 +16,7 @@ import { CHART_TABS, tabLabels } from "../../utils/statistics/chartConstants";
 import { createChartDataMap } from "../../utils/statistics/chartDataMap";
 import classes from "./chart.module.css";
 import { FaStar } from "react-icons/fa";
+import StarRating from "../mypage/MyReviews/StarRating";
 
 ChartJS.register(
     ArcElement,
@@ -153,14 +154,9 @@ const Chart = () => {
                     </div>
                     <div className={classes.centerCard}>
                         <h4>평균 별점</h4>
-                        <span>
-                            {Array.from({ length: 5 }, (_, i) => (
-                                <FaStar
-                                    key={i}
-                                    color={i < Math.round(averageRating) ? "#FFD700" : "#e0e0e0"}
-                                />
-                            ))}
-                            &nbsp;{averageRating?.toFixed(1)}점
+                        <span className={classes.rating}>
+                            <StarRating rating={averageRating} readOnly />
+                            <span>{averageRating?.toFixed(1)}점</span>
                         </span>
                     </div>
                 </>
