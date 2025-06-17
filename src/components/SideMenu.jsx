@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginButton from "./login/LoginButton";
 import LogoutButton from "./logout/LogoutButton";
 
@@ -17,7 +17,8 @@ const iconColor = "#7C6004";
 const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {
   const { nickname, role, error, loading } = userInfo;
   const SIDEBAR_WIDTH = appWidth / 2;
-
+  const navigate = useNavigate();
+  
   const getMenuItemsByRole = (role) => {
     console.log(role);
 
