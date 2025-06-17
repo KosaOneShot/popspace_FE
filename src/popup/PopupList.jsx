@@ -25,7 +25,7 @@ function PopupCard({ popupId, name, period, location, imageUrl, isLiked, onToggl
         className="d-flex align-items-center justify-content-center"
         style={{ width: '100%', height: '150px', overflow: 'hidden' }}
       >
-        <img src={imageUrl} alt={name} style={{ maxWidth: '100%', maxHeight: '100%' }} />
+        <img src={imageUrl} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <div className="card-body">
         <div className="d-flex justify-content-between">
