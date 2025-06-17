@@ -19,7 +19,7 @@ const QrScan = () => {
     };
     // 아이폰 정사각형 찌그러짐 방지
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const aspectRatio = isIOS ? 0.9 : 1;
+    const aspectRatio = isIOS ? 1.77 : 1;
 
 
     // 스캔 성공시 서버 호출
