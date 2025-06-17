@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
+import LoginButton from "./login/LoginButton";
 import LogoutButton from "./logout/LogoutButton";
-import LoginButton from "./login/LoginButton"
-import RegisterButton from "./register/RegisterButton";
 
 // 노란색 : #F8C94A 
 // 초록색: #1D9D8B 
@@ -87,13 +86,8 @@ const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {
               {role ? (
                 <LogoutButton />
               ) : (
-                <div>
-                  <div >
-                    <LoginButton />
-                  </div>
-                  <div className="">
-                    <RegisterButton />
-                  </div>
+                <div >
+                  <LoginButton />
                 </div>
               )}
             </div>
@@ -103,7 +97,7 @@ const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {
             <li key={idx} className="list-group-item px-3 py-2 border-0 bg-transparent">
               <Link
                 to={href}
-                onClick={()=>handleNavigation(href)}
+                onClick={() => handleNavigation(href)}
                 className="d-flex align-items-center text-decoration-none text-dark rounded px-2 py-2 hover-bg"
                 style={{ transition: "background-color 0.2s" }}
               >
