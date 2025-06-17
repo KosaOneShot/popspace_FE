@@ -162,7 +162,7 @@ export default function PopupList() {
   
   return (  
     <div ref={containerRef}
-      className="container" style={{ paddingTop: '70px', marginBottom: '100px', height: 'calc(100vh - 140px)', overflowY : 'auto' }}>
+      className="container" style={{ paddingTop: '70px', marginBottom: '100px', overflowY : 'auto' }}>
 
       <div
         className="mb-3"
