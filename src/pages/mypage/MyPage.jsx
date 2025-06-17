@@ -9,12 +9,13 @@ import "./MyPage.css";
 
 const MyPage = () => {
   const location = useLocation();
-  const tab = location.state?.tab;
-  const [activeTab, setActiveTab] = useState(tab || "profile");
-
   const navigate = useNavigate();
 
   const { nickname, role, loading, error } = useUserInfo();
+  const tab = location.state?.tab;
+  const [activeTab, setActiveTab] = useState(tab || "profile");
+
+
 
   if (!loading && (error || !nickname)) {
     navigate("/auth/login");
