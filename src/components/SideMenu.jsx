@@ -1,37 +1,56 @@
 import { Link } from "react-router-dom";
-import useUserInfo from "../hook/useUserInfo";
 import LogoutButton from "./logout/LogoutButton";
 import LoginButton from "./login/LoginButton"
 import RegisterButton from "./register/RegisterButton";
 
-  // 노란색 : #F8C94A 
-  // 초록색: #1D9D8B 
-  // 갈색 : #A0522D
-  /**
-   * #3E2C22 #1B5E56 #7C6004rgb(249, 244, 232) #F5E3D0
+// 노란색 : #F8C94A 
+// 초록색: #1D9D8B 
+// 갈색 : #A0522D
+/**
+ * #3E2C22 #1B5E56 #7C6004rgb(249, 244, 232) #F5E3D0
 #e9f5f3
-   */
+ */
 
 const hoverColor = "#e9f5f3";
 const iconColor = "#7C6004";
 
 
-const SideMenu = ({ isOpen, onClose, appWidth }) => {
-  const userInfo = useUserInfo();
+const SideMenu = ({ isOpen, onClose, appWidth,userInfo }) => {
+  const { nickname, role, error, loading } = userInfo;
   const SIDEBAR_WIDTH = appWidth / 2;
 
-  const menuItems = [
-    { label: "홈", href: "/", icon: "bi-house-door" },
-    { label: "팝업 목록", href: "/popup/list", icon: "bi-shop" },
-    { label: "예약 내역", href: "/reservation/list", icon: "bi-calendar-check" },
-    { label: "마이페이지", href: "/mypage", icon: "bi-person-circle" },
-    { label: "통계 (사장님)", href: "/chart/data", icon: "bi-bar-chart" },
-    { label: "QR 스캔 (사장님)", href: "/qr-scan", icon: "bi-qr-code-scan" },
-    { label: "통계 (총괄 관리자)", href: "/admin/popup/list", icon: "bi-graph-up" },
-  ];
+  const getMenuItemsByRole = (role) => {
+    console.log(role);
+    
+    const baseItems = [
+      { label: "홈", href: "/", icon: "bi-house-door" },
+      { label: "팝업 목록", href: "/popup/list", icon: "bi-shop" },
+      { label: "예약 내역", href: "/reservation/list", icon: "bi-calendar-check" },
+      { label: "마이페이지", href: "/mypage", icon: "bi-person-circle" },
+    ];
+
+    const popupAdminItems = [
+      { label: "통계 (사장님)", href: "/chart/data", icon: "bi-bar-chart" },
+      { label: "QR 스캔 (사장님)", href: "/qr-scan", icon: "bi-qr-code-scan" },
+      { label: "공지 작성 (사장님)", href: "/mypage/register-noti", icon: "bi-qr-code-scan" },
+    ];
+
+    const superAdminItems = [
+      { label: "통계 (총괄 관리자)", href: "/admin/popup/list", icon: "bi-graph-up" },
+    ];
+
+    if (role === "ROLE_POPUP_ADMIN") {
+      return [...baseItems, ...popupAdminItems];
+    } else if (role === "ROLE_ADMIN") {
+      return [...baseItems, ...popupAdminItems, ...superAdminItems];
+    } else {
+      return baseItems;
+    }
+  };
+
+  const menuItems = getMenuItemsByRole(role);
 
   if (!isOpen) return null;
-
   return (
     <div
       className="position-fixed border-start d-flex flex-column justify-content-between"
@@ -74,12 +93,12 @@ const SideMenu = ({ isOpen, onClose, appWidth }) => {
       </div>
 
       <div className="px-3 pb-4 d-flex justify-content-center" >
-        {userInfo?.role ? (
+        {role ? (
           <LogoutButton />
         ) : (
           <div className="d-flex justify-content-center w-100">
-            <LoginButton/>
-            <RegisterButton/>
+            <LoginButton />
+            <RegisterButton />
           </div>
         )}
       </div>
