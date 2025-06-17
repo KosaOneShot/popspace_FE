@@ -18,18 +18,24 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
        }
     });
     console.log('예약 목록 조회 응답:', response.data);
-    const list =  response.data.map(item => ({
-      id: item.reserveId,
-      title: item.popupName,
-      datetime: formatDateTime(item.reserveDate + ' ' + item.reserveTime),
-      reserveDate: item.reserveDate,
-      // 11:00 에서 시, 분 분리
-      reserveHour : Number(item.reserveTime.split(':')[0]),
-      reserveMinute : Number(item.reserveTime.split(':')[1]),
-      location: item.location,
-      imageUrl: item.imageUrl,
-      category: item.reservationType
-    }));
+
+  const list = response.data.map(item => {
+      // reserveTime 안전 분리
+      const [reserveHour, reserveMinute] =
+        (typeof item?.reserveTime === 'string' && item.reserveTime.includes(':'))
+          ? item.reserveTime.split(':').map(Number): ['-', '-'];
+      return {
+        id:          item.reserveId,
+        title:       item.popupName,
+        datetime:    formatDateTime(item.reserveDate + ' ' + (item.reserveTime ?? '')),
+        reserveDate: item.reserveDate,
+        reserveHour,
+        reserveMinute,
+        location:    item.location,
+        imageUrl:    item.imageUrl,
+        category:    item.reservationType
+      };
+    });
     console.log('가공된 예약 목록:', list);
     return list;
   } catch (error) {
