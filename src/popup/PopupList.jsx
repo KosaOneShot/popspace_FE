@@ -220,7 +220,7 @@ export default function PopupList() {
                 setPopupList(list);
               });
             }}
-            style={{ flex: 1, backgroundColor: '#f8ac0b', color: 'white' }}
+            style={{ flex: 1, backgroundColor: '#8250DF', color: 'white' }}
           >
             검색
           </button>
