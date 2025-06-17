@@ -10,7 +10,7 @@ import LogoutButton from "./logout/LogoutButton";
 #e9f5f3
  */
 
-const hoverColor = "#8250DF80";
+const hoverColor = "#8250DF4D";
 const iconColor = "#000";
 
 
