@@ -6,7 +6,6 @@ import useUserInfo from "../../hook/useUserInfo";
 import { useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./MyPage.css";
-import useUserInfo from "../../hook/useUserInfo";
 
 const MyPage = () => {
   const location = useLocation();
