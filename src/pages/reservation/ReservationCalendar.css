@@ -1,6 +1,6 @@
 /* 선택한 날짜 색상, 둥근 사각형 모양 */
 .custom-selected {
-    background-color: #1D9D8B !important;
+    background-color: #8250DF !important;
     color: white !important;
     border-radius: 8px;
 }
@@ -19,8 +19,8 @@
 /* 기본 DayPicker 네비게이션 화살표 색상 변경 */
 .rdp-button_previous svg,
 .rdp-button_next svg {
-    color: #1D9D8B !important;
-    fill: #1D9D8B !important;
+    color: #929292 !important;
+    fill: #929292 !important;
     font-size: 1.5rem;
     background: none;
     border: none;
@@ -73,7 +73,7 @@
 }
 
 .time-btn:hover:enabled {
-    border-color: #1D9D8B;
+    border-color: #8250DF;
 }
 
 .time-btn:disabled,
@@ -83,9 +83,9 @@
 }
 
 .time-btn.selected {
-    background-color: #1D9D8B;
+    background-color: #8250DF;
     color: white;
-    border-color: #1D9D8B;
+    border-color: #8250DF;
 }
 
 
@@ -105,8 +105,8 @@
 }
 
 .reserve-btn.active {
-    background-color: #1D9D8B;
-    border-color: #1D9D8B;
+    background-color: #8250DF;
+    border-color: #8250DF;
     color: white;
     cursor: pointer;
 }

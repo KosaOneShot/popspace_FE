@@ -14,6 +14,13 @@ const QrScan = () => {
     //todo 받아오기
     const { nickname,role, error, loading } = useUserInfo();
     const [reservationInfo, setReservationInfo] = useState(null);
+    const roleLabel = {
+        ROLE_POPUP_ADMIN: '관리자'
+    };
+    // 아이폰 정사각형 찌그러짐 방지
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const aspectRatio = isIOS ? 0.9 : 1;
+
 
     // 스캔 성공시 서버 호출
     const handleScanSuccess = async (decodedText) => {
@@ -65,10 +72,17 @@ const QrScan = () => {
     };
 
     // 전면 카메라 여부 (전면 카메라 좌우반전 위해)
-    const isFrontCamera = (label) => {
+    const isFrontCamera = (device, index, totalCount) => {
+        const label = device.label?.toLowerCase() || '';
         const keywords = ['front', 'user', 'face'];
-        const lower = label?.toLowerCase() || '';
-        return keywords.some(word => lower.includes(word));
+
+        // label 기반 판단
+        const matches = keywords.some(word => label.includes(word));
+
+        // label 없음 + 카메라가 1개뿐이면 전면일 가능성 높음
+        const assumeFront = !label && totalCount === 1;
+
+        return matches || assumeFront;
     };
 
     // 카메라 초기화
@@ -88,18 +102,30 @@ const QrScan = () => {
             return;
         }
 
-        // 후면 카메라 우선 선택
-        const backCamera = cameras.find(device =>
+        const total = cameras.length;
+
+        // 후면 카메라 우선 선택 (label 기반)
+        let selectedDevice = cameras.find(device =>
             device.label.toLowerCase().includes('back') ||
             device.label.toLowerCase().includes('rear') ||
             device.label.toLowerCase().includes('environment')
         );
-        const selectedDevice = backCamera || cameras[0];
+
+        // label 없을 경우 fallback: 두 번째 카메라 사용 (아이폰에서 후면일 가능성 높음)
+        if (!selectedDevice && cameras.length > 1) {
+            selectedDevice = cameras[1];
+        }
+        // fallback: 첫 번째 카메라라도 사용
+        if (!selectedDevice) {
+            selectedDevice = cameras[0];
+        }
+
         const selectedDeviceId = selectedDevice.id;
 
-        // 전면 카메라면 좌우반전
+        // 좌우반전 여부 결정
         if (qrReaderContainerRef.current) {
-            if (isFrontCamera(selectedDevice.label)) {
+            const index = cameras.findIndex(cam => cam.id === selectedDeviceId);
+            if (isFrontCamera(selectedDevice, index, total)) {
                 qrReaderContainerRef.current.classList.add('mirror');
             } else {
                 qrReaderContainerRef.current.classList.remove('mirror');
@@ -112,7 +138,7 @@ const QrScan = () => {
             {
                 fps: 10,
                 qrbox: { width: 250, height: 250 },
-                aspectRatio: 1,
+                aspectRatio: aspectRatio,
             },
             (decodedText) => {
                 setScanning(false);
@@ -168,12 +194,12 @@ const QrScan = () => {
                  maxWidth: 360,
                  marginTop: 70
              }}>
-            <div>{role}: {nickname}</div>
+            <div>{roleLabel[role] || role}: {nickname}</div>
 
             {/* QR 스캔 UI */}
             <h3 className="mb-3"
                 style={{
-                    color: '#1D9D8B',
+                    color: '#8250DF',
                 }}>
                 QR {scanning ? '(스캔 중)' : '(스캔 완료)'}
             </h3>
@@ -191,7 +217,7 @@ const QrScan = () => {
 
                 {(reservationInfo || errorMessage) && (
                     <div style={{
-                        border: '1px solid #DB9506',
+                        border: '1px solid #8250DF',
                         borderRadius: '16px',
                         padding: '16px',
                         backgroundColor: '#ffffff',
@@ -208,7 +234,7 @@ const QrScan = () => {
 
                         {reservationInfo && (
                             <>
-                                <h5 style={{ color: '#1D9D8B', marginBottom: '16px' }}>예약 정보</h5>
+                                <h5 style={{ color: '#8250DF', marginBottom: '16px' }}>예약 정보</h5>
                                 <p style={{ fontSize: '1.1rem', fontWeight: '500', marginBottom: '24px', color: '#888888' }}>
                                     {reservationInfo.popupName}
                                 </p>
@@ -231,7 +257,7 @@ const QrScan = () => {
                                 <div className="mt-4">
                                     {reservationInfo.reservationState === 'EMAIL_SEND' && (
                                         <>
-                                            <p style={{ color: '#1D9D8B' }}>입장 가능한 예약</p>
+                                            <p style={{ color: '#8250DF' }}>입장 가능한 예약</p>
                                             <button
                                                 className="btn btn-success w-100 mt-2"
                                                 onClick={handleCheckIn}
@@ -241,14 +267,14 @@ const QrScan = () => {
                                         </>
                                     )}
                                     {reservationInfo.reservationState === 'RESERVED' && (
-                                            <p style={{ color: '#1D9D8B' }}>아직 입장 시간이 아닙니다.</p>
+                                            <p style={{ color: '#8250DF' }}>아직 입장 시간이 아닙니다.</p>
                                     )}
                                     {reservationInfo.reservationState === 'CANCELED' && (
                                         <p style={{ color: '#E74C3C' }}>취소된 예약입니다</p>
                                     )}
                                     {reservationInfo.reservationState === 'CHECKED_IN' && (
                                         <>
-                                            <p style={{ color: '#1D9D8B' }}>입장 처리된 예약</p>
+                                            <p style={{ color: '#8250DF' }}>입장 처리된 예약</p>
                                             <button
                                                 className="btn btn-danger w-100 mt-2"
                                                 onClick={handleCheckOut}
