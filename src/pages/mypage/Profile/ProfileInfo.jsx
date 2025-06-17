@@ -52,6 +52,7 @@ const ProfileInfo = () => {
 
   const handleCheckNickname = async () => {
     if (form.nickname === originalNickname) {
+      setNicknameMessage("동일한 닉네임입니다.");
       setNicknameStatus("valid");
       return;
     }
@@ -108,7 +109,12 @@ const ProfileInfo = () => {
   return (
     <form onSubmit={handleSubmit} className={styles.accountForm}>
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>이메일</label>
+        <label
+          className={`form-label ${styles.accountLabel}`}
+          style={{ color: "#3E2C22" }}
+        >
+          이메일
+        </label>
         <input
           type="email"
           className="form-control text-muted"
@@ -118,7 +124,12 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>이름</label>
+        <label
+          className={`form-label ${styles.accountLabel}`}
+          style={{ color: "#3E2C22" }}
+        >
+          이름
+        </label>
         <input
           type="text"
           className="form-control text-muted"
@@ -128,7 +139,12 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>전화번호</label>
+        <label
+          className={`form-label ${styles.accountLabel}`}
+          style={{ color: "#3E2C22" }}
+        >
+          전화번호
+        </label>
         <input
           type="text"
           className="form-control text-muted"
@@ -138,7 +154,10 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-3">
-        <label className={`form-label ${styles.accountLabel}`} style={{ color: '#3E2C22' }}>
+        <label
+          className={`form-label ${styles.accountLabel}`}
+          style={{ color: "#3E2C22" }}
+        >
           닉네임
         </label>
         <div className="input-group">
@@ -154,7 +173,11 @@ const ProfileInfo = () => {
             type="button"
             className="btn"
             onClick={handleCheckNickname}
-            style={{backgroundColor: '#FFB823', color: 'white', fontSize: '14px'}}
+            style={{
+              backgroundColor: "#FFB823",
+              color: "white",
+              fontSize: "14px",
+            }}
           >
             중복 확인
           </button>
@@ -172,7 +195,10 @@ const ProfileInfo = () => {
 
       <div className="row mb-3">
         <div className="col">
-          <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>
+          <label
+            className={`form-label ${styles.accountLabel}`}
+            style={{ color: "#3E2C22" }}
+          >
             생년월일
           </label>
           <input
@@ -184,7 +210,12 @@ const ProfileInfo = () => {
           />
         </div>
         <div className="col">
-          <label className={`form-label ${styles.accountLabel}`} style={{color: '#3E2C22'}}>성별</label>
+          <label
+            className={`form-label ${styles.accountLabel}`}
+            style={{ color: "#3E2C22" }}
+          >
+            성별
+          </label>
           <select
             name="sex"
             className="form-select"
@@ -199,7 +230,10 @@ const ProfileInfo = () => {
       </div>
 
       <div className="mb-2">
-        <label className={`form-label ${styles.accountLabel}`} style={{ color: '#3E2C22' }}>
+        <label
+          className={`form-label ${styles.accountLabel}`}
+          style={{ color: "#3E2C22" }}
+        >
           주소
         </label>
         <div className="input-group">
@@ -215,7 +249,7 @@ const ProfileInfo = () => {
             type="button"
             className="btn btn-emerald btn-sm"
             onClick={() => setIsDaumPostOpen(true)}
-            style={{backgroundColor: '#FFB823'}}
+            style={{ backgroundColor: "#FFB823" }}
           >
             주소 검색
           </button>
