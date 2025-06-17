@@ -21,7 +21,7 @@ function PendingReview() {
   }, []);
 
   return (
-    <div className="container pb-3 bg-light min-vh-100">
+    <div className="container pb-3 min-vh-100">
       {pending.map((popup) => (
         <div
           className={`card mb-3 shadow-sm w-100 ${styles.card}`}
