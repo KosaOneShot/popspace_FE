@@ -175,8 +175,36 @@ useEffect(() => {
   };
 }, [loadMore]);
 
+
+  // 날짜값 변경시 검색
+  useEffect(() => {
+    fetchReservationList({
+      searchKeyword,
+      searchDate,
+      reservationType,
+      lastReserveDate:    null,
+      lastReserveHour:    null,
+      lastReserveMinute:  null,
+      lastReserveId:      null
+    }).then(list => {
+      setReservationList(list);
+      if (list.length) {
+        const last = list[list.length - 1];
+        setLastReserveDate(last.reserveDate);
+        setLastReserveHour(last.reserveHour);
+        setLastReserveMinute(last.reserveMinute);
+        setLastReserveId(last.id);
+      }
+    }
+    ).catch(err => {
+      console.error('예약 목록 로드 중 오류 발생:', err);
+      setReservationList([]); // 오류 발생 시 목록 초기화
+    }
+    );
+  }, [searchDate]); // 빈 배열로 의존성 설정하여 최초 한 번만 실행
+
   return (
-    <div ref={containerRef} className="container pt-0 pb-0" style={{ marginTop: '70px', height: 'calc(100vh - 160px)', marginBottom: '90px', overflowY: 'auto' }}>
+    <div ref={containerRef} className="container pt-0 pb-0" style={{ marginTop: '70px', height: 'calc(100vh - 160px)', marginBottom: '90px', overflowY: 'auto', overflowX:   'hidden' }}>
         <div
                 className="mb-3"
                 style={{

@@ -39,7 +39,7 @@ function PopupCard({ popup }) {
     <div className="mb-4">
       <div
         className="ratio ratio-1x1"
-        style={{ background: empty ? '#f8f9fa' : undefined, cursor: empty ? 'default' : 'pointer' }}
+        style={{background: empty ? '#f8f9fa' : undefined, cursor: empty ? 'default' : 'pointer' }}
         onClick={() => !empty && navigate(`/popup/detail/${popup.popupId}`)}
       >
         {empty ? (
@@ -167,7 +167,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="container py-4" style={{ maxWidth: 390, margin: '0 auto 60px' }}>
+    <div className="container" style={{ maxWidth: 390, marginTop: '70px', marginBottom: '90px' }}>
       <section>
         <PopupCard popup={mostLikedPopup} /> {/* ✅ isLogined 제거 */}
       </section>
