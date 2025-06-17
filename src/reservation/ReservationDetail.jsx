@@ -43,9 +43,9 @@ export default function ReservationDetail() {
   }, [reserveId]);  
 
   if (!detail) return <div className="text-center py-5">로딩 중…</div>;
-
+  
   return (
-    <div className="container" style={{ marginTop: '70px', marginBottom: detail.reservationState === 'RESERVED' ? '150px' : '100px' }}>
+    <div className="container" style={{ marginTop: '70px', marginBottom: detail.reservationState === '예약완료' ? '170px' : '100px' }}>
       <button className="btn btn-link mb-3" onClick={() => navigate(-1)}>← 목록으로</button>
       <img
         src={qrUrl}
@@ -107,7 +107,7 @@ export default function ReservationDetail() {
       )}
 
       {/* 예약취소 버튼 (오직 RESERVED 상태일 때만) */}
-      {detail.reservationState === 'RESERVED' && (
+      {detail.reservationState === '예약완료' && (
         <div className="position-fixed"
             style={{
                 bottom: "75px",
