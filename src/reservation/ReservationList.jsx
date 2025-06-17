@@ -176,7 +176,7 @@ useEffect(() => {
 }, [loadMore]);
 
   return (
-    <div ref={containerRef} className="container pt-0 pb-0" style={{ marginTop: '70px', height: 'calc(100vh - 160px)', marginBottom: '90px', overflowY: 'auto' }}>
+    <div ref={containerRef} className="container pt-0 pb-0" style={{ marginTop: '70px', height: 'calc(100vh - 160px)', marginBottom: '90px', overflowY: 'auto', overflowX:   'hidden' }}>
         <div
                 className="mb-3"
                 style={{
