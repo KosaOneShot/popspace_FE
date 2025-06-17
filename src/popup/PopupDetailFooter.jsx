@@ -68,15 +68,33 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
           {showModal && (
               <div className="modal-backdrop">
                   <div className="modal-content">
-                      <h5>현장 웨이팅 예약</h5>
+                      <h5 style={{ marginBottom: '16px' }}>현장 웨이팅 예약</h5>
+
                       {waitingInfo && (
-                          <div style={{ marginBottom: '12px', fontSize: '0.95rem', color: '#555' }}>
-                              <p>현재 대기 순번: <strong>{waitingInfo.sequence}</strong></p>
-                              <p>예상 대기 시간: <strong>{waitingInfo.averageWaitTime}분</strong></p>
-                              <p>예상 입장 시간: <strong>{waitingInfo.entranceTime}</strong></p>
+                          <div style={{
+                              marginBottom: '8px',
+                              fontSize: '0.95rem',
+                              color: '#555',
+                              lineHeight: 1.6,
+                              textAlign: 'left',
+                              marginTop: '12px'
+                          }}>
+                              <p><strong>현재 대기 순번:</strong> {waitingInfo.sequence}</p>
+
+                              {waitingInfo.averageWaitTime === -1 ? (
+                                  <>
+                                      <p><strong>예상 대기 시간:</strong> 없음 (즉시 입장 가능)</p>
+                                      <p><strong>예상 입장 시간:</strong> 곧 입장 예정</p>
+                                  </>
+                              ) : (
+                                  <>
+                                      <p><strong>예상 대기 시간:</strong> {waitingInfo.averageWaitTime}분</p>
+                                      <p><strong>예상 입장 시간:</strong> {waitingInfo.entranceTime}</p>
+                                  </>
+                              )}
                           </div>
                       )}
-                      <p>현장 예약 하시겠습니까?</p>
+                      {/*<p>현장 예약 하시겠습니까?</p>*/}
 
                       {/* 예약하기 버튼 */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginTop: '16px' }}>
