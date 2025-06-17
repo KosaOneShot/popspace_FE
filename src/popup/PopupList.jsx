@@ -242,17 +242,17 @@ const loadMore = () => {
           검색된 팝업이 없습니다.
         </div>
       ) : (
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3">
-          {popupList.map(item => (
-            <div key={item.popupId} className="col">
-              <PopupCard
-                {...item}
-                onToggle={toggleFav}
-                onCardClick={handleCardClick}
-              />
-            </div>
-          ))}
-        </div>
+      <div className="row row-cols-2 g-3">
+        {popupList.map(item => (
+          <div key={item.popupId} className="col">
+            <PopupCard
+              {...item}
+              onToggle={toggleFav}
+              onCardClick={handleCardClick}
+            />
+          </div>
+        ))}
+      </div>
       )}
     </div>
   );
