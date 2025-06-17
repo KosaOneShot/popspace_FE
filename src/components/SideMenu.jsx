@@ -81,17 +81,15 @@ const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {
 
         <ul className="list-group list-group-flush">
 
-          <li>
-            <div className="px-3 pt-3 " >
-              {role ? (
-                <LogoutButton />
-              ) : (
-                <div >
-                  <LoginButton />
-                </div>
-              )}
-            </div>
-          </li>
+          <div className="px-3 pt-3 " >
+            {role ? (
+              <LogoutButton />
+            ) : (
+              <div >
+                <LoginButton />
+              </div>
+            )}
+          </div>
 
           {menuItems.map(({ label, href, icon }, idx) => (
             <li key={idx} className="list-group-item px-3 py-2 border-0 bg-transparent">

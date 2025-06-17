@@ -121,12 +121,12 @@
 }
 
 .checkButton:hover {
-  background-color: #5d4037;
+  background-color:  rgb(56, 56, 56);
   transform: translateY(-0.0625rem);
 }
 
 .registerForm button[type="submit"]:hover {
-  background-color: #157a6f;
+  background-color:  rgb(56, 56, 56);
   transform: translateY(-0.0625rem);
 }
 
