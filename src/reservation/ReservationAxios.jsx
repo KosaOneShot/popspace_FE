@@ -13,17 +13,19 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
         reservationType : reservationType,
         lastReserveDate: lastReserveDate,
         lastReserveHour: lastReserveHour,
-        lastReserveMinute: lastReserveMinute,
         lastReserveId: lastReserveId
        }
     });
     console.log('예약 목록 조회 응답:', response.data);
 
-  const list = response.data.map(item => {
+    const list = response.data.map(item => {
       // reserveTime 안전 분리
       const [reserveHour, reserveMinute] =
         (typeof item?.reserveTime === 'string' && item.reserveTime.includes(':'))
           ? item.reserveTime.split(':').map(Number): ['-', '-'];
+
+      console.log('ReservationAxios - 분리된 예약시간 시, 분:', { reserveHour, reserveMinute });
+          
       return {
         id:          item.reserveId,
         title:       item.popupName,
@@ -33,7 +35,9 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
         reserveMinute,
         location:    item.location,
         imageUrl:    item.imageUrl,
-        category:    item.reservationType
+        category:    item.reservationType,
+        reservationStateKor: changeStateToKor(item.reservationState),
+        reservationTypeKor: changeTypeToKor(item.reservationType),
       };
     });
     console.log('가공된 예약 목록:', list);
@@ -67,14 +71,6 @@ export async function fetchReservationDetail(reserveId) {
     const response = await axi.get(`/api/reservation/detail/${reserveId}`);
     console.log('예약 상세 조회 응답:', response.data);
     const detail = response.data;
-    const reservationStateKor = {
-      RESERVED: '예약완료',
-      CANCELED: '예약취소',
-      CHECKED_IN: '입장',
-      CHECKED_OUT: '퇴장',
-      NOSHOW: '노쇼'
-    }[detail.reservationState] || detail.reservationState;
-    const reservationTypeKor = detail.reservationType === 'ADVANCE' ? '사전 예약' : '현장 웨이팅';
 
     return {
       reserveId: detail.reserveId,
@@ -82,8 +78,10 @@ export async function fetchReservationDetail(reserveId) {
       reserveTime: detail.reserveTime,
       createdAt: detail.createdAt,
       canceledAt: detail.canceledAt,
-      reservationState: reservationStateKor,
-      reservationType: reservationTypeKor,
+      reservationState: detail.reservationState,
+      reservationStateKor: changeStateToKor(item.reservationState),
+      reservationType: detail.reservationType,
+      reservationTypeKor: changeTypeToKor(item.reservationType),
       popupId: detail.popupId,
       memberName: detail.memberName,
       popupName: detail.popupName,
@@ -150,4 +148,25 @@ export async function postWalkInReservation(popupId) {
   } catch (err) {
     throw err;
   }
+}
+
+function changeStateToKor(reservationState) {
+  const reservationStateKor = {
+    RESERVED: '예약완료',
+    CANCELED: '예약취소',
+    CHECKED_IN: '입장',
+    CHECKED_OUT: '퇴장',
+    NOSHOW: '노쇼'
+  }[reservationState] || reservationState;
+
+  return reservationStateKor;
+}
+
+function changeTypeToKor(reservationType) {
+  const reservationTypeKor = {
+    WALK_IN: '현장 웨이팅',
+    ONLINE: '온라인 예약'
+  }[reservationType] || reservationType;
+
+  return reservationTypeKor;
 }
