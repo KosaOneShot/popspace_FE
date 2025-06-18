@@ -1,6 +1,6 @@
 // src/popup/PopupDetailFooter.jsx
 import React, { useState, useEffect } from "react";
-import ReactDOM from 'react-dom';  // ← 이 줄 추가
+import {createPortal} from 'react-dom';
 import { axiUpdatePopupLike } from "./popupAxios";
 import { fetchWalkInPreview, postWalkInReservation } from "../reservation/ReservationAxios";
 import { useNavigate } from "react-router-dom";
@@ -129,8 +129,8 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
                           </button>
                       </div>
                   </div>
-              </div>
-
+              </div>,
+              document.body
           )}
 
     <div
