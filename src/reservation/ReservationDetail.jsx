@@ -46,7 +46,9 @@ export default function ReservationDetail() {
   
   return (
     <div className="container" style={{ marginTop: '70px', marginBottom: detail.reservationState === '예약완료' ? '170px' : '100px' }}>
-      <button className="btn btn-link mb-3" onClick={() => navigate(-1)}>← 목록으로</button>
+      <div className="d-flex align-items-center">
+        <button type="button" className="btn btn-light me-3" onClick={() => navigate(-1)}>←</button>
+      </div>
       <img
         src={qrUrl}
         alt="예약 QR 코드"

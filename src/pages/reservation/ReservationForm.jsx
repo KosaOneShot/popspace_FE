@@ -110,16 +110,30 @@ const ReservationForm = () => {
         ['일', '월', '화', '수', '목', '금', '토'][day.getDay()];
 
     return (
-        <div className="container mt-4"
+        <div className="container mt-6"
              style={{
                  height: '100%',
                  minHeight: '600px',
                  minHeight: '100%',
                  overflowY: 'auto',
+                 marginTop: '70px', // 헤더 공간 확보
                  paddingBottom: '80px' // 예약하기 버튼 공간 확보
              }}
         >
-            <p className="text-center">날짜와 시간을 선택해주세요</p>
+            <div className="d-flex align-items-center mb-3">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => navigate(-1)}
+              >
+                ←
+              </button>
+              <p className="flex-grow-1 text-start m-0"
+                 style={{ paddingLeft: '50px' }}>
+
+                날짜와 시간을 선택해주세요
+              </p>
+            </div>
             {/* 달력 */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DayPicker

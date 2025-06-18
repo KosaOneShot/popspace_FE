@@ -1,6 +1,6 @@
 // src/popup/PopupDetail.jsx
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import FooterButtons from "./PopupDetailFooter";
 import ReviewList from "./ReviewList";
 import { axiFetchPopupDetail } from "./popupAxios";
@@ -12,6 +12,8 @@ const PopupDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLogined, setIsLogined] = useState(true); // 로그인 여부
+
+  const navigate = useNavigate();
 
   /* 데이터 불러오기 */
   useEffect(() => {
@@ -89,7 +91,7 @@ const PopupDetail = () => {
   return (
     <div
       className="d-flex flex-column overflow-hidden"
-      style={{ paddingBottom: "100px" /* footer 생각한 하단 여백 */ }}
+      style={{ paddingTop : '50px', paddingBottom: "100px" /* footer 생각한 하단 여백 */ }}
     >
       {/* 상단 스크롤 영역: 가로 390px로 고정, 중앙 정렬 */}
       <div className="flex-grow-1 overflow-x-hidden overflow-y-auto">
@@ -103,15 +105,23 @@ const PopupDetail = () => {
             paddingRight: "16px",
           }}
         >
-          {/* 팝업명 */}
-          <div className="text-center mb-3">
-            <h4 className="mb-1">{info.popupName}</h4>
-            <hr
-              className="mx-auto"
-              style={{ width: "60px", borderTop: "2px dashed #ccc" }}
-            />
+        <div className="d-flex align-items-center mb-3">
+          <button
+            type="button"
+            className="btn btn-light me-3"
+            onClick={() => navigate(-1)}
+          >
+            ←
+          </button>
+          <div className="flex-grow-1 d-flex align-items-center text-start"
+          style={{ fontWeight: "bold" }}>
+            <p className="mb-1 text-truncate w-100">
+              {info.popupName}
+            </p>
           </div>
 
+
+          </div>
           {/* 이미지(정사각형 비율) */}
           <div className="ratio ratio-1x1 mb-2">
             <img
