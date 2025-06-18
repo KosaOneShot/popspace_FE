@@ -61,7 +61,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
   return (
     <>
       {/* 모달 백드롭 + 콘텐츠를 document.body에 포탈 */}
-      {showModal && ReactDOM.createPortal(
+      {showModal && createPortal(
         <div
           style={{
             position: 'fixed',
