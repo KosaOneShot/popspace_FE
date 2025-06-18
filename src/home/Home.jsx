@@ -8,29 +8,11 @@ import { formatDate, formatTime } from '../utils/TimeFormat';
 function PopupCard({ popup }) {
   const navigate = useNavigate();
   const empty = !popup?.popupId;
-  const isLogined = popup?.isLogined;
-
-  const [liked, setLiked] = useState(popup.isLiked);
   const [likeCount, setLikeCount] = useState(popup.likeCount);
 
   useEffect(() => {
-    setLiked(popup.isLiked);
     setLikeCount(popup.likeCount);
   }, [popup]);
-
-  const handleLikeToggle = e => {
-    if (!isLogined || empty) return;
-    e.stopPropagation();
-    const orig = liked;
-    const next = !orig;
-    setLiked(next);
-    setLikeCount(c => c + (next ? 1 : -1));
-    axiUpdatePopupLike(popup.popupId, next).catch(err => {
-      console.error('찜 업데이트 실패', err);
-      setLiked(orig);
-      setLikeCount(c => c + (next ? -1 : 1));
-    });
-  };
 
   return (
     <div className="mb-4">
@@ -62,16 +44,8 @@ function PopupCard({ popup }) {
         )}
 
         <div className="d-flex justify-content-between align-items-center mt-2">
-          <div
-            onClick={handleLikeToggle}
-            className="d-flex align-items-center"
-            style={{ cursor: isLogined ? 'pointer' : 'not-allowed', opacity: isLogined ? 1 : 0.5 }}
-          >
-            <i
-              className={`bi me-1 ${liked ? 'bi-heart-fill' : 'bi-heart'}`}
-              style={{ color: liked ? '#dc3545' : '#6c757d' }}
-            />
-            <span className="text-muted small">{likeCount}</span>
+          <div>
+            <span className="text-muted" style={{fontSize : '12px'}}>좋아요 {likeCount}</span>
           </div>
 
           <button
