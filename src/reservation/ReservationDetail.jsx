@@ -1,7 +1,7 @@
 // ReservationDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchReservationDetail, fetchReservationQR } from './ReservationAxios';
+import { fetchReservationDetail, fetchReservationQR, cancelAdvanceReservation } from './ReservationAxios';
 import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 
@@ -40,7 +40,18 @@ export default function ReservationDetail() {
     fetchReservationDetail(reserveId)
       .then(setDetail)
       .catch(err => console.error('상세 조회 실패', err));
-  }, [reserveId]);  
+  }, [reserveId]);
+
+  // 예약 취소
+    const handleCancelAdvanceReservation = async () => {
+        try {
+            await cancelAdvanceReservation(reserveId);
+            alert("예약 취소 완료!");
+            navigate('/reservation/list'); // 취소 후 예약 목록으로 이동
+        } catch (err) {
+            alert("예약 취소 실패: " + (err.response?.data?.message || "오류 발생"));
+        }
+    };
 
   if (!detail) return <div className="text-center py-5">로딩 중…</div>;
   
@@ -122,9 +133,14 @@ export default function ReservationDetail() {
                 alignItems: "center",
                 padding: "4px",
             }}
-        > <button className="btn btn-danger w-100" style={{ margin: '5px 10px'}}>
+        >
+        <button
+            className="btn btn-danger w-100"
+            style={{ margin: '5px 10px' }}
+            onClick={handleCancelAdvanceReservation}
+        >
             예약취소
-          </button>
+        </button>
         </div>
       )}
     </div>

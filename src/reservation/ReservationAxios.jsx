@@ -124,6 +124,20 @@ export async function fetchWalkInPreview(popupId) {
   }
 }
 
+// 사전 예약 취소
+export async function cancelAdvanceReservation(reserveId){
+  const payload = {
+    reserveId: Number(reserveId)
+  };
+
+  try {
+    const res = await axi.post(`/api/reservations/${reserveId}/cancel`, payload);
+    return res.data;
+  }catch (err) {
+    throw err;
+  }
+}
+
 // 현장 웨이팅 예약 시도
 export async function postWalkInReservation(popupId) {
   const payload = {
