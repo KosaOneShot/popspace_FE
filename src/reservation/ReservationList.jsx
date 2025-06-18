@@ -6,9 +6,9 @@ import CalendarModal from '../components/modal/CalenderModal';
 
 // 카테고리별 색상
 const CATEGORY = {
-  ALL:        { label: '전체', color: '#8250DF' },
-  ADVANCE:   { label: '사전예약', color: '#929292' },
-  WALK_IN:    { label: '현장웨이팅', color: '#929292' }
+  ALL:     { label: '전체' },
+  ADVANCE: { label: '사전예약' },
+  WALK_IN: { label: '현장웨이팅' }
 };
 
 // 팝업 카드 컴포넌트
@@ -25,7 +25,7 @@ function ReservationCard({ item }) {
     <div
       className="card mb-1"
       style={{
-        border: `2px solid ${borderColor}`,
+        border: '2px solid #e0e0e0',
         height: '90px',
         overflow: 'hidden',
         cursor: 'pointer'                   // 클릭 가능 커서
@@ -283,24 +283,32 @@ useEffect(() => {
                 </div>
               </div>
 
-      <div className="btn-group mb-3" role="group" style={{ width: '100%' }}>
-        {Object.entries(CATEGORY).map(([key, cat]) => (
-          <button
-            key={key}
-            type="button"
-            className={`btn ${reservationType === key ? 'btn-light' : 'btn-outline-light'}`}
-            style={{
-              width: '30%',
-              borderColor:     cat.color,
-              backgroundColor: reservationType === key ? cat.color : '#fff',
-              color:           reservationType === key ? '#fff' : cat.color
-            }}
-            onClick={() => setReservationType(key)} // ✅ key: "ADVANCE"
-          >
-            {cat.label}
-          </button>
-        ))}
-      </div>
+              <div className="btn-group mb-3" role="group" style={{ width: '100%' }}>
+                {Object.entries(CATEGORY).map(([key, cat]) => {
+                  const selected = reservationType === key;
+                  const bgColor  = selected ? '#8250DF' : '#fff';
+                  const txtColor = selected ? '#fff'     : '#929292';
+                  const bdColor  = selected ? '#8250DF' : '#929292';
+
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      className="btn"
+                      style={{
+                        width: '30%',
+                        backgroundColor: bgColor,
+                        color:           txtColor,
+                        border:          `1px solid ${bdColor}`,
+                        fontWeight:      selected ? 600 : 400
+                      }}
+                      onClick={() => setReservationType(key)}
+                    >
+                      {cat.label}
+                    </button>
+                  );
+                })}
+              </div>
 
         {/* 캘린더 모달 */}
         <CalendarModal
