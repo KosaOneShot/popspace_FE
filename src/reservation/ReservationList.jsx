@@ -209,7 +209,7 @@ useEffect(() => {
                 className="mb-3"
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 100px',  // 왼쪽은 남은 공간, 오른쪽은 100px 고정
+                  gridTemplateColumns: '1fr 70px',  // 왼쪽은 남은 공간, 오른쪽은 100px 고정
                   columnGap: '8px',
                   width: '390px',
                   margin: '0 auto',
@@ -252,33 +252,74 @@ useEffect(() => {
                 <div
                   className="btn-group-vertical"
                   role="group"
-                  style={{ height: '100%' , width : '80px'}}
+                  style={{ height: '100%', width: '40px' }}
                 >
+                  {/* 검색 버튼 */}
                   <button
-                    className="btn"
+                    className="btn icon-btn d-flex justify-content-center align-items-center"
                     onClick={() => {
-                      console.log('검색 버튼 클릭:', { searchKeyword, searchDate, reservationType });
-                      fetchReservationList({searchKeyword, searchDate, reservationType}).then(list => {
-                        setReservationList(list);
-                      });
+                      // 검색어와 날짜로 예약 목록 조회
+                      fetchReservationList({
+                        searchKeyword,
+                        searchDate,
+                        reservationType,
+                        lastReserveDate: null,
+                        lastReserveHour: null,
+                        lastReserveMinute: null,
+                        lastReserveId: null
+                      }).then(setReservationList);
                     }}
-                    style={{ flex: 1, backgroundColor: '#8250DF', color: 'white' }}
+                    style={{ flex: 1 }}
                   >
-                   검색 
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="-0.5 -0.5 16 16"
+                      fill="none"
+                      stroke="#8250DF"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-search"
+                      height={23}
+                      width={25}
+                    >
+                      <path d="M1.875 6.875a5 5 0 1 0 10 0 5 5 0 1 0 -10 0" strokeWidth={2} />
+                      <path d="m13.125 13.125 -2.71875 -2.71875" strokeWidth={2} />
+                    </svg>
                   </button>
+                  {/* 초기화 버튼 */}
                   <button
-                    className="btn"
+                    className="btn icon-btn d-flex justify-content-center align-items-center"
                     onClick={() => {
                       setSearchKeyword('');
                       setSearchDate('');
-                      setReservationType('ALL'); // 초기화 시 전체로 설정
-                      fetchReservationList({ searchKeyword, searchDate, reservationType }).then(list => {
-                        setReservationList(list);
-                      });
+                      // axiFetchPopupList('', '', sortKey).then(setPopupList);
+                      fetchReservationList({
+                        searchKeyword: '',
+                        searchDate: '',
+                        reservationType,
+                        lastReserveDate: null,
+                        lastReserveHour: null,
+                        lastReserveMinute: null,
+                        lastReserveId: null
+                      }).then(setReservationList);
                     }}
-                    style={{ flex: 1, backgroundColor: '#929292', color: 'white' }}
+                    style={{ flex: 1 }}
                   >
-                    초기화
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      height={24}
+                      width={24}
+                    >
+                      <g id="arrow-reload">
+                        <path
+                          d="M12 21c-2.31667 0 -4.325 -0.7625 -6.025 -2.2875C4.275 17.1875 3.3 15.2833 3.05 13H5.1c0.23333 1.7333 1.00417 3.1667 2.3125 4.3C8.72083 18.4333 10.25 19 12 19c1.95 0 3.6042 -0.6792 4.9625 -2.0375C18.3208 15.6042 19 13.95 19 12c0 -1.95 -0.6792 -3.60417 -2.0375 -4.9625C15.6042 5.67917 13.95 5 12 5c-1.15 0 -2.225 0.26667 -3.225 0.8 -1 0.53333 -1.84167 1.26667 -2.525 2.2H9v2H3V4h2v2.35c0.85 -1.06667 1.8875 -1.89167 3.1125 -2.475C9.3375 3.29167 10.6333 3 12 3c1.25 0 2.4208 0.2375 3.5125 0.7125 1.0917 0.475 2.0417 1.11667 2.85 1.925s1.45 1.75833 1.925 2.85C20.7625 9.57917 21 10.75 21 12s-0.2375 2.4208 -0.7125 3.5125c-0.475 1.0917 -1.1167 2.0417 -1.925 2.85s-1.7583 1.45 -2.85 1.925C14.4208 20.7625 13.25 21 12 21Z"
+                          strokeWidth={1}
+                          fill="#000"
+                        />
+                      </g>
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -313,7 +354,7 @@ useEffect(() => {
         {/* 캘린더 모달 */}
         <CalendarModal
         show={showCal}
-        date={searchDate}
+        searchDate={searchDate}
         onClose={() => setShowCal(false)}
         onApply={d => setSearchDate(d)}
         />
