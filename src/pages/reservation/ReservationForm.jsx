@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { DayPicker } from 'react-day-picker';
@@ -16,6 +17,10 @@ const ReservationForm = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableTimes, setAvailableTimes] = useState([]);
     const [selectedTime, setSelectedTime] = useState(null);
+
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [confirmMessage, setConfirmMessage] = useState('');
+    const [lastReserveId, setLastReserveId] = useState(null);
 
     const { popupId } = useParams();
 
@@ -37,13 +42,14 @@ const ReservationForm = () => {
             const res = await axi.post('/api/reservation/advance', payload);
             console.log('예약 성공:', res.data);
             const reserveId = res.data.reserveId;
-            alert("예약 성공!")
-            // 예약 상세 페이지로 이동
-            navigate(`/reservation/detail/${reserveId}`);
+            setLastReserveId(reserveId);
+            setConfirmMessage('예약 성공!');
+            setShowConfirm(true);
+            // remove navigate from here
         } catch (err) {
             const message = err?.response?.data?.message || '예약 중 오류가 발생했습니다.';
-            alert(message);
-            console.error('예약 실패:', err);
+            setConfirmMessage(message);
+            setShowConfirm(true);
         }
     };
 
@@ -110,6 +116,7 @@ const ReservationForm = () => {
         ['일', '월', '화', '수', '목', '금', '토'][day.getDay()];
 
     return (
+        <>
         <div className="container mt-6"
              style={{
                  height: '100%',
@@ -188,6 +195,49 @@ const ReservationForm = () => {
                 </>
             )}
         </div>
+        {showConfirm && createPortal(
+            <div
+              style={{
+                position: 'fixed',
+                top: 0, left: 0,
+                width: '100vw', height: '100vh',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 2000,
+              }}
+              onClick={() => setShowConfirm(false)}
+            >
+              <div
+                style={{
+                  position: 'fixed',
+                  top: '45%', left: '50%',
+                  width: '250px',
+                  transform: 'translate(-50%, -50%)',
+                  background: '#fff',
+                  padding: '24px',
+                  borderRadius: '8px',
+                  textAlign: 'center',
+                  zIndex: 2001,
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                <p style={{ marginBottom: '16px' }}>{confirmMessage}</p>
+                <button
+                  className="btn"
+                  style={{ backgroundColor: '#8250DF', color: '#fff' }}
+                  onClick={() => {
+                    setShowConfirm(false);
+                    if (lastReserveId) {
+                      navigate(`/reservation/detail/${lastReserveId}`);
+                    }
+                  }}
+                >
+                  확인
+                </button>
+              </div>
+            </div>,
+            document.body
+        )}
+        </>
     );
 };
 
