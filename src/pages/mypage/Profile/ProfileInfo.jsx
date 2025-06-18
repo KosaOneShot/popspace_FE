@@ -168,13 +168,19 @@ const ProfileInfo = () => {
             value={form.nickname}
             maxLength={20}
             onChange={handleChange}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              border: '1px solid #ccc',
+              borderColor: '#ccc'
+            }}
           />
           <button
             type="button"
             className="btn"
             onClick={handleCheckNickname}
             style={{
-              backgroundColor: "#FFB823",
+              backgroundColor: "#000",
               color: "white",
               fontSize: "14px",
             }}
@@ -183,11 +189,10 @@ const ProfileInfo = () => {
           </button>
         </div>
         <div
-          className={`small mt-1 ${
-            nicknameStatus === "valid"
-              ? styles.successMessage
-              : styles.errorMessage
-          }`}
+          className={`small mt-1 ${nicknameStatus === "valid"
+            ? styles.successMessage
+            : styles.errorMessage
+            }`}
         >
           {nicknameMessage}
         </div>
@@ -207,6 +212,12 @@ const ProfileInfo = () => {
             className="form-control"
             value={form.birthDate}
             onChange={handleChange}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              border: '1px solid #ccc',
+              borderColor: '#ccc'
+            }}
           />
         </div>
         <div className="col">
@@ -221,6 +232,12 @@ const ProfileInfo = () => {
             className="form-select"
             value={form.sex}
             onChange={handleChange}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              border: '1px solid #ccc',
+              borderColor: '#ccc'
+            }}
           >
             <option value="">선택</option>
             <option value="M">남성</option>
@@ -244,12 +261,25 @@ const ProfileInfo = () => {
             placeholder="도로명 주소"
             value={form.roadAddress}
             readOnly
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              border: '1px solid #ccc',
+              borderColor: '#ccc'
+            }}
           />
           <button
             type="button"
             className="btn btn-emerald btn-sm"
             onClick={() => setIsDaumPostOpen(true)}
-            style={{ backgroundColor: "#FFB823" }}
+            style={{
+              outline: 'none',
+              boxShadow: 'none',
+              border: '1px solid #ccc',
+              borderColor: '#ccc',
+              backgroundColor: '#000'
+            }}
+
           >
             주소 검색
           </button>
@@ -270,15 +300,20 @@ const ProfileInfo = () => {
           value={form.detailAddress}
           maxLength={40}
           onChange={handleChange}
+          style={{
+            outline: 'none',
+            boxShadow: 'none',
+            border: '1px solid #ccc',
+            borderColor: '#ccc'
+          }}
         />
       </div>
 
       <div
-        className={`small mb-2 ${
-          submitMsg.includes("성공")
-            ? styles.successMessage
-            : styles.errorMessage
-        }`}
+        className={`small mb-2 ${submitMsg.includes("성공")
+          ? styles.successMessage
+          : styles.errorMessage
+          }`}
       >
         {submitMsg}
       </div>

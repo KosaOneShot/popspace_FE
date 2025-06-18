@@ -10,8 +10,8 @@ import LogoutButton from "./logout/LogoutButton";
 #e9f5f3
  */
 
-const hoverColor = "#e9f5f3";
-const iconColor = "#7C6004";
+const hoverColor = "#8250DF4D";
+const iconColor = "#000";
 
 
 const SideMenu = ({ isOpen, onClose, appWidth, userInfo }) => {

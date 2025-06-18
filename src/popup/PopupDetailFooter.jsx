@@ -113,76 +113,75 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginTop: '16px' }}>
-              <button
-                className="btn btn-secondary w-50"
-                onClick={() => setShowModal(false)}
-              >
-                닫기
-              </button>
-              <button
-                className="btn w-50"
-                onClick={handleWalkInReserve}
-                style={{ backgroundColor: '#1D9D8B', color: '#fff', border: 'none' }}
-              >
-                예약하기
-              </button>
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+                      {/* 예약하기 버튼 */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginTop: '16px' }}>
+                          <button
+                              className="btn btn-secondary w-50"
+                              onClick={() => setShowModal(false)}
+                          >닫기
+                          </button>
 
-      {/* 하단 고정 버튼 바 */}
-      <div
-        className="position-fixed"
-        style={{
-          bottom: '75px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '390px',
-          height: '70px',
-          zIndex: 1000,
-          backgroundColor: '#F7F6F3',
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '4px',
-        }}
-      >
-        {/* 사전예약 버튼 */}
-        <button
-          type="button"
-          disabled={!isLogined}
-          className="btn me-2"
-          onClick={handleAdvanceClick}
-          style={{
-            width: '43%',
-            borderRadius: '8px',
-            height: '80%',
-            backgroundColor: isLogined ? '#f8ac0b' : '#ccc',
-            color: isLogined ? '#fff' : '#666'
-          }}
-        >
-          사전 예약
-        </button>
+                          <button
+                              className="btn w-50"
+                              onClick={handleWalkInReserve}
+                              style={{ backgroundColor: '#8250DF', color: '#fff', border: 'none' }}
+                          >예약하기
+                          </button>
+                      </div>
+                  </div>
+              </div>
 
-        {/* 웨이팅 버튼 */}
-        <button
-          type="button"
-          disabled={!isLogined}
-          className="btn"
-          onClick={() => setShowModal(true)}
-          style={{
-            width: '43%',
-            borderRadius: '8px',
-            height: '80%',
-            backgroundColor: isLogined ? '#1D9D8B' : '#ccc',
-            color: isLogined ? '#fff' : '#666'
-          }}
-        >
-          현장 웨이팅
-        </button>
+          )}
+
+    <div
+      className="position-fixed"
+      style={{
+        bottom: "75px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "390px",
+        height: "70px",
+        zIndex: 1000,
+        backgroundColor: "#F7F6F3",
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
+        padding: "4px",
+      }}
+    >
+    {/* 사전예약 버튼 */}
+    <button
+      type="button"
+      disabled={!isLogined}
+      className="btn me-2"
+      onClick={handleAdvanceClick}
+      style={{
+        width: "43%",
+        borderRadius: "8px",
+        height: "80%",
+        backgroundColor: isLogined ? "#8250DF" : "#ccc",
+        color: isLogined ? "#fff" : "#666"
+      }}
+    >
+      사전 예약
+    </button>
+
+    {/* 웨이팅 버튼 */}
+    <button
+      type="button"
+      disabled={!isLogined}
+      className="btn"
+      onClick={() => setShowModal(true)}
+      style={{
+        width: "43%",
+        borderRadius: "8px",
+        height: "80%",
+        backgroundColor: isLogined ? "#000" : "#ccc",
+        color: isLogined ? "#fff" : "#666"
+      }}
+    >
+      현장 웨이팅
+    </button>
 
         {/* 찜하기 버튼 */}
         <button

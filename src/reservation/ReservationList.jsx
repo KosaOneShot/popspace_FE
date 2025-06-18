@@ -6,9 +6,9 @@ import CalendarModal from '../components/modal/CalenderModal';
 
 // 카테고리별 색상
 const CATEGORY = {
-  ALL:        { label: '전체', color: '#795548' },
-  ADVANCE:   { label: '사전예약', color: '#f8ac0b' },
-  WALK_IN:    { label: '현장웨이팅', color: '#1D9D8B' }
+  ALL:        { label: '전체', color: '#8250DF' },
+  ADVANCE:   { label: '사전예약', color: '#929292' },
+  WALK_IN:    { label: '현장웨이팅', color: '#929292' }
 };
 
 // 팝업 카드 컴포넌트
@@ -262,7 +262,7 @@ useEffect(() => {
                         setReservationList(list);
                       });
                     }}
-                    style={{ flex: 1, backgroundColor: '#f8ac0b', color: 'white' }}
+                    style={{ flex: 1, backgroundColor: '#8250DF', color: 'white' }}
                   >
                    검색 
                   </button>
@@ -276,7 +276,7 @@ useEffect(() => {
                         setReservationList(list);
                       });
                     }}
-                    style={{ flex: 1, backgroundColor: '#1D9D8B', color: 'white' }}
+                    style={{ flex: 1, backgroundColor: '#929292', color: 'white' }}
                   >
                     초기화
                   </button>

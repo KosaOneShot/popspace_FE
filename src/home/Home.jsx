@@ -37,8 +37,9 @@ function PopupCard({ popup }) {
 
       <div className="px-3 py-2">
         {!empty && (
-          <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#1D9D8B' }}>
-            🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br />『 {popup.popupName} 』 🎉
+          <p className="fw-bold fst-italic mb-2" style={{ fontSize: '17px', color: '#8250DF' }}>
+            🔥✨ 지금 가장 뜨겁게 주목받는 팝업,<br />
+            『 {popup.popupName} 』 🎉
           </p>
         )}
 

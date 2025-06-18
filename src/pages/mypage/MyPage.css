@@ -9,7 +9,7 @@
 }
 
 .mypage-tabs .nav-link.active {
-  background-color: #1d9d8b;
+  background-color: #8250DF;
   color: white;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .tab-item.active {
-  color: #1d9d8b; /* 포인트 컬러 */
+  color: #000;
   font-weight: 600;
 }
 
@@ -46,12 +46,12 @@
   left: 20%;
   right: 20%;
   height: 3px;
-  background-color: #1d9d8b;
+  background-color: #8250DF;
   border-radius: 3px 3px 0 0;
 }
 
 .btn-emerald {
-  background-color: #1d9d8b;
+  background-color: #8250DF;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -63,7 +63,7 @@
 .btn-emerald:hover,
 .btn-emerald:focus,
 .btn-emerald:active {
-  background-color: #157a6f;
+  background-color:  #8250DF;
   color: white;
   transform: translateY(-1px);
   outline: none;
@@ -75,7 +75,7 @@
 }
 
 .text-emerald {
-  color: #1d9d8b;
+  color: #8250DF;
 }
 
 .review-tab-group {
@@ -96,7 +96,7 @@
 
 .review-tab-btn.active {
   background-color: white;
-  color: #1d9d8b;
+  color: #8250DF;
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

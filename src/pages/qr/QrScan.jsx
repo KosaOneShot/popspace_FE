@@ -17,6 +17,10 @@ const QrScan = () => {
     const roleLabel = {
         ROLE_POPUP_ADMIN: '관리자'
     };
+    // 아이폰 정사각형 찌그러짐 방지
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const aspectRatio = isIOS ? 0.9 : 1;
+
 
     // 스캔 성공시 서버 호출
     const handleScanSuccess = async (decodedText) => {
@@ -68,10 +72,17 @@ const QrScan = () => {
     };
 
     // 전면 카메라 여부 (전면 카메라 좌우반전 위해)
-    const isFrontCamera = (label) => {
+    const isFrontCamera = (device, index, totalCount) => {
+        const label = device.label?.toLowerCase() || '';
         const keywords = ['front', 'user', 'face'];
-        const lower = label?.toLowerCase() || '';
-        return keywords.some(word => lower.includes(word));
+
+        // label 기반 판단
+        const matches = keywords.some(word => label.includes(word));
+
+        // label 없음 + 카메라가 1개뿐이면 전면일 가능성 높음
+        const assumeFront = !label && totalCount === 1;
+
+        return matches || assumeFront;
     };
 
     // 카메라 초기화
@@ -91,18 +102,30 @@ const QrScan = () => {
             return;
         }
 
-        // 후면 카메라 우선 선택
-        const backCamera = cameras.find(device =>
+        const total = cameras.length;
+
+        // 후면 카메라 우선 선택 (label 기반)
+        let selectedDevice = cameras.find(device =>
             device.label.toLowerCase().includes('back') ||
             device.label.toLowerCase().includes('rear') ||
             device.label.toLowerCase().includes('environment')
         );
-        const selectedDevice = backCamera || cameras[0];
+
+        // label 없을 경우 fallback: 두 번째 카메라 사용 (아이폰에서 후면일 가능성 높음)
+        if (!selectedDevice && cameras.length > 1) {
+            selectedDevice = cameras[1];
+        }
+        // fallback: 첫 번째 카메라라도 사용
+        if (!selectedDevice) {
+            selectedDevice = cameras[0];
+        }
+
         const selectedDeviceId = selectedDevice.id;
 
-        // 전면 카메라면 좌우반전
+        // 좌우반전 여부 결정
         if (qrReaderContainerRef.current) {
-            if (isFrontCamera(selectedDevice.label)) {
+            const index = cameras.findIndex(cam => cam.id === selectedDeviceId);
+            if (isFrontCamera(selectedDevice, index, total)) {
                 qrReaderContainerRef.current.classList.add('mirror');
             } else {
                 qrReaderContainerRef.current.classList.remove('mirror');
@@ -115,7 +138,7 @@ const QrScan = () => {
             {
                 fps: 10,
                 qrbox: { width: 250, height: 250 },
-                aspectRatio: 1,
+                aspectRatio: aspectRatio,
             },
             (decodedText) => {
                 setScanning(false);

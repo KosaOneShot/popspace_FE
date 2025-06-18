@@ -59,7 +59,7 @@
 }
 
 .tabGroup input[type="radio"]:checked+span {
-  background-color: #1D9D8B;
+  background-color: #8250DF;
   color: white;
 }
 
@@ -124,8 +124,15 @@
   margin: 1rem;
   padding: 0.5rem;
   border-radius: 0.75rem;
-  border: 1px solid #f1f5f9;
+  border: 2px solid #f1f5f9;
   box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.05);
   cursor: pointer;
   text-align: center;
+  outline: none;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
 }

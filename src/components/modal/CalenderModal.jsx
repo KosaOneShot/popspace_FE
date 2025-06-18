@@ -32,6 +32,12 @@ export default function CalendarModal({ show, date, onClose, onApply }) {
               className="form-control"
               value={tmp}
               onChange={e => setTmp(e.target.value)}
+              style={{
+                outline: 'none',
+                boxShadow: 'none',
+                border: '1px solid #ccc',
+                borderColor: '#ccc'
+              }}
             />
           </div>
           <div className="modal-footer">
@@ -45,7 +51,7 @@ export default function CalendarModal({ show, date, onClose, onApply }) {
                 onClose();
               }}
             >
-                선택
+              선택
             </button>
           </div>
         </div>
