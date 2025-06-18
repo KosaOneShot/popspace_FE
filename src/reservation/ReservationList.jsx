@@ -12,26 +12,44 @@ const CATEGORY = {
 };
 
 // 팝업 카드 컴포넌트
+// 팝업 카드 컴포넌트
 function ReservationCard({ item }) {
-  const navigate = useNavigate();          // useNavigate 훅
-  const borderColor = CATEGORY[item.category]?.color || '#CCC'; // fallback color
+  const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    console.log('카드 클릭:',  `/reservation/detail/${item.id}`)
-    navigate(`/reservation/detail/${item.id}`); // 예약 상세 페이지로 이동
-  };
+  const isPast = new Date(item.reserveDate) < new Date(); // 과거 예약인지 확인
+  
+  const isWaiting = item.category === 'WALK_IN';
 
   return (
     <div
-      className="card mb-1"
+      className="card mb-1 position-relative"
       style={{
-        border: '2px solid #e0e0e0',
+        border: '2px solidrgb(225, 225, 225)',
         height: '90px',
         overflow: 'hidden',
-        cursor: 'pointer'                   // 클릭 가능 커서
+        cursor: 'pointer',
+        backgroundColor: isPast ? '#f0f0f0' : '#fff'  // ← 여기가 핵심
       }}
-      onClick={handleCardClick}             // 카드 전체 클릭 바인딩
+      onClick={() => navigate(`/reservation/detail/${item.id}`)}
     >
+      {isWaiting && (
+        <span
+          className="badge"
+          style={{
+            position: 'absolute',
+            bottom: 8,
+            right: 4,
+            backgroundColor: '#8250DF',
+            color: '#fff',
+            fontSize: '0.6rem',
+            padding: '3px 6px',
+            borderRadius: '8px'
+          }}
+        >
+          웨이팅
+        </span>
+      )}
+
       <div className="row g-0 h-100 align-items-center">
         <div className="col-3" style={{ height: '90px', overflow: 'hidden' }}>
           <img
@@ -45,7 +63,7 @@ function ReservationCard({ item }) {
             <h6
               className="card-title mb-2"
               style={{
-                fontWeight: '600',
+                fontWeight: 600,
                 fontSize: '1rem',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -75,7 +93,8 @@ function ReservationCard({ item }) {
                 textOverflow: 'ellipsis'
               }}
             >
-             <i className="bi bi-geo-alt" style={{color: '#e74c3c'}}></i> {item.location}
+              <i className="bi bi-geo-alt" style={{ color: '#e74c3c' }}></i>{' '}
+              {item.location}
             </p>
           </div>
         </div>
@@ -104,7 +123,7 @@ const fetchFirstPage = () => {
   fetchReservationList({
     searchKeyword,
     searchDate,
-    reservationType,
+    // reservationType,
     lastReserveDate:    null,
     lastReserveHour:    null,
     lastReserveMinute:  null,
