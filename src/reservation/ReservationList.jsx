@@ -120,53 +120,57 @@ export default function ReservationList() {
 
 const fetchFirstPage = () => {
   setIsLoading(true);
-  fetchReservationList({
+  const params = {
     searchKeyword,
     searchDate,
-    // reservationType,
-    lastReserveDate:    null,
-    lastReserveHour:    null,
-    lastReserveMinute:  null,
-    lastReserveId:      null
-  })
-  .then(list => {
-    setReservationList(list);
-    if (list.length) {
-      const last = list[list.length - 1];
-      setLastReserveDate(last.reserveDate);
-      setLastReserveHour(last.reserveHour);
-      setLastReserveMinute(last.reserveMinute);
-      setLastReserveId(last.id);
-    }
-  })
-  .finally(() => setIsLoading(false));
-};
+    lastReserveDate: null,
+    lastReserveId:   null,
+  };
+  if (reservationType !== 'ALL') {
+    params.reservationType = reservationType;
+  }
 
-  const loadMore = () => {
-    if (isLoading) return; // 중복 로딩 방지
-    setIsLoading(true);
-    fetchReservationList({
-      searchKeyword,
-      searchDate,
-      reservationType,
-      lastReserveDate,
-      lastReserveHour,
-      lastReserveMinute,
-      lastReserveId
-    })
-      .then(list => {
-        if (!list || list.length === 0) return;
-        // 중복 제거하며 누적
-        setReservationList(prev => [...prev, ...list.filter(newItem => !prev.some(old => old.id === newItem.id))]);
+  fetchReservationList(params)
+    .then(list => {
+      setReservationList(list);
+      if (list.length) {
         const last = list[list.length - 1];
         setLastReserveDate(last.reserveDate);
-        setLastReserveHour(last.reserveHour);
-        setLastReserveMinute(last.reserveMinute);
         setLastReserveId(last.id);
-      })
-      .catch(err => console.error('예약 목록 로드 중 오류 발생:', err))
-      .finally(() => setIsLoading(false)); // 로딩 상태 해제
+      }
+    })
+    .finally(() => setIsLoading(false));
+};
+
+// loadMore 함수
+const loadMore = () => {
+  if (isLoading) return;
+  setIsLoading(true);
+
+  const params = {
+    searchKeyword,
+    searchDate,
+    lastReserveDate,
+    lastReserveId,
   };
+  if (reservationType !== 'ALL') {
+    params.reservationType = reservationType;
+  }
+
+  fetchReservationList(params)
+    .then(list => {
+      if (!list || list.length === 0) return;
+      setReservationList(prev => [
+        ...prev,
+        ...list.filter(i => !prev.some(o => o.id === i.id))
+      ]);
+      const last = list[list.length - 1];
+      setLastReserveDate(last.reserveDate);
+      setLastReserveId(last.id);
+    })
+    .catch(err => console.error('예약 목록 로드 중 오류 발생:', err))
+    .finally(() => setIsLoading(false));
+};
 
   useEffect(() => {
     // 초기 목록 로딩

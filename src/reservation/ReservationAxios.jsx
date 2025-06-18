@@ -13,7 +13,6 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
         reservationType : reservationType,
         lastReserveDate: lastReserveDate,
         lastReserveHour: lastReserveHour,
-        lastReserveMinute: lastReserveMinute,
         lastReserveId: lastReserveId
        }
     });
@@ -24,6 +23,9 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
       const [reserveHour, reserveMinute] =
         (typeof item?.reserveTime === 'string' && item.reserveTime.includes(':'))
           ? item.reserveTime.split(':').map(Number): ['-', '-'];
+
+      console.log('ReservationAxios - 분리된 예약시간 시, 분:', { reserveHour, reserveMinute });
+          
       return {
         id:          item.reserveId,
         title:       item.popupName,
