@@ -12,6 +12,9 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
   const [waitingInfo, setWaitingInfo] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmReserveId, setConfirmReserveId] = useState(null);
+  const [confirmMessage, setConfirmMessage] = useState("");
 
   // 모달 열릴 때 미리보기 데이터 로드
   useEffect(() => {
@@ -50,12 +53,16 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
   // 현장 웨이팅 예약
   const handleWalkInReserve = async () => {
     try {
-      await postWalkInReservation(popupId);
-      alert("현장 예약 완료!");
-      setShowModal(false);
+      const response = await postWalkInReservation(popupId);
+      setConfirmReserveId(response.reserveId);
+      setConfirmMessage("현장 예약이 완료되었습니다");
     } catch (err) {
-      alert("예약 실패: " + (err.response?.data?.message || "오류 발생"));
+      console.error("예약 실패:", err);
+      setConfirmReserveId(null);
+      
+      setConfirmMessage(`예약 실패 : ${err.response?.data?.message || "오류 발생"}`);
     }
+    setShowConfirm(true);
   };
 
   return (
@@ -132,6 +139,51 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
               </div>,
               document.body
           )}
+
+      {showConfirm && createPortal(
+        <div
+          style={{
+            position: 'fixed',
+            top: 0, left: 0,
+            width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            zIndex: 3000,
+          }}
+          onClick={() => setShowConfirm(false)}
+        >
+          <div
+            style={{
+              position: 'fixed',
+              top: '40%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: '#fff',
+              padding: '24px',
+              borderRadius: '8px',
+              textAlign: 'center',
+              zIndex: 3001,
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <p style={{ marginBottom: '16px' }}>{confirmMessage}</p>
+            <button
+              className="btn"
+              style={{ backgroundColor: '#8250DF', color: '#fff' }}
+              onClick={() => {
+                setShowConfirm(false);
+                if (confirmReserveId) {
+                  navigate(`/popup/reservation/detail/${confirmReserveId}`);
+                } else {
+                  navigate(`/popup/detail/${popupId}`);
+                }
+                setShowModal(false);
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
     <div
       className="position-fixed"
