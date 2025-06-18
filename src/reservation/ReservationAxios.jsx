@@ -49,7 +49,6 @@ export async function fetchReservationList({ searchKeyword, searchDate, reservat
 }
 // 예약 QR 조회 /api/qr/{reserveId}
 export async function fetchReservationQR(reserveId) {
-  console.log('예약 QR 조회 ID:', reserveId);
   try {
     const response = await axi.get(`/api/qr/${reserveId}`, {
       responseType: 'blob'
@@ -150,9 +149,12 @@ function changeStateToKor(reservationState) {
 
 function changeTypeToKor(reservationType) {
   const reservationTypeKor = {
-    WALK_IN: '현장 웨이팅',
-    ONLINE: '온라인 예약'
+    'WALK-IN' : '현장 웨이팅',
+    'ADVANCE': '사전 예약'
   }[reservationType] || reservationType;
+  console.log(reservationType, ' -> ', reservationTypeKor);
+  
+  
 
   return reservationTypeKor;
 }
