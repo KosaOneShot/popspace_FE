@@ -11,7 +11,6 @@ const QrScan = () => {
     const html5QrCodeRef = useRef(null);
     const qrReaderContainerRef = useRef(null);
     const hasStartedRef = useRef(false);
-    //todo 받아오기
     const { nickname,role, error, loading } = useUserInfo();
     const [reservationInfo, setReservationInfo] = useState(null);
     const roleLabel = {
@@ -19,7 +18,7 @@ const QrScan = () => {
     };
     // 아이폰 정사각형 찌그러짐 방지
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const aspectRatio = isIOS ? 1.77 : 1;
+    const aspectRatio = isIOS ? 0.5 : 1;
 
 
     // 스캔 성공시 서버 호출
