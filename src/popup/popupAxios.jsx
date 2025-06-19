@@ -61,9 +61,12 @@ export async function axiFetchPopupDetail(popupId) {
   console.log("data : ", info);
   
   // 3) 리뷰 목록
-  const reviewResponse = await axi.get(`/api/popup/review/${popupId}`);
-  const reviewData = reviewResponse.data || [];
-  console.log("reviewData : ", reviewData);
+  // const reviewResponse = await axi.get(`/api/popup/review/${popupId}`);
+  // console.log('??', popupId);
+  
+  // const reviewResponse = await fetchReviewPage(popupId, 1, 3); // 페이지네이션을 위해 기본값 설정
+  // const reviewData = reviewResponse.data || [];
+  // console.log("reviewData !!!!!!!!!: ", reviewData);
 
   // 1) 찜, 로그인 여부
   let liked, isLogined = await axiFetchPopupLike(popupId);
@@ -83,18 +86,32 @@ export async function axiFetchPopupDetail(popupId) {
     description:      info.description
   };
   
-  // 리뷰 목록은 reviewData에서 가공
-  const reviewList = reviewData.map(review => ({
-    reviewId:   review.reviewId,
-    rating:     review.rating,
-    content:    review.content,
-    createdAt:  review.createdAt
-  }));
+  // // 리뷰 목록은 reviewData에서 가공
+  // const reviewList = reviewData.map(review => ({
+  //   reviewId:   review.reviewId,
+  //   rating:     review.rating,
+  //   content:    review.content,
+  //   createdAt:  review.createdAt
+  // }));
 
   return {
     isLogined,
     isPopupLike: liked,
     popupInfo,
-    reviewList
+    // reviewList
   };
+}
+
+/**
+ 리뷰 - 페이지네이션
+ */
+export async function fetchReviewPage(popupId, pageNum, pageSize) {
+  const response = await axi.get('/api/popup/review', {
+    params: {
+      popupId : popupId,
+      pageNum : pageNum,
+      pageSize : pageSize
+    }
+  });
+  return response.data;
 }``

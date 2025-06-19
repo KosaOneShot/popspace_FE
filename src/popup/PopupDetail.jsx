@@ -154,7 +154,7 @@ const PopupDetail = () => {
           <hr className="border border-2 opacity-50 rounded" />
 
           {/* 리뷰 섹션 */}
-          <ReviewList reviews={reviews} />
+          <ReviewList popupId={popupId} />
         </div>
       </div>
 
