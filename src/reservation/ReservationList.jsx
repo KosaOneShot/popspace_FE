@@ -8,17 +8,17 @@ import CalendarModal from '../components/modal/CalenderModal';
 const CATEGORY = {
   ALL:     { label: '전체' },
   ADVANCE: { label: '사전예약' },
-  WALK_IN: { label: '현장웨이팅' }
+  'WALK-IN': { label: '현장웨이팅' }
 };
 
 // 팝업 카드 컴포넌트
 // 팝업 카드 컴포넌트
 function ReservationCard({ item }) {
   const navigate = useNavigate();
-
-  const isPast = new Date(item.reserveDate) < new Date(); // 과거 예약인지 확인
+  console.log(item);
   
-  const isWaiting = item.category === 'WALK_IN';
+  const isPast = checkIsPast(item.reserveDate, item.reserveHour);
+  const isWaiting = item.category === 'WALK-IN';
 
   return (
     <div
@@ -102,6 +102,28 @@ function ReservationCard({ item }) {
     </div>
   );
 }
+
+// 지나간 팝업인지 확인 (회색으로 처리)
+// dateStr : "YYYY-MM-DD"
+// hour : 0~23 또는 '-'
+const checkIsPast = (dateStr, hour) => {
+  const now = new Date();
+  const todayOnly   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  // Date 형식으로 변환
+  const [y, m, d]    = dateStr.split('-').map(Number);
+  const reserveDate  = new Date(y, m - 1, d);
+
+  if (reserveDate < todayOnly) return true;
+  if (reserveDate.getTime() === todayOnly.getTime()) {
+    // 예약 시간이 "-" 이거나 현재 시각보다 앞서면 과거
+    if (hour === '-' || Number(hour) < now.getHours()) {
+      return true;
+    }
+  }
+  return false; // 미래 예약
+};
+
 
 // 전체 페이지
 export default function ReservationList() {
