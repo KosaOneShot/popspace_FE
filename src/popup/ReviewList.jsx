@@ -45,19 +45,22 @@ const ReviewList = ({ popupId }) => {
   if (loading) {
     return (
       <div className="mb-5">
-        <h6 className="fw-bold mb-3">리뷰</h6>
-        <p className="text-muted small">로딩 중...</p>
+        <h5 className="fw-bold mb-3">리뷰 ({totalCount})</h5>
+        <div className="card shadow-sm p-4 text-center text-muted">
+          로딩 중...
+        </div>
       </div>
     );
   }
   console.log('?????????reviews:', reviews);
-  
 
-  if (reviews == null || reviews.length === 0) {
+  if (reviews.length === 0) {
     return (
       <div className="mb-5">
-        <h6 className="fw-bold mb-3">리뷰 0</h6>
-        <p className="text-muted small">리뷰가 없습니다</p>
+        <h5 className="fw-bold mb-3">리뷰 (0)</h5>
+        <div className="card shadow-sm p-4 text-center text-muted">
+          리뷰가 없습니다
+        </div>
       </div>
     );
   }
@@ -67,45 +70,58 @@ const ReviewList = ({ popupId }) => {
 
   return (
     <div className="mb-5">
-      <h6 className="fw-bold mb-3">
-        리뷰 {reviews.totalCount}
-      </h6>
-      <div className="d-flex align-items-center mb-2">
-        <i className="bi bi-star-fill text-warning me-1" />
-        <span className="fw-bold me-2">{avg.toFixed(1)}</span>
-        <span className="text-muted small">(전체 {totalCount}개)</span>
+      <h5 className="fw-bold mb-3">리뷰 ({totalCount})</h5>
+      <div className="row g-4">
+        {paginatedReviews.map((rev, idx) => (
+          <div key={rev.reviewId ?? idx} className="col-12">
+            <div className="card mb-3 border-0 shadow-sm">
+              <div className="card-body">
+                <div className="d-flex align-items-center mb-2">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(rev.nickname)}&background=f3c5ff&color=fff&rounded=true&size=40`}
+                    alt={rev.nickname}
+                    className="rounded-circle me-3 shadow-sm"
+                    width="40"
+                    height="40"
+                  />
+                  <div className="fw-semibold" style={{color : '#a178df'}}>{rev.nickname}</div>
+                  <small className="text-muted ms-auto">
+                    {new Date(rev.createdAt).toLocaleDateString()}
+                  </small>
+                </div>
+                <div className="mb-2 d-flex align-items-center">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <i
+                      key={i}
+                      className={`bi me-1 ${
+                        i < rev.rating ? 'bi-star-fill text-warning' : 'bi-star text-warning'
+                      }`}
+                    />
+                  ))}
+                  <span className="card-text text-body-secondary ms-2">{rev.content}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      {paginatedReviews.map((rev, idx) => (
-        <ReviewItem
-          key={rev.reviewId ?? idx}  // reviewId가 없으면 인덱스 사용
-          rating={rev.rating}
-          content={rev.content}
-          createdAt={rev.createdAt}
-        />
-      ))}
-      <nav>
-        <ul className="pagination">
+      <nav className="mt-4">
+        <ul className="pagination justify-content-center">
           <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-            <button
-              className="page-link"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
-              Previous
+            <button className="page-link" onClick={() => setPage(page - 1)} disabled={page === 1}>
+              &lt;
             </button>
           </li>
-          <li className="page-item disabled">
-            <span className="page-link">
-              Page {page}
-            </span>
-          </li>
-          <li className={`page-item ${reviews.length < size ? 'disabled' : ''}`}>
-            <button
-              className="page-link"
-              onClick={() => setPage(page + 1)}
-              disabled={reviews.length < size}
-            >
-              Next
+          {Array.from({ length: Math.ceil(totalCount / size) }, (_, i) => (
+            <li key={i + 1} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => setPage(i + 1)}>
+                {i + 1}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${page === Math.ceil(totalCount / size) ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setPage(page + 1)} disabled={page === Math.ceil(totalCount / size)}>
+              &gt;
             </button>
           </li>
         </ul>
