@@ -19,6 +19,7 @@ const ReviewItem = ({ rating, content, createdAt }) => (
 const ReviewList = ({ popupId }) => {
   const [reviews, setReviews] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
   const [page, setPage] = useState(1);
   const size = 3;
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,8 @@ const ReviewList = ({ popupId }) => {
       try {
         const response = await fetchReviewPage(popupId, page, size);
         setReviews(response.reviewList || []);
-        setTotalCount(response.totalCount || 0);
+        setTotalCount(response.reviewCountAvg.totalCount || 0);
+        setAverageRating(response.reviewCountAvg.averageRating || 0);
         console.log('리뷰 목록:', response.reviewList);
         console.log('총 리뷰 수:', response.totalCount);
       } catch (error) {
@@ -45,19 +47,31 @@ const ReviewList = ({ popupId }) => {
   if (loading) {
     return (
       <div className="mb-5">
-        <h5 className="fw-bold mb-3">리뷰 ({totalCount})</h5>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="fw-bold m-0">리뷰 ({totalCount})</h5>
+          <div className="d-flex align-items-center">
+            <span className="me-2">사용자 총 평점</span>
+            <span className="fw-bold me-3">{averageRating.toFixed(1)}</span>
+          </div>
+        </div>
         <div className="card shadow-sm p-4 text-center text-muted">
           로딩 중...
         </div>
       </div>
     );
   }
-  console.log('?????????reviews:', reviews);
+  console.log('받은 review 목록:', reviews);
 
   if (reviews.length === 0) {
     return (
       <div className="mb-5">
-        <h5 className="fw-bold mb-3">리뷰 (0)</h5>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="fw-bold m-0">리뷰 ({totalCount})</h5>
+          <div className="d-flex align-items-center">
+            <span className="me-2">사용자 총 평점</span>
+            <span className="fw-bold me-3">{averageRating.toFixed(1)}</span>
+          </div>
+        </div>
         <div className="card shadow-sm p-4 text-center text-muted">
           리뷰가 없습니다
         </div>
@@ -70,7 +84,13 @@ const ReviewList = ({ popupId }) => {
 
   return (
     <div className="mb-5">
-      <h5 className="fw-bold mb-3">리뷰 ({totalCount})</h5>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5 className="fw-bold m-0">리뷰 ({totalCount})</h5>
+        <div className="d-flex align-items-center">
+          <span className="me-2">사용자 총 평점</span>
+          <span className="fw-bold me-3">{averageRating.toFixed(1)}</span>
+        </div>
+      </div>
       <div className="row g-4">
         {paginatedReviews.map((rev, idx) => (
           <div key={rev.reviewId ?? idx} className="col-12">
