@@ -31,6 +31,7 @@ export default function ReservationDetail() {
   const [qrUrl, setQrUrl] = useState(null);
   const [waitingInfo, setWaitingInfo] = useState(null);
   const [showWaitingModal, setShowWaitingModal] = useState(false);
+  const [showEnterNowModal, setShowEnterNowModal] = useState(false);
 
   useEffect(() => {
     fetchReservationQR(reserveId)
@@ -40,7 +41,12 @@ export default function ReservationDetail() {
       setQrUrl(null);
     });
     fetchReservationDetail(reserveId)
-      .then(setDetail)
+      .then(data => {
+        setDetail(data);
+        if (data.reservationState === 'EMAIL_SEND') {
+          setShowEnterNowModal(true);
+        }
+      })
       .catch(err => console.error('상세 조회 실패', err));
   }, [reserveId]);  
 
@@ -59,29 +65,31 @@ export default function ReservationDetail() {
         />
       </div>
     
-    <div style={{textAlign: 'center'}}>
-      {/* 대기 정보 */}
-      <button
-        type="button"
-        className="btn btn-outline-secondary mb-3"
-        onClick={async () => {
-          try {
-            const info = await fetchWaitingInfo(detail.popupId, detail.reserveId);
-            if (info) {
-              setWaitingInfo(info);
-              setShowWaitingModal(true);
-            } else {
-              alert('대기 정보를 불러올 수 없습니다.');
+    {detail.reservationState === 'RESERVED' && (
+      <div style={{textAlign: 'center'}}>
+        {/* 대기 정보 */}
+        <button
+          type="button"
+          className="btn btn-outline-secondary mb-3"
+          onClick={async () => {
+            try {
+              const info = await fetchWaitingInfo(detail.popupId, detail.reserveId);
+              if (info) {
+                setWaitingInfo(info);
+                setShowWaitingModal(true);
+              } else {
+                alert('대기 정보를 불러올 수 없습니다.');
+              }
+            } catch (e) {
+              console.error('대기 정보 조회 실패', e);
+              alert('대기 정보 조회 중 오류가 발생했습니다.');
             }
-          } catch (e) {
-            console.error('대기 정보 조회 실패', e);
-            alert('대기 정보 조회 중 오류가 발생했습니다.');
-          }
-        }}
-      >
-        대기 정보 보기
-      </button>
-    </div>
+          }}
+        >
+          대기 정보 보기
+        </button>
+      </div>
+    )}
       
       {/* 예약 정보 */}
       <div className="card mb-4">
@@ -104,7 +112,7 @@ export default function ReservationDetail() {
       <div className="text-center mb-3">
         <button
           className="btn"
-          style={{ backgroundColor: '#fbeaff', color: '#8250DF', borderRadius: '8px', padding: '10px 20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+          style={{ backgroundColor: '#F2EDE4', color: 'black', borderRadius: '8px', padding: '10px 20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
           onClick={() => setShowPopup(prev => !prev)}
         >
           {showPopup ? '▼ 가게 정보 접기' : '► 가게 정보 보기'}
@@ -173,10 +181,21 @@ export default function ReservationDetail() {
                 <div className="mb-2"><span className="fw-semibold">🪑 현재 대기 순번:</span> {waitingInfo.sequence}</div>
                 <div className="mb-2"><span className="fw-semibold">⏱ 평균 대기 시간:</span> {waitingInfo.averageWaitTime === -1 ? '즉시 입장 가능' : `${waitingInfo.averageWaitTime}분`}</div>
                 <div className="mb-2"><span className="fw-semibold">📅 예상 입장 시간:</span> {waitingInfo.entranceTime}</div>
-                <div><span className="fw-semibold">🚪 입장 가능 여부:</span> <span style={{ color: waitingInfo.isAllowed ? '#198754' : '#dc3545', fontWeight: 'bold' }}>{waitingInfo.isAllowed ? '입장 가능' : '입장 불가'}</span></div>
               </div>
               <div className="px-3 pb-3">
                 <button type="button" className="btn btn-outline-dark w-100 rounded-pill" onClick={() => setShowWaitingModal(false)}>확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {showEnterNowModal && (
+        <div className="modal d-block" style={{ inset: 0, position: 'fixed', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 2000 }} onClick={() => setShowEnterNowModal(false)}>
+          <div className="modal-dialog" style={{ maxWidth: '310px', margin: '370px auto' }} onClick={e => e.stopPropagation()}>
+            <div className="modal-content" style={{ borderRadius: '10px', overflow: 'hidden' }}>
+              <div className="modal-body text-center">
+                <h5 className="mb-4">📢 지금 입장해주세요</h5>
+                <button className="btn" style={{width : '60px', backgroundColor : '#8250DF', color: 'white'}} onClick={() => setShowEnterNowModal(false)}>확인</button>
               </div>
             </div>
           </div>
