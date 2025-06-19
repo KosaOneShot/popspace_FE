@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import {createPortal} from 'react-dom';
 import { axiUpdatePopupLike } from "./popupAxios";
-import { fetchWalkInPreview, postWalkInReservation } from "../reservation/ReservationAxios";
+import { fetchWalkInPreview, postWalkInReservation, postImmediateReservation } from "../reservation/ReservationAxios";
 import { useNavigate } from "react-router-dom";
 import '../pages/reservation/WalkInModal.css';
 
@@ -15,6 +15,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmReserveId, setConfirmReserveId] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
+  const [isAllowed, setIsAllowed] = useState(null);
 
   // 모달 열릴 때 미리보기 데이터 로드
   useEffect(() => {
@@ -22,7 +23,12 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
 
     const fetchData = async () => {
       const preview = await fetchWalkInPreview(popupId);
-      if (preview) setWaitingInfo(preview);
+
+      if (preview) {
+          setWaitingInfo(preview);
+          setIsAllowed(preview.isAllowed);
+          console.log("preview.isAllowed:", preview.isAllowed);
+      }
     };
 
     fetchData();
@@ -64,6 +70,21 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
     }
     setShowConfirm(true);
   };
+
+    // 즉시 입장 예약
+    const handleImmediateEnter = async () => {
+        try {
+            const response = await postImmediateReservation(popupId);
+            setConfirmReserveId(response.reserveId);
+            setConfirmMessage("즉시 입장 신청이 완료되었습니다.");
+        } catch (err) {
+            console.error("예약 실패:", err);
+            setConfirmReserveId(null);
+
+            setConfirmMessage(`예약 실패 : ${err.response?.data?.message || "오류 발생"}`);
+        }
+        setShowConfirm(true);
+    };
 
   return (
     <>
@@ -130,10 +151,16 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
 
                           <button
                               className="btn w-50"
-                              onClick={handleWalkInReserve}
+                              onClick={isAllowed ? handleImmediateEnter : handleWalkInReserve}
                               style={{ backgroundColor: '#8250DF', color: '#fff', border: 'none' }}
-                          >예약하기
+                          >
+                              {isAllowed === null
+                                  ? "웨이팅 확인 중"
+                                  : isAllowed
+                                      ? "즉시 입장"
+                                      : "현장 웨이팅"}
                           </button>
+
                       </div>
                   </div>
               </div>,
@@ -171,7 +198,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
               onClick={() => {
                 setShowConfirm(false);
                 if (confirmReserveId) {
-                  navigate(`/popup/reservation/detail/${confirmReserveId}`);
+                  navigate(`/reservation/detail/${confirmReserveId}`);
                 } else {
                   navigate(`/popup/detail/${popupId}`);
                 }
@@ -232,7 +259,7 @@ const FooterButtons = ({ popupId, like, isLogined }) => {
         color: isLogined ? "#fff" : "#666"
       }}
     >
-      현장 웨이팅
+        현장 웨이팅
     </button>
 
         {/* 찜하기 버튼 */}

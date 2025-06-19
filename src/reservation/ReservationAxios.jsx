@@ -106,6 +106,8 @@ export async function fetchWalkInPreview(popupId) {
   try {
     const response = await axi.get(`/api/${popupId}/reservation/total/sequence`);
     const data = response.data;
+    console.log("data:", data);
+
 
     return {
       // 현재 대기 순번
@@ -114,12 +116,15 @@ export async function fetchWalkInPreview(popupId) {
       averageWaitTime: data.averageWaitTime,
       // 예상 입장 시간
       entranceTime: data.entranceTime,
+      // 즉시 입장 가능 여부
+      isAllowed: data.allowed,
     };
   } catch (error) {
     console.error('현장 웨이팅 정보 조회 중 오류 발생:', error);
     return null;
   }
 }
+
 
 // 현장 웨이팅 예약 시도
 export async function postWalkInReservation(popupId) {
@@ -134,6 +139,21 @@ export async function postWalkInReservation(popupId) {
     throw err;
   }
 }
+
+// 즉시 입장 예약 시도
+export async function postImmediateReservation(popupId) {
+  const payload = {
+    popupId: Number(popupId)
+  };
+
+  try {
+    const res = await axi.post("/api/reservation/immediate-walk-in", payload);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 
 function changeStateToKor(reservationState) {
   const reservationStateKor = {
