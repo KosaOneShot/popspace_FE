@@ -8,7 +8,7 @@ import CalendarModal from '../components/modal/CalenderModal';
 const CATEGORY = {
   ALL:     { label: '전체' },
   ADVANCE: { label: '사전예약' },
-  WALK_IN: { label: '현장웨이팅' }
+  'WALK-IN': { label: '현장웨이팅' }
 };
 
 // 팝업 카드 컴포넌트
@@ -18,7 +18,7 @@ function ReservationCard({ item }) {
   console.log(item);
   
   const isPast = checkIsPast(item.reserveDate, item.reserveHour);
-  const isWaiting = item.category === 'WALK_IN';
+  const isWaiting = item.category === 'WALK-IN';
 
   return (
     <div
