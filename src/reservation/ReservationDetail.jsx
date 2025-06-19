@@ -51,25 +51,15 @@ export default function ReservationDetail() {
       <div className="d-flex align-items-center">
         <button type="button" className="btn btn-light me-3" onClick={() => navigate(-1)}>←</button>
       </div>
-      <img
-        src={qrUrl}
-        alt="예약 QR 코드"
-        style={{ width: '100%', display: 'block' }}
-      />
-      {/* 예약 정보 */}
-      <div className="card mb-4">
-        <div className="card-header">예약 상세 (ID: {detail.reserveId})</div>
-        <div className="card-body">
-          <ReservationInfoRow label="예약일자"   value={formatDate(detail.reserveDate)} />
-          <ReservationInfoRow label="예약시간"   value={formatTime(detail.reserveTime)} />         
-          <ReservationInfoRow label="예약 타입"     value={detail.reservationType} />
-          <ReservationInfoRow label="예약 상태"     value={detail.reservationState} />
-          <ReservationInfoRow label="예약자"        value={detail.memberName} />
-          <ReservationInfoRow label="생성일시"   value={formatDateTime(detail.createdAt)} />
-          <ReservationInfoRow label="취소일시"   value={formatDateTime(detail.canceledAt)} />
-        </div>
+      <div style={{ textAlign: 'center' }}>
+        <img
+          src={qrUrl}
+          alt="예약 QR 코드"
+          style={{ width: '80%', display: 'block', margin: '0 auto' }}
+        />
       </div>
-
+    
+    <div style={{textAlign: 'center'}}>
       {/* 대기 정보 */}
       <button
         type="button"
@@ -91,13 +81,30 @@ export default function ReservationDetail() {
       >
         대기 정보 보기
       </button>
+    </div>
+      
+      {/* 예약 정보 */}
+      <div className="card mb-4">
+        <div className="card-header">예약 상세 (ID: {detail.reserveId})</div>
+        <div className="card-body">
+          <ReservationInfoRow label="예약일자"   value={formatDate(detail.reserveDate)} />
+          <ReservationInfoRow label="예약시간"   value={formatTime(detail.reserveTime)} />         
+          <ReservationInfoRow label="예약 타입"     value={detail.reservationType} />
+          <ReservationInfoRow label="예약 상태"     value={detail.reservationState} />
+          <ReservationInfoRow label="예약자"        value={detail.memberName} />
+          <ReservationInfoRow label="생성일시"   value={formatDateTime(detail.createdAt)} />
+          <ReservationInfoRow label="취소일시"   value={formatDateTime(detail.canceledAt)} />
+        </div>
+      </div>
+
 
 
 
       {/* 팝업 정보 토글 */}
       <div className="text-center mb-3">
         <button
-          className="btn btn-outline-primary"
+          className="btn"
+          style={{ backgroundColor: '#fbeaff', color: '#8250DF', borderRadius: '8px', padding: '10px 20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
           onClick={() => setShowPopup(prev => !prev)}
         >
           {showPopup ? '▼ 가게 정보 접기' : '► 가게 정보 보기'}
@@ -157,20 +164,19 @@ export default function ReservationDetail() {
       )}
       {showWaitingModal && waitingInfo && (
         <div className="modal d-block" style={{ inset: 0, position: 'fixed', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 2000 }} onClick={() => setShowWaitingModal(false)}>
-          <div className="modal-dialog" style={{ maxWidth: '400px', margin: '150px auto' }} onClick={e => e.stopPropagation()}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">대기 정보</h5>
-                <button type="button" className="btn-close" onClick={() => setShowWaitingModal(false)} />
+          <div className="modal-dialog" style={{ maxWidth: '320px', margin: '300px auto' }} onClick={e => e.stopPropagation()}>
+            <div className="modal-content" style={{ borderRadius: '12px', backgroundColor: '#ffffff', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)', overflow: 'hidden', border: '1px solid #eee' }}>
+              <div className="p-3 border-bottom">
+                <h5 className="fw-bold mb-0" style={{ fontSize: '16px' }}>📋 대기 정보</h5>
               </div>
-              <div className="modal-body">
-                <p>현재 대기 순번: {waitingInfo.sequence}</p>
-                <p>평균 대기 시간: {waitingInfo.averageWaitTime === -1 ? '즉시 입장 가능' : `${waitingInfo.averageWaitTime}분`}</p>
-                <p>예상 입장 시간: {waitingInfo.entranceTime}</p>
-                <p>입장 가능 여부: {waitingInfo.isAllowed ? '가능' : '불가'}</p>
+              <div className="modal-body" style={{ padding: '16px', fontSize: '14px', color: '#333' }}>
+                <div className="mb-2"><span className="fw-semibold">🪑 현재 대기 순번:</span> {waitingInfo.sequence}</div>
+                <div className="mb-2"><span className="fw-semibold">⏱ 평균 대기 시간:</span> {waitingInfo.averageWaitTime === -1 ? '즉시 입장 가능' : `${waitingInfo.averageWaitTime}분`}</div>
+                <div className="mb-2"><span className="fw-semibold">📅 예상 입장 시간:</span> {waitingInfo.entranceTime}</div>
+                <div><span className="fw-semibold">🚪 입장 가능 여부:</span> <span style={{ color: waitingInfo.isAllowed ? '#198754' : '#dc3545', fontWeight: 'bold' }}>{waitingInfo.isAllowed ? '입장 가능' : '입장 불가'}</span></div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={() => setShowWaitingModal(false)}>확인</button>
+              <div className="px-3 pb-3">
+                <button type="button" className="btn btn-outline-dark w-100 rounded-pill" onClick={() => setShowWaitingModal(false)}>확인</button>
               </div>
             </div>
           </div>
