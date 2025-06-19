@@ -158,3 +158,14 @@ function changeTypeToKor(reservationType) {
 
   return reservationTypeKor;
 }
+
+export async function fetchWaitingInfo(popupId, reservationId) {
+  const res = await axi.get(`/api/${popupId}/reservation/${reservationId}/sequence`,);
+  console.log('대기 정보 조회 응답:', res.data);
+  const data = res.data;
+  const [hour, minute] = data.entranceTime.split(':');
+  return {
+    ...data,
+    entranceTime: `${Number(hour)}시 ${Number(minute)}분`,
+  };
+}

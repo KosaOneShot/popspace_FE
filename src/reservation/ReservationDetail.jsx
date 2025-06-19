@@ -1,7 +1,7 @@
 // ReservationDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchReservationDetail, fetchReservationQR } from './ReservationAxios';
+import { fetchReservationDetail, fetchReservationQR, fetchWaitingInfo } from './ReservationAxios';
 import { formatDate, formatTime, formatDateTime } from '../utils/TimeFormat';
 
 
@@ -29,6 +29,8 @@ export default function ReservationDetail() {
   const [detail, setDetail] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [qrUrl, setQrUrl] = useState(null);
+  const [waitingInfo, setWaitingInfo] = useState(null);
+  const [showWaitingModal, setShowWaitingModal] = useState(false);
 
   useEffect(() => {
     fetchReservationQR(reserveId)
@@ -67,6 +69,30 @@ export default function ReservationDetail() {
           <ReservationInfoRow label="취소일시"   value={formatDateTime(detail.canceledAt)} />
         </div>
       </div>
+
+      {/* 대기 정보 */}
+      <button
+        type="button"
+        className="btn btn-outline-secondary mb-3"
+        onClick={async () => {
+          try {
+            const info = await fetchWaitingInfo(detail.popupId, detail.reserveId);
+            if (info) {
+              setWaitingInfo(info);
+              setShowWaitingModal(true);
+            } else {
+              alert('대기 정보를 불러올 수 없습니다.');
+            }
+          } catch (e) {
+            console.error('대기 정보 조회 실패', e);
+            alert('대기 정보 조회 중 오류가 발생했습니다.');
+          }
+        }}
+      >
+        대기 정보 보기
+      </button>
+
+
 
       {/* 팝업 정보 토글 */}
       <div className="text-center mb-3">
@@ -127,6 +153,27 @@ export default function ReservationDetail() {
         > <button className="btn btn-danger w-100" style={{ margin: '5px 10px'}}>
             예약취소
           </button>
+        </div>
+      )}
+      {showWaitingModal && waitingInfo && (
+        <div className="modal d-block" style={{ inset: 0, position: 'fixed', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 2000 }} onClick={() => setShowWaitingModal(false)}>
+          <div className="modal-dialog" style={{ maxWidth: '400px', margin: '150px auto' }} onClick={e => e.stopPropagation()}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">대기 정보</h5>
+                <button type="button" className="btn-close" onClick={() => setShowWaitingModal(false)} />
+              </div>
+              <div className="modal-body">
+                <p>현재 대기 순번: {waitingInfo.sequence}</p>
+                <p>평균 대기 시간: {waitingInfo.averageWaitTime === -1 ? '즉시 입장 가능' : `${waitingInfo.averageWaitTime}분`}</p>
+                <p>예상 입장 시간: {waitingInfo.entranceTime}</p>
+                <p>입장 가능 여부: {waitingInfo.isAllowed ? '가능' : '불가'}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={() => setShowWaitingModal(false)}>확인</button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
