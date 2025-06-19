@@ -108,19 +108,46 @@ const ReviewList = ({ popupId }) => {
       <nav className="mt-4">
         <ul className="pagination justify-content-center">
           <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => setPage(page - 1)} disabled={page === 1}>
+            <button
+              type="button"
+              className="page-link"
+              style={{ color: '#000', border: '1px solid #dee2e6' }}
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+              onFocus={e => e.target.style.backgroundColor = '#ccc'}
+              onBlur={e => e.target.style.backgroundColor = ''}
+            >
               &lt;
             </button>
           </li>
           {Array.from({ length: Math.ceil(totalCount / size) }, (_, i) => (
-            <li key={i + 1} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-              <button className="page-link" onClick={() => setPage(i + 1)}>
+            <li key={i + 1} className="page-item">
+              <button
+                type="button"
+                className="page-link"
+                style={{
+                  color: '#000',
+                  backgroundColor: page === (i + 1) ? '#ccc' : '',
+                  border: '1px solid #dee2e6'
+                }}
+                onClick={() => setPage(i + 1)}
+                onFocus={e => e.target.style.backgroundColor = '#929292'}
+                onBlur={e => e.target.style.backgroundColor = ''}
+              >
                 {i + 1}
               </button>
             </li>
           ))}
           <li className={`page-item ${page === Math.ceil(totalCount / size) ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => setPage(page + 1)} disabled={page === Math.ceil(totalCount / size)}>
+            <button
+              type="button"
+              className="page-link"
+              style={{ color: '#000', border: '1px solid #dee2e6' }}
+              onClick={() => setPage(page + 1)}
+              disabled={page === Math.ceil(totalCount / size)}
+              onFocus={e => e.target.style.backgroundColor = '#929292'}
+              onBlur={e => e.target.style.backgroundColor = ''}
+            >
               &gt;
             </button>
           </li>
