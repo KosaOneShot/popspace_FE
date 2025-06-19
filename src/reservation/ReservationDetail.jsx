@@ -179,7 +179,7 @@ export default function ReservationDetail() {
               </div>
               <div className="modal-body" style={{ padding: '16px', fontSize: '14px', color: '#333' }}>
                 <div className="mb-2"><span className="fw-semibold">🪑 현재 대기 순번:</span> {waitingInfo.sequence}</div>
-                <div className="mb-2"><span className="fw-semibold">⏱ 평균 대기 시간:</span> {waitingInfo.averageWaitTime === -1 ? '즉시 입장 가능' : `${waitingInfo.averageWaitTime}분`}</div>
+                <div className="mb-2"><span className="fw-semibold">⏱ 평균 대기 시간:</span> {waitingInfo.averageWaitTime === -1 ? '데이터가 부족합니다' : `${waitingInfo.averageWaitTime}분`}</div>
                 <div className="mb-2"><span className="fw-semibold">📅 예상 입장 시간:</span> {waitingInfo.entranceTime}</div>
               </div>
               <div className="px-3 pb-3">
