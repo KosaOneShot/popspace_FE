@@ -33,7 +33,7 @@ class Axios {
                         originalRequest._retry = true;
                         
                         try {
-                            await Axios.instance.get("/api/auth/refresh");
+                            await Axios.instance.post("/api/auth/refresh");
 
                             return Axios.instance.request(originalRequest);
                         } catch (refreshError) {
