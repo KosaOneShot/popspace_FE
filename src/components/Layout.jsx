@@ -8,6 +8,7 @@ const Layout = ({ children }) => {
         position: "fixed",
         top: 0,
         left: 0,
+        minHeight: "100vh", // 100vh 대신 min-height 사용
         width: "100vw",
         height: "100vh",
         backgroundColor: "#f0f0f0", // 바깥 회색
@@ -28,7 +29,7 @@ const Layout = ({ children }) => {
         }}
       >
         {/* 자식 영역만 스크롤 가능하게 */}
-        <div style={{ flex: 1, overflowY: "auto" }}>{children}</div>
+        <div style={{ flex: 1, overflowY: "auto", paddingBottom: "5rem" }}>{children}</div>
       </div>
     </div>
   );
