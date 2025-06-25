@@ -1,0 +1,136 @@
+.registerContainer {
+  width: 90%;
+  margin: 6.5rem auto 7.5rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+  font-family: 'Pretendard', sans-serif;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.registerTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-align: left;
+}
+
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inputGroup input {
+  flex: 1 1 auto;
+  min-width: 6.25rem;
+}
+
+.registerForm input {
+  /* flex: 1; */
+  min-width: 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+
+.checkButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: #000000;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.registerForm button[type="submit"] {
+  padding: 1rem;
+  background-color: #000000;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sexBirthGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sexBirthGroup select,
+.sexBirthGroup input[type="date"] {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(0.625rem);
+    /* 10px */
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.successMessage {
+  color: green;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.checkButton:hover {
+  background-color:  rgb(56, 56, 56);
+  transform: translateY(-0.0625rem);
+}
+
+.registerForm button[type="submit"]:hover {
+  background-color:  rgb(56, 56, 56);
+  transform: translateY(-0.0625rem);
+}
+
+.registerForm input:focus {
+  /* box-shadow: 0 0 0 0.25rem rgba(29, 157, 139, 0.3); */
+  outline: none;
+}

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import SideMenu from "./SideMenu";
+import useUserInfo from "../hook/useUserInfo";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const userInfo = useUserInfo();
   const HEADER_HEIGHT = 56;
   const APP_WIDTH = 390;
 
@@ -26,9 +28,7 @@ const Header = () => {
         </button>
       </header>
 
-      <div style={{ height: `${HEADER_HEIGHT}px` }} />
-
-      <SideMenu isOpen={open} onClose={() => setOpen(false)} appWidth={APP_WIDTH} />
+      <SideMenu isOpen={open} onClose={() => setOpen(false)} appWidth={APP_WIDTH} userInfo={userInfo} />
     </>
   );
 };

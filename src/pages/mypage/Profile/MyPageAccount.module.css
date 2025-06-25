@@ -1,0 +1,23 @@
+.accountForm {
+  padding-bottom: 30px;
+}
+
+.accountLabel {
+  color: #3E2C22;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.successMessage {
+  color: #198754;
+  font-size: 13px;
+}
+
+.errorMessage {
+  color: #dc3545;
+  font-size: 13px;
+}
+
+.addressButton {
+  padding: 2px 8px;
+}

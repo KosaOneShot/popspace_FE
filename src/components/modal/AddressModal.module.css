@@ -1,0 +1,20 @@
+/* src/components/modal/AddressModal.module.css */
+
+.modalContainer {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 1rem;
+}
+
+.closeButton {
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: right;
+}

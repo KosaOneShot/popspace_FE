@@ -1,0 +1,19 @@
+.register-button {
+  background-color: #000; /* Tailwind purple-500 */
+  color: white;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border: none;
+  width: 100%;
+  border-radius: 0.25rem; /* rounded */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* shadow-md */
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.register-button:hover {
+  background-color: rgb(56, 56, 56)
+}

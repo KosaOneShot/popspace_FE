@@ -1,0 +1,138 @@
+.container {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 6.5rem auto 7.5rem;
+}
+
+.headerWrapper {
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid #eee;
+  text-align: center;
+}
+
+.titleBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.tabGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.tabGroup label {
+  flex: 0 1 calc(50% - 10px);
+  text-align: center;
+  cursor: pointer;
+}
+
+.tabGroup input[type="radio"] {
+  display: none;
+}
+
+.tabGroup span {
+  display: block;
+  background-color: #f1f5f9;
+  border: 0.25rem solid transparent;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.tabGroup input[type="radio"]:checked+span {
+  background-color: #8250DF;
+  color: white;
+}
+
+.summaryContainer {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.summaryCard {
+  flex: 1 1 200px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 0.5rem;
+  background-color: #f8f4e8;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.summaryGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+.centerCard {
+  width: 100%;
+  padding: 1rem;
+  margin: auto;
+  background-color: #f8f4e8;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+
+.chartBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  /* 넓게 설정 */
+}
+
+.summaryCard:hover {
+  transform: translateY(-4px);
+  background-color: #ebe4d3;
+}
+
+.popupSelector {
+  margin: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid #f1f5f9;
+  box-shadow: 0 0.25rem 0.6rem rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+}

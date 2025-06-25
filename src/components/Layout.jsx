@@ -1,3 +1,6 @@
+// Layout.jsx
+import React from "react";
+
 const Layout = ({ children }) => {
   return (
     <div
@@ -5,26 +8,28 @@ const Layout = ({ children }) => {
         position: "fixed",
         top: 0,
         left: 0,
+        minHeight: "100vh", // 100vh 대신 min-height 사용
         width: "100vw",
         height: "100vh",
-        backgroundColor: "#f0f0f0", // 화면 바깥 회색
-        pointerEvents: "none",       // 회색 영역 클릭 비활성
+        backgroundColor: "#f0f0f0", // 바깥 회색
+        pointerEvents: "none",
       }}
     >
       <div
         style={{
-          width: "390px",         // iPhone 12 Pro 고정 폭
-          maxWidth: "100%",       // 화면이 더 좁으면 꽉 채움
+          width: "390px", // iPhone 12 Pro 폭
+          maxWidth: "100%",
           height: "100%",
-          minHeight: "780px",
-          margin: "0 auto",       // 가로 중앙 정렬
-          backgroundColor: "#ffffff", // 앱 내부 흰색
+          margin: "0 auto", // 가로 중앙
+          backgroundColor: "#ffffff",
           display: "flex",
           flexDirection: "column",
-          pointerEvents: "auto",  // 앱 영역은 클릭/스크롤 가능
+          pointerEvents: "auto",
+          overflow: "hidden", // 외각 스크롤 제거
         }}
       >
-        {children}
+        {/* 자식 영역만 스크롤 가능하게 */}
+        <div style={{ flex: 1, overflowY: "auto", paddingBottom: "5rem" }}>{children}</div>
       </div>
     </div>
   );
