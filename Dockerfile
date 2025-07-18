@@ -10,11 +10,11 @@ ARG VITE_API_URL
 COPY package*.json ./
 RUN npm ci
 
-# 빌드 인자 환경변수 주입
-ENV VITE_API_URL=http://192.168.125.221:30085
+# # 빌드 인자 환경변수 주입
+# ENV VITE_API_URL=
 
-# .env.production 파일 생성 (Vite는 여기서 참조함)
-RUN echo "VITE_API_URL=${VITE_API_URL}" > .env.production
+# # .env.production 파일 생성 (Vite는 여기서 참조함)
+# RUN echo "VITE_API_URL=${VITE_API_URL}" > .env.production
 
 # 소스 복사 및 빌드
 COPY . .
